@@ -1,1 +1,36 @@
-# mwodeun.github.io
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>모든건설 · 모든제조</title>
+    <style>
+        body{
+            font-family: sans-serif;
+            text-align:center;
+            padding:80px;
+            background:#f5f5f5;
+        }
+        h1{
+            font-size:48px;
+        }
+        p{
+            font-size:22px;
+        }
+        .box{
+            background:white;
+            padding:40px;
+            border-radius:10px;
+            display:inline-block;
+            box-shadow:0 0 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>모든건설 · 모든제조</h1>
+        <p>전남 보성군 벌교읍 채동선로 277</p>
+        <p>☎ 010-3005-3126</p>
+        <p>리모델링 · 바닥시공 · 제조작업 전문</p>
+    </div>
+</body>
+</html>
