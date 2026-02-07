@@ -105,6 +105,120 @@ button{
 button:hover{
   background:#5300a8;
 }
+
+/* ✅ 필터 상태 표시 */
+.filterbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  background:white;
+  border-radius:10px;
+  padding:12px 14px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.06);
+  margin-bottom:18px;
+  font-size:14px;
+}
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  background:#f1e6ff;
+  border-radius:999px;
+  color:#4b0aa0;
+  font-weight:700;
+}
+.linkbtn{
+  color:#6a0dad;
+  cursor:pointer;
+  font-weight:700;
+  text-decoration:underline;
+}
+.small{
+  color:#666;
+}
+
+/* ✅ 팝업(모달) */
+.modal-bg{
+  position:fixed;
+  left:0; top:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.55);
+  display:none;               /* 기본 숨김 */
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  padding:20px;
+}
+.modal{
+  width:100%;
+  max-width:420px;
+  background:white;
+  border-radius:14px;
+  box-shadow:0 12px 35px rgba(0,0,0,0.25);
+  overflow:hidden;
+}
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 16px;
+  background:#6a0dad;
+  color:white;
+}
+.modal-title{
+  font-size:16px;
+  font-weight:800;
+}
+.modal-close{
+  background:transparent;
+  border:none;
+  color:white;
+  font-size:22px;
+  cursor:pointer;
+  padding:0 6px;
+}
+.modal-body{
+  padding:16px;
+}
+.modal-row{
+  margin-bottom:10px;
+  font-size:14px;
+}
+.modal-row b{
+  display:inline-block;
+  width:78px;
+}
+.modal-input{
+  width:100%;
+  padding:10px 12px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  font-size:14px;
+  box-sizing:border-box;
+  margin:8px 0 12px;
+}
+.modal-actions{
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  padding:0 16px 16px;
+}
+.btn-gray{
+  background:#eee;
+  color:#111;
+}
+.btn-gray:hover{
+  background:#e0e0e0;
+}
+.notice{
+  background:#faf5ff;
+  border:1px solid #ead7ff;
+  color:#4b0aa0;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:13px;
+  margin-top:10px;
+}
 </style>
 </head>
 
@@ -121,10 +235,16 @@ button:hover{
   <a href="#">💥 고장&파손제품</a>
   <a href="#">🔧 공구/장비</a>
   <a href="#">🙋 구해요</a>
-  <a href="#">⏰ 마감임박</a>
+
+  <!-- ✅ 마감임박 -->
+  <a href="#" id="navClosing">⏰ 마감임박</a>
+
   <a href="#">🎣 레저용품</a>
   <a href="#">📜 운영규칙</a>
-  <a href="#">🔥 진행중 경매</a>
+
+  <!-- ✅ 전체 보기 -->
+  <a href="#" id="navAll">🔥 진행중 경매</a>
+
   <a href="#">📝 판매등록</a>
   <a href="#">👤 마이페이지</a>
 </nav>
@@ -133,64 +253,245 @@ button:hover{
 
 <h2>🔥 진행중 경매</h2>
 
-<div class="cards">
+<!-- ✅ 필터 상태 표시줄 -->
+<div class="filterbar">
+  <div>
+    현재 보기:
+    <span class="badge" id="filterLabel">전체</span>
+    <span class="small" id="filterDesc">— 모든 경매를 표시합니다.</span>
+  </div>
+  <div class="linkbtn" id="clearFilter" style="display:none;">필터 해제</div>
+</div>
 
-  <div class="card">
+<div class="cards" id="cards">
+
+  <!-- ✅ 각 카드에 data-title / data-price / data-bids를 넣어둠 (팝업용) -->
+  <div class="card" data-title="전동드릴 세트" data-price="현재가: (미정)" data-bids="입찰 3건" data-end="2026-02-08T10:00:00+09:00">
     <img src="https://via.placeholder.com/300x180/6a0dad/ffffff?text=전동드릴" alt="전동드릴">
     <h3>전동드릴 세트</h3>
     <div class="price">입찰 3건</div>
-    <div class="remain" data-end="2026-02-07T18:00:00+09:00">남은시간: 계산중...</div>
-    <button>입찰하기</button>
+    <div class="remain">남은시간: 계산중...</div>
+    <button class="bidBtn">입찰하기</button>
   </div>
 
-  <div class="card">
+  <div class="card" data-title="LG 55인치 TV (고장)" data-price="현재가: 10,000원" data-bids="입찰 (미정)" data-end="2026-02-08T11:30:00+09:00">
     <img src="https://via.placeholder.com/300x180/333333/ffffff?text=55인치+TV" alt="TV">
     <h3>LG 55인치 TV (고장)</h3>
     <div class="price">현재가: 10,000원</div>
-    <div class="remain" data-end="2026-02-07T20:00:00+09:00">남은시간: 계산중...</div>
-    <button>입찰하기</button>
+    <div class="remain">남은시간: 계산중...</div>
+    <button class="bidBtn">입찰하기</button>
   </div>
 
-  <div class="card">
+  <div class="card" data-title="캠핑 테이블" data-price="현재가: 5,000원" data-bids="입찰 (미정)" data-end="2026-02-08T12:00:00+09:00">
     <img src="https://via.placeholder.com/300x180/008000/ffffff?text=캠핑테이블" alt="캠핑 테이블">
     <h3>캠핑 테이블</h3>
     <div class="price">현재가: 5,000원</div>
-    <div class="remain" data-end="2026-02-08T12:00:00+09:00">남은시간: 계산중...</div>
-    <button>입찰하기</button>
+    <div class="remain">남은시간: 계산중...</div>
+    <button class="bidBtn">입찰하기</button>
   </div>
 
 </div>
 </div>
 
+<!-- ✅ 입찰 팝업(모달) -->
+<div class="modal-bg" id="modalBg" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">입찰하기</div>
+      <button class="modal-close" id="modalClose" aria-label="닫기">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-row"><b>상품:</b> <span id="mItem">-</span></div>
+      <div class="modal-row"><b>정보:</b> <span id="mInfo">-</span></div>
+      <div class="modal-row"><b>남은시간:</b> <span id="mRemain">-</span></div>
+
+      <label style="font-size:14px; font-weight:700;">입찰가(원)</label>
+      <input class="modal-input" id="bidAmount" type="number" min="0" placeholder="예) 15000">
+
+      <div class="notice">
+        ※ 데모용 팝업입니다. 실제 결제/보증금/입찰 저장 기능은 다음 단계에서 붙입니다.
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-gray" id="modalCancel">취소</button>
+      <button id="modalSubmit">입찰 제출</button>
+    </div>
+  </div>
+</div>
+
 <script>
-function updateCountdowns() {
-  const items = document.querySelectorAll(".remain");
+/* =========================
+   ✅ 1) 남은시간 + 마감임박(1시간 이하) 필터
+========================= */
+let currentFilter = "all"; // all | closing
+let lastClickedCard = null;
 
-  items.forEach(el => {
-    const endStr = el.getAttribute("data-end");
-    const end = new Date(endStr).getTime();
-    const now = Date.now();
-    const diff = end - now;
+function getDiffMs(endStr){
+  const end = new Date(endStr).getTime();
+  const now = Date.now();
+  return end - now;
+}
 
-    if (diff <= 0) {
-      el.textContent = "남은시간: 마감";
-      el.style.color = "gray";
+function formatRemainText(diffMs){
+  if (diffMs <= 0) return { text: "남은시간: 마감", isClosed:true, totalSec:0 };
+
+  const totalSec = Math.floor(diffMs / 1000);
+  const days = Math.floor(totalSec / (60 * 60 * 24));
+  const hours = Math.floor((totalSec % (60 * 60 * 24)) / (60 * 60));
+  const mins = Math.floor((totalSec % (60 * 60)) / 60);
+  const secs = totalSec % 60;
+
+  const dText = days > 0 ? `${days}일 ` : "";
+  return {
+    text: `남은시간: ${dText}${hours}시간 ${mins}분 ${secs}초`,
+    isClosed:false,
+    totalSec
+  };
+}
+
+function updateCountdownsAndFilter(){
+  const cards = document.querySelectorAll(".card");
+
+  cards.forEach(card => {
+    const endStr = card.getAttribute("data-end");
+    const diff = getDiffMs(endStr);
+    const remainEl = card.querySelector(".remain");
+
+    const remainInfo = formatRemainText(diff);
+
+    if (remainInfo.isClosed) {
+      remainEl.textContent = remainInfo.text;
+      remainEl.style.color = "gray";
+      card.style.display = "none"; // 마감된 상품은 숨김
       return;
     }
 
-    const totalSec = Math.floor(diff / 1000);
-    const days = Math.floor(totalSec / (60 * 60 * 24));
-    const hours = Math.floor((totalSec % (60 * 60 * 24)) / (60 * 60));
-    const mins = Math.floor((totalSec % (60 * 60)) / 60);
-    const secs = totalSec % 60;
+    remainEl.textContent = remainInfo.text;
+    remainEl.style.color = "#d40000";
 
-    const dText = days > 0 ? `${days}일 ` : "";
-    el.textContent = `남은시간: ${dText}${hours}시간 ${mins}분 ${secs}초`;
+    // ✅ 필터 적용
+    if (currentFilter === "closing") {
+      // 1시간 이하(<=3600초)만 보여주기
+      card.style.display = (remainInfo.totalSec <= 3600) ? "" : "none";
+    } else {
+      card.style.display = "";
+    }
   });
+
+  // 만약 필터 때문에 현재 열려있는 카드가 숨겨지면 팝업도 닫기
+  if (lastClickedCard && lastClickedCard.style.display === "none") {
+    closeModal();
+  }
 }
 
-updateCountdowns();
-setInterval(updateCountdowns, 1000);
+function setFilter(mode){
+  currentFilter = mode;
+
+  const label = document.getElementById("filterLabel");
+  const desc = document.getElementById("filterDesc");
+  const clearBtn = document.getElementById("clearFilter");
+
+  if (mode === "closing") {
+    label.textContent = "마감임박(1시간 이하)";
+    desc.textContent = "— 남은 시간이 1시간 이하인 경매만 표시합니다.";
+    clearBtn.style.display = "block";
+  } else {
+    label.textContent = "전체";
+    desc.textContent = "— 모든 경매를 표시합니다.";
+    clearBtn.style.display = "none";
+  }
+
+  updateCountdownsAndFilter();
+}
+
+document.getElementById("navClosing").addEventListener("click", (e) => {
+  e.preventDefault();
+  setFilter("closing");
+});
+document.getElementById("navAll").addEventListener("click", (e) => {
+  e.preventDefault();
+  setFilter("all");
+});
+document.getElementById("clearFilter").addEventListener("click", () => setFilter("all"));
+
+/* =========================
+   ✅ 2) 입찰하기 팝업(모달)
+========================= */
+const modalBg = document.getElementById("modalBg");
+const modalClose = document.getElementById("modalClose");
+const modalCancel = document.getElementById("modalCancel");
+const modalSubmit = document.getElementById("modalSubmit");
+
+const mItem = document.getElementById("mItem");
+const mInfo = document.getElementById("mInfo");
+const mRemain = document.getElementById("mRemain");
+const bidAmount = document.getElementById("bidAmount");
+const modalTitle = document.getElementById("modalTitle");
+
+function openModal(card){
+  lastClickedCard = card;
+
+  const title = card.getAttribute("data-title") || "상품";
+  const price = card.getAttribute("data-price") || "";
+  const bids = card.getAttribute("data-bids") || "";
+  const endStr = card.getAttribute("data-end");
+
+  modalTitle.textContent = "입찰하기";
+  mItem.textContent = title;
+  mInfo.textContent = [price, bids].filter(Boolean).join(" / ") || "-";
+
+  const remainInfo = formatRemainText(getDiffMs(endStr));
+  mRemain.textContent = remainInfo.isClosed ? "마감" : remainInfo.text.replace("남은시간: ","");
+
+  bidAmount.value = "";
+  modalBg.style.display = "flex";
+  modalBg.setAttribute("aria-hidden", "false");
+  bidAmount.focus();
+}
+
+function closeModal(){
+  modalBg.style.display = "none";
+  modalBg.setAttribute("aria-hidden", "true");
+  lastClickedCard = null;
+}
+
+document.querySelectorAll(".bidBtn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const card = btn.closest(".card");
+    openModal(card);
+  });
+});
+
+modalClose.addEventListener("click", closeModal);
+modalCancel.addEventListener("click", closeModal);
+
+// 배경 클릭해도 닫기
+modalBg.addEventListener("click", (e) => {
+  if (e.target === modalBg) closeModal();
+});
+
+// ESC로 닫기
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && modalBg.style.display === "flex") closeModal();
+});
+
+// 제출 버튼(현재는 데모 알림)
+modalSubmit.addEventListener("click", () => {
+  const v = (bidAmount.value || "").trim();
+  if (!v) {
+    alert("입찰가를 입력해주세요.");
+    bidAmount.focus();
+    return;
+  }
+  alert(`입찰 제출(데모): ${v}원\n\n※ 실제 저장/결제 기능은 다음 단계에서 연결합니다.`);
+  closeModal();
+});
+
+/* =========================
+   ✅ 초기 실행
+========================= */
+setFilter("all");
+setInterval(updateCountdownsAndFilter, 1000);
 </script>
 
 </body>
