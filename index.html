@@ -1,111 +1,184 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <title>MWODEUN 모든경매</title>
-  <style>
-    body{
-      font-family: sans-serif;
-      text-align:center;
-      padding:80px;
-      background:#f5f5f5;
-      margin:0;
-    }
-    h1{ font-size:48px; }
-    p{ font-size:22px; }
-    .box{
-      background:white;
-      padding:40px;
-      border-radius:10px;
-      display:inline-block;
-      box-shadow:0 0 15px rgba(0,0,0,0.1);
-    }
-  </style>
+<meta charset="utf-8">
+<title>MWODEUN 모든경매</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  margin:0;
+  background:#f5f5f5;
+}
+
+header{
+  text-align:center;
+  padding:30px 0 10px;
+  background:white;
+}
+
+nav{
+  background:#222;
+  padding:10px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+nav a{
+  color:white;
+  margin:10px;
+  text-decoration:none;
+  font-size:14px;
+}
+
+nav a:hover{
+  color:#6a0dad;
+}
+
+.container{
+  max-width:1100px;
+  margin:40px auto;
+  padding:0 20px;
+}
+
+h2{
+  margin-bottom:25px;
+}
+
+.cards{
+  display:flex;
+  gap:25px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.card{
+  background:white;
+  width:300px;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  transition:0.2s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+}
+
+.card h3{
+  margin:0 0 15px;
+  font-size:18px;
+}
+
+.price{
+  font-size:16px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.remain{
+  font-size:14px;
+  color:#d40000;
+  margin-bottom:15px;
+}
+
+button{
+  padding:8px 14px;
+  background:#6a0dad;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#5300a8;
+}
+</style>
 </head>
 
 <body>
 
-  <header style="text-align:center; padding:30px 0 10px;">
-    <img src="logo.png" alt="MWODEUN 모든경매" style="height:90px;">
-    <div style="font-size:22px; font-weight:700; margin-top:10px;">모든경매</div>
-  </header>
+<header>
+  <img src="logo.png" alt="MWODEUN 모든경매" style="height:90px;">
+  <div style="font-size:22px; font-weight:700; margin-top:10px;">모든경매</div>
+</header>
 
-  <nav style="background:#222; padding:10px; display:flex; flex-wrap:wrap; justify-content:center;">
-    <a href="#" style="color:white; margin:10px;">📺 가전제품</a>
-    <a href="#" style="color:white; margin:10px;">🏗 건설 잔여자재</a>
-    <a href="#" style="color:white; margin:10px;">💥 고장&파손제품</a>
-    <a href="#" style="color:white; margin:10px;">🔧 공구/장비</a>
-    <a href="#" style="color:white; margin:10px;">🙋 구해요</a>
-    <a href="#" style="color:white; margin:10px;">⏰ 마감임박</a>
-    <a href="#" style="color:white; margin:10px;">🎣 레져용품</a>
-    <a href="#" style="color:white; margin:10px;">📜 운영규칙</a>
-    <a href="#" style="color:white; margin:10px;">🔥 진행중 경매</a>
-    <a href="#" style="color:white; margin:10px;">📝 판매등록</a>
-    <a href="#" style="color:white; margin:10px;">👤 마이페이지</a>
-  </nav>
+<nav>
+  <a href="#">📺 가전제품</a>
+  <a href="#">🏗 건설 잔여자재</a>
+  <a href="#">💥 고장&파손제품</a>
+  <a href="#">🔧 공구/장비</a>
+  <a href="#">🙋 구해요</a>
+  <a href="#">⏰ 마감임박</a>
+  <a href="#">🎣 레저용품</a>
+  <a href="#">📜 운영규칙</a>
+  <a href="#">🔥 진행중 경매</a>
+  <a href="#">📝 판매등록</a>
+  <a href="#">👤 마이페이지</a>
+</nav>
 
-  <div style="max-width:1000px; margin:40px auto;">
-    <h2 style="text-align:left;">🔥 진행중 경매</h2>
+<div class="container">
 
-    <!-- 카드들은 여기 한 겹의 flex만 있으면 됩니다 -->
-    <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; align-items:flex-start;">
+<h2>🔥 진행중 경매</h2>
 
-      <!-- 카드 1 -->
-      <div style="background:white; padding:20px; width:280px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
-        <h3>전동드릴 세트</h3>
-        <p>입찰 3건</p>
-        <p class="remain" data-end="2026-02-07T18:00:00+09:00">남은시간: 계산중...</p>
-        <button style="padding:8px 12px; background:#6a0dad; color:white; border:none; border-radius:6px;">입찰하기</button>
-      </div>
+<div class="cards">
 
-      <!-- 카드 2 -->
-      <div style="background:white; padding:20px; width:280px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
-        <h3>LG 55인치 TV (고장)</h3>
-        <p>현재가: 10,000원</p>
-        <p class="remain" data-end="2026-02-07T20:00:00+09:00">남은시간: 계산중...</p>
-        <button style="padding:8px 12px; background:#6a0dad; color:white; border:none; border-radius:6px;">입찰하기</button>
-      </div>
-
-      <!-- 카드 3 -->
-      <div style="background:white; padding:20px; width:280px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
-        <h3>캠핑 테이블</h3>
-        <p class="remain" data-end="2026-02-08T12:00:00+09:00">남은시간: 계산중...</p>
-        <button style="padding:8px 12px; background:#6a0dad; color:white; border:none; border-radius:6px;">입찰하기</button>
-      </div>
-
-    </div>
+  <div class="card">
+    <h3>전동드릴 세트</h3>
+    <div class="price">입찰 3건</div>
+    <div class="remain" data-end="2026-02-07T18:00:00+09:00">남은시간: 계산중...</div>
+    <button>입찰하기</button>
   </div>
 
-  <!-- 스크립트는 body 맨 아래(카드 밖)로 빼는 게 안전 -->
-  <script>
-    function updateCountdowns() {
-      const items = document.querySelectorAll(".remain");
+  <div class="card">
+    <h3>LG 55인치 TV (고장)</h3>
+    <div class="price">현재가: 10,000원</div>
+    <div class="remain" data-end="2026-02-07T20:00:00+09:00">남은시간: 계산중...</div>
+    <button>입찰하기</button>
+  </div>
 
-      items.forEach(el => {
-        const endStr = el.getAttribute("data-end");
-        const end = new Date(endStr).getTime();
-        const now = Date.now();
-        let diff = end - now;
+  <div class="card">
+    <h3>캠핑 테이블</h3>
+    <div class="price">현재가: 5,000원</div>
+    <div class="remain" data-end="2026-02-08T12:00:00+09:00">남은시간: 계산중...</div>
+    <button>입찰하기</button>
+  </div>
 
-        if (diff <= 0) {
-          el.textContent = "남은시간: 마감";
-          return;
-        }
+</div>
+</div>
 
-        const totalSec = Math.floor(diff / 1000);
-        const days = Math.floor(totalSec / (60 * 60 * 24));
-        const hours = Math.floor((totalSec % (60 * 60 * 24)) / (60 * 60));
-        const mins = Math.floor((totalSec % (60 * 60)) / 60);
-        const secs = totalSec % 60;
+<script>
+function updateCountdowns() {
+  const items = document.querySelectorAll(".remain");
 
-        const dText = days > 0 ? `${days}일 ` : "";
-        el.textContent = `남은시간: ${dText}${hours}시간 ${mins}분 ${secs}초`;
-      });
+  items.forEach(el => {
+    const endStr = el.getAttribute("data-end");
+    const end = new Date(endStr).getTime();
+    const now = Date.now();
+    const diff = end - now;
+
+    if (diff <= 0) {
+      el.textContent = "남은시간: 마감";
+      el.style.color = "gray";
+      return;
     }
 
-    updateCountdowns();
-    setInterval(updateCountdowns, 1000);
-  </script>
+    const totalSec = Math.floor(diff / 1000);
+    const days = Math.floor(totalSec / (60 * 60 * 24));
+    const hours = Math.floor((totalSec % (60 * 60 * 24)) / (60 * 60));
+    const mins = Math.floor((totalSec % (60 * 60)) / 60);
+    const secs = totalSec % 60;
+
+    const dText = days > 0 ? `${days}일 ` : "";
+    el.textContent = `남은시간: ${dText}${hours}시간 ${mins}분 ${secs}초`;
+  });
+}
+
+updateCountdowns();
+setInterval(updateCountdowns, 1000);
+</script>
 
 </body>
 </html>
