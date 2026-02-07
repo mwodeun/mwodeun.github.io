@@ -61,12 +61,42 @@
     <div style="background:white; padding:20px; width:280px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
         <h3>LG 55인치 TV (고장)</h3>
         <p>현재가: 10,000원</p>
+        <p class="remain" data-end="2026-02-07T20:00:00+09:00">남은시간: 계산중...</p>
         <button style="padding:8px 12px; background:#6a0dad; color:white; border:none; border-radius:6px;">입찰하기</button>
     <div style="background:white; padding:20px; width:280px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
         
         <h3>캠핑 테이블</h3>
+        <p class="remain" data-end="2026-02-08T12:00:00+09:00">남은시간: 계산중...</p>
 <button style="padding:8px 12px; background:#6a0dad; color:white; border:none; border-radius:6px;">입찰하기</button>
+<script>
+  function updateCountdowns() {
+    const items = document.querySelectorAll(".remain");
 
+    items.forEach(el => {
+      const endStr = el.getAttribute("data-end");
+      const end = new Date(endStr).getTime();
+      const now = Date.now();
+      let diff = end - now;
+
+      if (diff <= 0) {
+        el.textContent = "남은시간: 마감";
+        return;
+      }
+
+      const totalSec = Math.floor(diff / 1000);
+      const days = Math.floor(totalSec / (60 * 60 * 24));
+      const hours = Math.floor((totalSec % (60 * 60 * 24)) / (60 * 60));
+      const mins = Math.floor((totalSec % (60 * 60)) / 60);
+      const secs = totalSec % 60;
+
+      const dText = days > 0 ? `${days}일 ` : "";
+      el.textContent = `남은시간: ${dText}${hours}시간 ${mins}분 ${secs}초`;
+    });
+  }
+
+  updateCountdowns();
+  setInterval(updateCountdowns, 1000);
+</script>
 </div>
         </div>
 </html>
