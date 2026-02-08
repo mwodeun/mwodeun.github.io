@@ -23,7 +23,7 @@
     }
 
     /* =========================
-       ✅ 상단(사진처럼) : 하늘 배너 + 보라 메뉴 + 카테고리(타원형)
+       상단 고정
        ========================= */
     header{
       position:sticky;
@@ -33,12 +33,9 @@
       border-bottom:1px solid var(--border);
     }
 
-    /* 하늘 배너(이미지 없으니 CSS로 하늘 느낌) */
-    .skyBanner{
-      background:
-        radial-gradient(1200px 180px at 20% 35%, rgba(255,255,255,.65), rgba(255,255,255,0) 60%),
-        radial-gradient(900px 160px at 75% 30%, rgba(255,255,255,.55), rgba(255,255,255,0) 60%),
-        linear-gradient(90deg, #5db2ff 0%, #a6dbff 35%, #c6edff 70%, #a9dbff 100%);
+    /* ✅ 문제2: 배너 배경(무늬/회색원/하늘) 제거 → 흰 배경 */
+    .bannerArea{
+      background:#fff;
       border-bottom:1px solid rgba(0,0,0,.05);
     }
 
@@ -62,12 +59,12 @@
       gap:12px;
       min-width:260px;
     }
-    /* ✅ 로고(이미지 자체) 크게 */
+    /* ✅ 문제1: 로고 더 키움 */
     .brand img{
-      height:64px;          /* ← 로고만 키움 */
+      height:78px;
       width:auto;
       display:block;
-      filter: drop-shadow(0 2px 2px rgba(0,0,0,.12));
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,.10));
     }
     .brand .title{
       font-weight:900;
@@ -80,6 +77,34 @@
       opacity:.85;
       margin-top:4px;
       font-weight:700;
+    }
+
+    /* ✅ 문제2: 배너 문구(가운데 정렬 + 좌→우 흐름) */
+    .bannerMarquee{
+      margin-top:8px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      background:#fff;
+      overflow:hidden;
+    }
+    .marqueeTrack{
+      display:flex;
+      width:100%;
+      justify-content:center; /* 가운데 정렬 기준 */
+      overflow:hidden;
+    }
+    .marqueeText{
+      display:inline-block;
+      white-space:nowrap;
+      font-weight:900;
+      color:#111;
+      opacity:.85;
+      animation: marqueeLR 14s linear infinite;
+    }
+    @keyframes marqueeLR{
+      0%{ transform: translateX(-55%); }
+      100%{ transform: translateX(55%); }
     }
 
     /* 상단 오른쪽 컨트롤(닉네임/자동증가/관리자버튼) */
@@ -98,10 +123,9 @@
       align-items:center;
       gap:8px;
       padding:8px 10px;
-      background:rgba(255,255,255,.85);
+      background:#fff;
       border:1px solid rgba(0,0,0,.10);
       border-radius:12px;
-      backdrop-filter: blur(3px);
     }
     .chip label{
       font-size:12px;
@@ -132,7 +156,7 @@
     .btn.danger{background:#d93025; color:#fff;}
     .btn.small{padding:7px 10px; border-radius:10px; font-size:12px}
 
-    /* ✅ 1번째 메뉴줄(사진처럼 보라색 바) */
+    /* ✅ 문제3: 보라색 메뉴줄 → 전부 오른쪽 정렬 */
     .primaryNav{
       background: linear-gradient(90deg, var(--purple) 0%, var(--purple2) 100%);
       border-top:1px solid rgba(255,255,255,.18);
@@ -144,6 +168,7 @@
       gap:10px;
       align-items:center;
       flex-wrap:wrap;
+      justify-content:flex-end;  /* ✅ 오른쪽 정렬 */
     }
     .navLink{
       color:#fff;
@@ -157,9 +182,9 @@
     }
     .navLink:hover{ background:rgba(255,255,255,.14); }
 
-    /* ✅ 2번째 메뉴줄: 배경색 없이 타원형(지금 스타일 유지) */
+    /* 2번째 메뉴줄(카테고리): 배경색 없이 타원형 */
     .categoryRow{
-      background:#fff; /* 줄 전체 배경은 흰색(배경색 ‘바’ 느낌 제거) */
+      background:#fff;
       border-bottom:1px solid var(--border);
     }
     .categoryRow .wrap{
@@ -172,7 +197,7 @@
     .catBtn{
       cursor:pointer;
       border:1px solid var(--border);
-      background:transparent;   /* ✅ “배경색 없이” */
+      background:transparent;
       padding:8px 12px;
       border-radius:999px;
       font-weight:900;
@@ -190,11 +215,10 @@
       display:none;
       margin-top:12px;
       padding:14px;
-      background:rgba(255,255,255,.92);
+      background:#fff;
       border:1px solid rgba(0,0,0,.10);
       border-radius:16px;
       box-shadow:0 10px 22px rgba(0,0,0,.08);
-      backdrop-filter: blur(4px);
     }
     .adminGrid{
       display:grid;
@@ -204,7 +228,7 @@
     .adminGrid .full{grid-column:1 / -1}
 
     /* =========================
-       본문/카드(기능 그대로)
+       본문/카드(기능 유지)
        ========================= */
     main .wrap{padding:18px 16px 70px}
     h2{
@@ -306,19 +330,87 @@
     .countdown{font-weight:900}
     .lastBidder{font-weight:900; color:#111;}
 
+    /* =========================
+       ✅ 문제4: 하단 카테고리별 목록(세로선 구분)
+       ========================= */
+    .summaryBox{
+      margin-top:22px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:16px;
+      box-shadow:0 8px 18px rgba(0,0,0,0.05);
+      overflow:hidden;
+    }
+    .summaryHead{
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom:1px solid var(--border);
+    }
+    .summaryHead .ttl{
+      font-size:18px;
+      font-weight:900;
+    }
+    .summaryHead .hint{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .summaryGrid{
+      display:grid;
+      grid-template-columns: repeat(5, 1fr); /* 가전/공구/전자스크랩/생활용품/건설 */
+    }
+    .sumCol{
+      padding:12px 12px 14px;
+      min-height:140px;
+      border-left:1px solid var(--border); /* ✅ 세로선 */
+    }
+    .sumCol:first-child{border-left:none;}
+    .sumTitle{
+      font-weight:900;
+      margin-bottom:10px;
+      color:#111;
+    }
+    .sumItem{
+      padding:10px 8px;
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:12px;
+      background:#fafafa;
+      margin-bottom:10px;
+    }
+    .sumLine{
+      font-size:12px;
+      color:#111;
+      line-height:1.45;
+    }
+    .sumLine b{font-weight:900;}
+    .sumEmpty{
+      font-size:12px;
+      color:var(--muted);
+      padding:6px 2px;
+      font-weight:700;
+    }
+    @media (max-width:980px){
+      .summaryGrid{ grid-template-columns: 1fr; }
+      .sumCol{ border-left:none; border-top:1px solid var(--border); }
+      .sumCol:first-child{ border-top:none; }
+    }
+
     @media (max-width:720px){
       .adminGrid{grid-template-columns:1fr}
       input[type="text"]{min-width:140px}
       .brand{min-width:auto}
-      .brand img{height:56px;}
+      .brand img{height:68px;}
     }
   </style>
 </head>
 
 <body>
   <header>
-    <!-- ✅ 하늘 배너 영역 -->
-    <div class="skyBanner">
+    <!-- 배너(흰 배경) -->
+    <div class="bannerArea">
       <div class="wrap">
         <div class="topbar">
           <div class="brand">
@@ -347,6 +439,15 @@
 
             <button class="btn primary" onclick="toggleAdmin()">관리자 상품추가</button>
             <button class="btn gray" onclick="resetToSample()" title="샘플데이터로 초기화">샘플초기화</button>
+          </div>
+        </div>
+
+        <!-- ✅ 배너 문구(가운데 정렬 + 좌→우) -->
+        <div class="bannerMarquee">
+          <div class="marqueeTrack">
+            <div class="marqueeText">
+              MWODEUN 모든경매에 오신 것을 환영합니다 · 중고물품만 등록 · 입찰은 보증금 확인 후 진행 · 마감 60초 이내 입찰 시 자동연장(60초)
+            </div>
           </div>
         </div>
 
@@ -387,7 +488,7 @@
       </div>
     </div>
 
-    <!-- ✅ 1번째 메뉴줄(보라색 바) - 사진처럼 “배열 느낌” -->
+    <!-- 보라색 메뉴(오른쪽 정렬) -->
     <div class="primaryNav">
       <div class="wrap">
         <a class="navLink" href="#" onclick="return false;">HOME</a>
@@ -398,7 +499,7 @@
       </div>
     </div>
 
-    <!-- ✅ 2번째 메뉴줄(배경색 없는 타원형 카테고리) -->
+    <!-- 카테고리(타원형) -->
     <div class="categoryRow">
       <div class="wrap" id="categoryBar"></div>
     </div>
@@ -416,6 +517,19 @@
         <div class="sectionHint">마감된 상품만 이곳에 모입니다. (없으면 이 영역은 표시되지 않습니다)</div>
         <div class="grid" id="closedGrid"></div>
       </div>
+
+      <!-- ✅ 문제4: 하단 카테고리별 목록(예전 방식 복구) -->
+      <div class="summaryBox" id="summaryBox">
+        <div class="summaryHead">
+          <div class="ttl">진행중인 경매</div>
+          <div class="hint">카테고리별로 “상품명 / 현재가 / 남은시간” 표시</div>
+        </div>
+
+        <div class="summaryGrid" id="summaryGrid">
+          <!-- JS로 채움 -->
+        </div>
+      </div>
+
     </div>
   </main>
 
@@ -423,8 +537,8 @@
     /***********************
      * LocalStorage
      ***********************/
-    const LS_KEY = "mwodeun_products_layout_restore_v1";
-    const LS_FILTER = "mwodeun_filter_layout_restore_v1";
+    const LS_KEY = "mwodeun_products_final_v1";
+    const LS_FILTER = "mwodeun_filter_final_v1";
 
     function nowISO(){ return new Date().toISOString(); }
 
@@ -433,12 +547,7 @@
       return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
     }
     function formatMoney(n){ return Number(n||0).toLocaleString("ko-KR"); }
-    function formatEndTime(iso){
-      const d = new Date(iso);
-      if (isNaN(d.getTime())) return "시간정보 없음";
-      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ` +
-             `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-    }
+
     function calcRemain(endIso){
       const end = new Date(endIso).getTime();
       const now = Date.now();
@@ -450,6 +559,13 @@
       const m = Math.floor((sec%3600)/60);
       const s = sec%60;
       return {closed:false, text:`${h}시간 ${m}분 ${s}초`};
+    }
+
+    function formatEndTime(iso){
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return "시간정보 없음";
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ` +
+             `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     }
 
     function loadProducts(){
@@ -795,6 +911,55 @@
       });
     }
 
+    /* ✅ 문제4: 하단 목록 렌더 */
+    const SUMMARY_CATS = [
+      {key:"가전", label:"가전"},
+      {key:"공구/장비", label:"공구/장비"},
+      {key:"전자스크랩", label:"전자스크랩"},
+      {key:"생활용품/레저용품", label:"생활용품/레저용품"},
+      {key:"건설 잔여자재", label:"건설 전여자재"}
+    ];
+
+    function renderSummary(openItems){
+      const grid = document.getElementById("summaryGrid");
+      grid.innerHTML = "";
+
+      SUMMARY_CATS.forEach(cat=>{
+        const col = document.createElement("div");
+        col.className = "sumCol";
+
+        const t = document.createElement("div");
+        t.className = "sumTitle";
+        t.textContent = cat.label;
+
+        col.appendChild(t);
+
+        const list = openItems.filter(p=>p.category===cat.key);
+
+        if(list.length===0){
+          const empty = document.createElement("div");
+          empty.className = "sumEmpty";
+          empty.textContent = "등록된 상품이 없습니다.";
+          col.appendChild(empty);
+        }else{
+          // 최신 등록 우선
+          list.slice(0, 6).forEach(p=>{
+            const remain = calcRemain(p.endTime);
+            const box = document.createElement("div");
+            box.className = "sumItem";
+            box.innerHTML = `
+              <div class="sumLine"><b>상품명:</b> ${escapeHtml(p.title)}</div>
+              <div class="sumLine"><b>현재가:</b> ${formatMoney(p.currentPrice || p.startPrice)}원</div>
+              <div class="sumLine"><b>남은시간:</b> <span id="sum_cd_${p.id}">${remain.text}</span></div>
+            `;
+            col.appendChild(box);
+          });
+        }
+
+        grid.appendChild(col);
+      });
+    }
+
     function renderAll(){
       syncClosedFlags();
       renderCategoryBar();
@@ -824,6 +989,10 @@
           .forEach(p=> closedGrid.appendChild(renderCard(p)));
       }
 
+      // ✅ 하단 요약 목록은 "전체 진행중(필터 무시)" 기준이 더 자연스러움:
+      const openAll = state.products.filter(p=>!p.closed);
+      renderSummary(openAll);
+
       updateNextBidLabels();
     }
 
@@ -841,6 +1010,13 @@
         if(cd){
           const remain = calcRemain(p.endTime);
           cd.textContent = (p.closed || remain.closed) ? "마감" : remain.text;
+        }
+
+        // 하단 목록 남은시간 갱신
+        const sumCd = document.getElementById("sum_cd_"+p.id);
+        if(sumCd){
+          const remain = calcRemain(p.endTime);
+          sumCd.textContent = (p.closed || remain.closed) ? "마감" : remain.text;
         }
       });
 
