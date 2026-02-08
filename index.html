@@ -11,322 +11,122 @@
   --brand:#6a0dad;
   --danger:#d40000;
   --bg:#f5f5f5;
-  --text:#0b2239;
 }
 *{box-sizing:border-box;}
-body{margin:0;font-family:Arial, sans-serif;background:var(--bg);color:var(--text);}
+body{margin:0;font-family:Arial;background:var(--bg);}
 
-/* ✅ 풀폭은 유지, 내부는 보기 좋게 정렬 */
-.full{width:100%; padding-left:16px; padding-right:16px;}
+.full{width:100%;padding:16px;}
 
-/* 하늘 배경 */
-.sky{
-  background:linear-gradient(180deg,#48b2ff 0%,#86cfff 52%,#d9f3ff 100%);
-  padding-top:18px;
-  padding-bottom:18px;
-  border-bottom:1px solid rgba(0,0,0,0.06);
-  position:relative;
-}
-.sky:before{
-  content:"";
-  position:absolute; inset:0;
-  background:
-    radial-gradient(circle at 14% 28%, rgba(255,255,255,0.65) 0 15%, transparent 16%),
-    radial-gradient(circle at 23% 30%, rgba(255,255,255,0.55) 0 11%, transparent 12%),
-    radial-gradient(circle at 74% 22%, rgba(255,255,255,0.60) 0 18%, transparent 19%),
-    radial-gradient(circle at 85% 26%, rgba(255,255,255,0.50) 0 12%, transparent 13%);
-  pointer-events:none;
-}
-.sky > *{position:relative;}
-
-/* 로고/타이틀 */
-.headerRow{display:flex;align-items:center;gap:14px;}
-.logoCircle{
-  width:92px;height:92px;border-radius:50%;
-  background:#fff;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 10px 25px rgba(0,0,0,0.10);
-  border:1px solid rgba(0,0,0,0.06);
-  overflow:hidden;
-}
-/* 로고 파일 여백이 있어도 크게 */
-.logoCircle img{
-  height:78px; width:auto; display:block;
-  transform: scale(1.35);
-  transform-origin:center;
-}
-.titleText{font-weight:900;font-size:22px;color:#08324d;}
-
-/* 배너 */
-.banner{
-  margin-top:12px;
-  background:rgba(255,255,255,0.62);
-  border:1px solid rgba(255,255,255,0.55);
-  border-radius:16px;
-  padding:14px;
-  overflow:hidden;
-  box-shadow:0 12px 28px rgba(0,0,0,0.10);
-}
-.marquee{
-  font-family:"Jua",sans-serif;
-  font-size:18px;
-  white-space:nowrap;
-  transform:translateX(-55%);
-  animation:slideStop 5s ease-out 1 forwards;
-  color:#08324d;
-}
-@keyframes slideStop{
-  0%{transform:translateX(-55%);}
-  70%{transform:translateX(0);}
-  100%{transform:translateX(0);}
-}
-
-/* 메뉴 */
-.navTop{
-  margin-top:12px;
-  background:var(--brand);
-  padding:10px;
-  border-radius:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-.navTop .left{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-.navTop a{
-  color:#fff;text-decoration:none;
-  padding:8px 12px;border-radius:10px;font-weight:900;font-size:13px;
-}
-.navTop a:hover{background:rgba(255,255,255,0.18);}
-
-.navBottom{
-  margin-top:8px;
-  background:#222;
-  padding:10px;
-  border-radius:12px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  justify-content:center;
-}
-.navBottom a{
-  color:#fff;text-decoration:none;
-  padding:8px 12px;border-radius:10px;font-weight:800;font-size:13px;
-}
-.navBottom a:hover{background:rgba(106,13,173,0.40);}
-
-/* 컨텐츠 */
-.container{
-  width:100%;
-  padding-top:14px;
-  padding-bottom:22px;
-}
-
-/* 섹션 타이틀 */
-.sectionTitle{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  margin:14px 0 10px;
-}
-.sectionTitle h2{margin:0;font-size:18px;}
-.pill{font-size:12px;font-weight:900;padding:6px 10px;border-radius:999px;background:#f1e6ff;color:#4b0aa0;border:1px solid #ead7ff;}
-
-/* 마감임박 박스 */
-.closingBox{
-  background:#fff5f5;
-  border:2px solid var(--danger);
-  border-radius:16px;
-  padding:14px;
-  margin-bottom:16px;
-  box-shadow:0 6px 16px rgba(0,0,0,0.06);
-}
-.closingTop{display:flex;justify-content:space-between;align-items:center;gap:10px;}
-.closingBox h3{color:var(--danger);margin:0;font-size:16px;}
-.closingItem{margin-top:8px;font-size:13px;line-height:1.35;}
-.smallBtn{
-  background:#111;color:#fff;border:none;
-  padding:8px 12px;border-radius:12px;cursor:pointer;font-weight:900;
-}
-.smallBtn:hover{background:#000;}
-
-/* ✅ 문제1 해결: 카드/텍스트 보드가 큰 화면에서 한쪽으로 안 치우치게
-   - 페이지는 풀폭 유지
-   - 카드/보드 영역만 "중앙 정렬 + 최대폭" */
-.contentWrap{
-  width:100%;
-  display:flex;
-  justify-content:center; /* 가운데 정렬 */
-}
-.contentInner{
-  width:100%;
-  max-width:1600px; /* 큰 화면에서도 균형 잡히게 */
-}
-
-/* 카드 4열(데스크탑 안정) */
 .cardsGrid{
-  width:100%;
   display:grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns:repeat(4,1fr);
   gap:14px;
-  justify-content:center;
 }
-@media (max-width: 1050px){
-  .cardsGrid{grid-template-columns: repeat(2, minmax(0, 1fr));}
+@media(max-width:1000px){
+  .cardsGrid{grid-template-columns:repeat(2,1fr);}
 }
-@media (max-width: 620px){
-  .cardsGrid{grid-template-columns: repeat(1, minmax(0, 1fr));}
+@media(max-width:600px){
+  .cardsGrid{grid-template-columns:repeat(1,1fr);}
 }
 
 .card{
-  background:#fff;
+  background:white;
   padding:14px;
   border-radius:14px;
   box-shadow:0 8px 20px rgba(0,0,0,0.08);
 }
-.card .img{
+.card img{
   width:100%;
-  height:150px;
-  border-radius:12px;
-  overflow:hidden;
-  background:#eee;
+  height:140px;
+  object-fit:cover;
+  border-radius:10px;
 }
-.card .img img{width:100%;height:100%;object-fit:cover;display:block;}
-.card h3{margin:10px 0 8px;font-size:15px;}
-.remain{color:var(--danger);font-size:13px;margin:6px 0;}
-.mainBtn{
-  background:var(--brand);color:#fff;border:none;
-  padding:8px 12px;border-radius:12px;cursor:pointer;font-weight:900;
+.remain{color:var(--danger);font-size:13px;}
+button{
+  background:var(--brand);
+  color:white;
+  border:none;
+  padding:8px 12px;
+  border-radius:10px;
+  cursor:pointer;
 }
-.mainBtn:hover{background:#5300a8;}
+button:hover{background:#5300a8;}
 
-/* 텍스트 7칸 보드 */
-.textBoard{
-  width:100%;
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  background:#fff;
+.closingBox{
+  background:#fff5f5;
+  border:2px solid var(--danger);
+  padding:12px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+
+/* ===== 모달 ===== */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+.modalBox{
+  background:white;
+  padding:20px;
+  width:320px;
   border-radius:14px;
-  overflow:hidden;
-  box-shadow:0 6px 16px rgba(0,0,0,0.06);
 }
-.textCol{
-  border-right:1px solid #eee;
-  padding:10px;
-  font-size:12px;
-  min-height:170px;
+.modalBox h3{margin-top:0;}
+.modalBox input{
+  width:100%;
+  padding:8px;
+  margin:8px 0;
 }
-.textCol:last-child{border-right:none;}
-.textCol h4{
-  margin:0 0 8px;
+.modalBox label{
   font-size:13px;
-  border-bottom:1px solid #eee;
-  padding-bottom:6px;
 }
-.textItem{margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed #eee;}
-.textItem b{display:block;font-size:12px;}
-.textItem span{display:block;color:#444;margin-top:2px;}
+.modalBox .actions{
+  display:flex;
+  justify-content:space-between;
+  margin-top:10px;
+}
 </style>
 </head>
 
 <body>
 
-<div class="sky">
-  <div class="full">
-    <div class="headerRow">
-      <div class="logoCircle"><img src="logo.png" alt="logo"></div>
-      <div class="titleText">MWODEUN 모든경매</div>
-    </div>
+<div class="full">
 
-    <div class="banner">
-      <div class="marquee">
-        어쩌면 버려질지도 모르는 당신의 모든것을 절실하게 합리적인 가격으로 재사용될수 있게 만들어 드립니다
-      </div>
-    </div>
-
-    <div class="navTop">
-      <div class="left">
-        <a href="#" id="navHome">HOME</a>
-        <a href="#" id="navRules">운영규칙</a>
-        <a href="#" id="navSell">판매등록</a>
-        <a href="#" id="navMy">마이페이지</a>
-      </div>
-      <div style="color:rgba(255,255,255,0.9);font-size:12px;font-weight:900;">
-        ✅ 중앙 정렬 안정화
-      </div>
-    </div>
-
-    <div class="navBottom">
-      <a href="#" class="cat" data-cat="전체">진행중인 경매</a>
-      <a href="#" class="cat" data-cat="건설 잔여자재">건설잔여자재</a>
-      <a href="#" class="cat" data-cat="가전제품">가전제품</a>
-      <a href="#" class="cat" data-cat="공구/장비">공구/장비</a>
-      <a href="#" class="cat" data-cat="레저용품">레저용품</a>
-      <a href="#" class="cat" data-cat="고장&파손제품">고장&파손품</a>
-      <a href="#" id="closingOnly">마감임박</a>
-      <a href="#" class="cat" data-cat="구해요">구해요</a>
-    </div>
-  </div>
+<div class="closingBox">
+  <b>🔥 마감임박 (1시간 이하)</b>
+  <div id="closingList"></div>
 </div>
 
-<div class="container">
-  <div class="full">
+<h3>이미지 포함 상품</h3>
+<div class="cardsGrid" id="cards"></div>
 
-    <div class="closingBox">
-      <div class="closingTop">
-        <h3>🔥 마감임박 (1시간 이하)</h3>
-        <button class="smallBtn" id="refreshBtn">목록 갱신</button>
-      </div>
-      <div id="closingList" class="closingItem">계산중...</div>
+<h3>카테고리별 텍스트 목록</h3>
+<div id="textBoard"></div>
+
+</div>
+
+<!-- ===== 입찰 모달 ===== -->
+<div class="modal" id="bidModal">
+  <div class="modalBox">
+    <h3>입찰하기</h3>
+    <div id="modalProduct"></div>
+    <input type="number" id="bidInput" placeholder="입찰금 입력 (1000원 단위)">
+    <label>
+      <input type="checkbox" id="depositCheck">
+      입찰 보증금 10,000원 동의
+    </label>
+    <div class="actions">
+      <button onclick="closeModal()">취소</button>
+      <button onclick="submitBid()">입찰 제출</button>
     </div>
-
-    <!-- ✅ 중앙 정렬되는 콘텐츠 래퍼 -->
-    <div class="contentWrap">
-      <div class="contentInner">
-
-        <div class="sectionTitle">
-          <h2>이미지 포함 상품</h2>
-          <span class="pill">4개 한 줄</span>
-        </div>
-        <div class="cardsGrid" id="cards"></div>
-
-        <div class="sectionTitle" style="margin-top:18px;">
-          <h2>카테고리별 텍스트 목록</h2>
-          <span class="pill">상품명 · 현재가 · 남은시간</span>
-        </div>
-        <div class="textBoard" id="textBoard">
-          <div class="textCol" data-col="건설 잔여자재"><h4>건설잔여자재</h4></div>
-          <div class="textCol" data-col="가전제품"><h4>가전제품</h4></div>
-          <div class="textCol" data-col="공구/장비"><h4>공구/장비</h4></div>
-          <div class="textCol" data-col="고장&파손제품"><h4>고장&파손품</h4></div>
-          <div class="textCol" data-col="레저용품"><h4>레저용품</h4></div>
-          <div class="textCol" data-col="구해요"><h4>구해요</h4></div>
-          <div class="textCol" data-col="기타"><h4>기타</h4></div>
-        </div>
-
-      </div>
-    </div>
-
   </div>
 </div>
 
 <script>
-function svgImageData(title){
-  const t = (title || "MWODEUN").slice(0, 12);
-  const svg =
-`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#6a0dad"/>
-      <stop offset="1" stop-color="#3c0a7a"/>
-    </linearGradient>
-  </defs>
-  <rect width="100%" height="100%" rx="24" fill="url(#g)"/>
-  <circle cx="520" cy="80" r="60" fill="rgba(255,255,255,0.15)"/>
-  <circle cx="120" cy="210" r="90" fill="rgba(255,255,255,0.10)"/>
-  <text x="40" y="170" font-size="54" font-family="Arial" font-weight="800" fill="#ffffff">${t}</text>
-  <text x="40" y="220" font-size="22" font-family="Arial" fill="rgba(255,255,255,0.85)">MWODEUN 모든경매</text>
-</svg>`;
-  return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
-}
 
 const products = [
   {id:1,title:"전동드릴",cat:"공구/장비",price:10000,end:Date.now()+1800000},
@@ -335,163 +135,106 @@ const products = [
   {id:4,title:"캠핑테이블",cat:"레저용품",price:7000,end:Date.now()+3500000}
 ];
 
-let selectedCat = "전체";
-let filterClosingOnly = false;
+let currentProductId = null;
 
-function money(n){ return Number(n||0).toLocaleString("ko-KR")+"원"; }
-function remainText(endMs){
-  const diff = endMs - Date.now();
-  if (diff <= 0) return "마감";
-  const mins = Math.floor(diff / 60000);
-  const hrs = Math.floor(mins / 60);
-  const mm = mins % 60;
-  if (hrs >= 1) return `${hrs}시간 ${mm}분`;
-  return `${mm}분`;
-}
-function isClosing(endMs){
-  const diff = endMs - Date.now();
-  return diff > 0 && diff <= 3600000;
+function money(n){
+  return n.toLocaleString("ko-KR")+"원";
 }
 
-function buildCardsOnce(){
-  const wrap = document.getElementById("cards");
-  wrap.innerHTML = "";
+function remainText(end){
+  const diff = end - Date.now();
+  if(diff<=0) return "마감";
+  const m = Math.floor(diff/60000);
+  return m+"분";
+}
+
+function render(){
+  const cards = document.getElementById("cards");
+  const textBoard = document.getElementById("textBoard");
+  const closingList = document.getElementById("closingList");
+
+  cards.innerHTML="";
+  textBoard.innerHTML="";
+  closingList.innerHTML="";
+
   products.forEach(p=>{
-    const card = document.createElement("div");
-    card.className = "card";
-    card.setAttribute("data-id", p.id);
 
-    const imgWrap = document.createElement("div");
-    imgWrap.className = "img";
-    const img = document.createElement("img");
-    img.src = svgImageData(p.title);
-    img.alt = p.title;
-    imgWrap.appendChild(img);
-
-    const h3 = document.createElement("h3");
-    h3.textContent = p.title;
-
-    const price = document.createElement("div");
-    price.innerHTML = `현재가: <b class="pPrice">${money(p.price)}</b>`;
-
-    const remain = document.createElement("div");
-    remain.className = "remain";
-    remain.innerHTML = `남은시간: <b class="pRemain">${remainText(p.end)}</b>`;
-
-    const btn = document.createElement("button");
-    btn.className = "mainBtn";
-    btn.textContent = "입찰하기";
-    btn.addEventListener("click", ()=>{
-      alert("데모: 입찰 기능은 다음 단계에서 연결합니다.");
-    });
-
-    card.appendChild(imgWrap);
-    card.appendChild(h3);
-    card.appendChild(price);
-    card.appendChild(remain);
-    card.appendChild(btn);
-    wrap.appendChild(card);
-  });
-}
-
-function updateTextBoard(){
-  document.querySelectorAll(".textCol").forEach(col=>{
-    const head = col.querySelector("h4").outerHTML;
-    col.innerHTML = head;
-  });
-
-  const now = Date.now();
-  products.forEach(p=>{
-    if (p.end <= now) return;
-    if (selectedCat !== "전체" && p.cat !== selectedCat) return;
-
-    const col = document.querySelector(`.textCol[data-col="${p.cat}"]`) ||
-                document.querySelector(`.textCol[data-col="기타"]`);
-    if (!col) return;
-
-    const item = document.createElement("div");
-    item.className = "textItem";
-    /* ✅ 문제2 해결: 현재가: 라벨 추가 */
-    item.innerHTML = `
-      <b>${p.title}</b>
-      <span>현재가: ${money(p.price)}</span>
-      <span>남은시간: ${remainText(p.end)}</span>
+    // 카드
+    const c = document.createElement("div");
+    c.className="card";
+    c.innerHTML=`
+      <img src="https://picsum.photos/400/200?random=${p.id}">
+      <h4>${p.title}</h4>
+      현재가: <b>${money(p.price)}</b><br>
+      <span class="remain">남은시간: ${remainText(p.end)}</span><br><br>
+      <button onclick="openModal(${p.id})">입찰하기</button>
     `;
-    col.appendChild(item);
-  });
-}
+    cards.appendChild(c);
 
-function updateClosingBox(){
-  const box = document.getElementById("closingList");
-  const list = products
-    .filter(p=>isClosing(p.end))
-    .sort((a,b)=>a.end-b.end)
-    .map(p=>`${p.title} | ${money(p.price)} | ${remainText(p.end)}`)
-    .slice(0, 10);
+    // 텍스트 목록
+    const t = document.createElement("div");
+    t.innerHTML=`
+      <b>${p.title}</b> |
+      현재가: ${money(p.price)} |
+      남은시간: ${remainText(p.end)}
+      <br>
+    `;
+    textBoard.appendChild(t);
 
-  box.innerHTML = list.length ? list.join("<br>") : "마감임박 상품이 없습니다.";
-}
-
-function applyCardFilter(){
-  document.querySelectorAll(".card").forEach(card=>{
-    const id = Number(card.getAttribute("data-id"));
-    const p = products.find(x=>x.id===id);
-    if (!p) return;
-
-    const alive = p.end > Date.now();
-    if (!alive) { card.style.display = "none"; return; }
-
-    if (filterClosingOnly){
-      card.style.display = isClosing(p.end) ? "" : "none";
-      return;
+    // 마감임박
+    if(p.end-Date.now()<=3600000 && p.end>Date.now()){
+      const m = document.createElement("div");
+      m.innerText=`${p.title} | ${money(p.price)} | ${remainText(p.end)}`;
+      closingList.appendChild(m);
     }
 
-    if (selectedCat === "전체"){
-      card.style.display = "";
-    }else{
-      card.style.display = (p.cat === selectedCat) ? "" : "none";
-    }
   });
+
 }
 
-function refreshAll(){
-  updateClosingBox();
-  updateTextBoard();
-  applyCardFilter();
-
-  document.querySelectorAll(".card").forEach(card=>{
-    const id = Number(card.getAttribute("data-id"));
-    const p = products.find(x=>x.id===id);
-    if (!p) return;
-    const remainEl = card.querySelector(".pRemain");
-    if (remainEl) remainEl.textContent = remainText(p.end);
-  });
+function openModal(id){
+  currentProductId=id;
+  const p = products.find(x=>x.id===id);
+  document.getElementById("modalProduct").innerHTML=
+    `<b>${p.title}</b><br>현재가: ${money(p.price)}`;
+  document.getElementById("bidInput").value="";
+  document.getElementById("depositCheck").checked=false;
+  document.getElementById("bidModal").style.display="flex";
 }
 
-document.querySelectorAll(".cat").forEach(a=>{
-  a.addEventListener("click",(e)=>{
-    e.preventDefault();
-    selectedCat = a.getAttribute("data-cat") || "전체";
-    filterClosingOnly = false;
-    refreshAll();
-  });
-});
-document.getElementById("closingOnly").addEventListener("click",(e)=>{
-  e.preventDefault();
-  filterClosingOnly = true;
-  selectedCat = "전체";
-  refreshAll();
-});
-document.getElementById("refreshBtn").addEventListener("click", ()=>refreshAll());
+function closeModal(){
+  document.getElementById("bidModal").style.display="none";
+}
 
-document.getElementById("navHome").addEventListener("click",(e)=>{e.preventDefault(); window.scrollTo({top:0,behavior:"smooth"});});
-document.getElementById("navRules").addEventListener("click",(e)=>{e.preventDefault(); alert("운영규칙은 다음 단계에서 연결합니다.");});
-document.getElementById("navSell").addEventListener("click",(e)=>{e.preventDefault(); alert("판매등록(관리자)은 다음 단계에서 연결합니다.");});
-document.getElementById("navMy").addEventListener("click",(e)=>{e.preventDefault(); alert("마이페이지는 다음 단계에서 연결합니다.");});
+function submitBid(){
+  const bid = Number(document.getElementById("bidInput").value);
+  const checked = document.getElementById("depositCheck").checked;
+  const p = products.find(x=>x.id===currentProductId);
 
-buildCardsOnce();
-refreshAll();
-setInterval(refreshAll, 60000);
+  if(!checked){
+    alert("입찰 보증금 10,000원 동의가 필요합니다.");
+    return;
+  }
+
+  if(bid%1000!==0){
+    alert("입찰은 1000원 단위로만 가능합니다.");
+    return;
+  }
+
+  if(bid<=p.price){
+    alert("현재가보다 높은 금액을 입력하세요.");
+    return;
+  }
+
+  p.price=bid;
+  alert("입찰 완료!");
+  closeModal();
+  render();
+}
+
+render();
+setInterval(render,60000);
+
 </script>
 
 </body>
