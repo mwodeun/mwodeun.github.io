@@ -7,10 +7,12 @@
   <style>
     :root{
       --purple:#6a0dad;
+      --purple2:#7c1dd1;
       --bg:#f5f5f5;
       --card:#ffffff;
       --muted:#666;
       --border:#e6e6e6;
+      --dark:#101114;
     }
     *{box-sizing:border-box}
     body{
@@ -20,58 +22,75 @@
       color:#111;
     }
 
-    /* ✅ 상단 고정(두 줄 구조 유지) */
+    /* =========================
+       ✅ 상단(사진처럼) : 하늘 배너 + 보라 메뉴 + 카테고리(타원형)
+       ========================= */
     header{
       position:sticky;
       top:0;
-      z-index:10;
+      z-index:50;
       background:#fff;
       border-bottom:1px solid var(--border);
+    }
+
+    /* 하늘 배너(이미지 없으니 CSS로 하늘 느낌) */
+    .skyBanner{
+      background:
+        radial-gradient(1200px 180px at 20% 35%, rgba(255,255,255,.65), rgba(255,255,255,0) 60%),
+        radial-gradient(900px 160px at 75% 30%, rgba(255,255,255,.55), rgba(255,255,255,0) 60%),
+        linear-gradient(90deg, #5db2ff 0%, #a6dbff 35%, #c6edff 70%, #a9dbff 100%);
+      border-bottom:1px solid rgba(0,0,0,.05);
     }
 
     .wrap{
       max-width:1200px;
       margin:0 auto;
-      padding:14px 16px;
+      padding:12px 16px;
     }
 
     .topbar{
       display:flex;
-      gap:14px;
       align-items:center;
       justify-content:space-between;
+      gap:14px;
       flex-wrap:wrap;
     }
+
     .brand{
       display:flex;
       align-items:center;
       gap:12px;
-      min-width:240px;
+      min-width:260px;
     }
+    /* ✅ 로고(이미지 자체) 크게 */
     .brand img{
-      height:44px;
+      height:64px;          /* ← 로고만 키움 */
       width:auto;
       display:block;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,.12));
     }
     .brand .title{
-      font-weight:800;
+      font-weight:900;
       font-size:18px;
       line-height:1.1;
     }
     .brand .sub{
       font-size:12px;
-      color:var(--muted);
-      margin-top:3px;
+      color:#1f2937;
+      opacity:.85;
+      margin-top:4px;
+      font-weight:700;
     }
 
+    /* 상단 오른쪽 컨트롤(닉네임/자동증가/관리자버튼) */
     .controls{
       display:flex;
-      gap:10px;
       align-items:center;
+      gap:10px;
       flex-wrap:wrap;
       justify-content:flex-end;
+      min-width:320px;
       flex:1;
-      min-width:260px;
     }
 
     .chip{
@@ -79,48 +98,72 @@
       align-items:center;
       gap:8px;
       padding:8px 10px;
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:10px;
+      background:rgba(255,255,255,.85);
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:12px;
+      backdrop-filter: blur(3px);
     }
     .chip label{
       font-size:12px;
-      color:var(--muted);
+      color:#111;
+      opacity:.7;
       white-space:nowrap;
+      font-weight:800;
     }
     input[type="text"], input[type="number"], input[type="datetime-local"], select{
       padding:8px 10px;
-      border:1px solid var(--border);
-      border-radius:10px;
+      border:1px solid rgba(0,0,0,.12);
+      border-radius:12px;
       outline:none;
       background:#fff;
     }
-    input[type="text"]{min-width:180px}
+    input[type="text"]{min-width:170px}
     select{min-width:120px}
 
     .btn{
       cursor:pointer;
       border:none;
-      border-radius:10px;
+      border-radius:12px;
       padding:10px 14px;
-      font-weight:700;
+      font-weight:900;
     }
     .btn.primary{background:var(--purple); color:#fff;}
     .btn.gray{background:#eee; color:#111;}
     .btn.danger{background:#d93025; color:#fff;}
-    .btn.small{padding:7px 10px; border-radius:9px; font-size:12px}
+    .btn.small{padding:7px 10px; border-radius:10px; font-size:12px}
 
-    /* ✅ 문제1 해결: 상단 2번째 줄(카테고리)이 “따로 분리된 칸”처럼 보이게 */
-    .headerDivider{
-      height:1px;
-      background:var(--border);
-      margin:12px 0 10px;
+    /* ✅ 1번째 메뉴줄(사진처럼 보라색 바) */
+    .primaryNav{
+      background: linear-gradient(90deg, var(--purple) 0%, var(--purple2) 100%);
+      border-top:1px solid rgba(255,255,255,.18);
+      border-bottom:1px solid rgba(0,0,0,.18);
     }
-    .catWrap{
-      border:1px solid var(--border);
-      background:#fff;
-      border-radius:14px;
-      padding:10px;
+    .primaryNav .wrap{
+      padding:8px 16px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .navLink{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      font-size:13px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.08);
+    }
+    .navLink:hover{ background:rgba(255,255,255,.14); }
+
+    /* ✅ 2번째 메뉴줄: 배경색 없이 타원형(지금 스타일 유지) */
+    .categoryRow{
+      background:#fff; /* 줄 전체 배경은 흰색(배경색 ‘바’ 느낌 제거) */
+      border-bottom:1px solid var(--border);
+    }
+    .categoryRow .wrap{
+      padding:10px 16px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
@@ -129,11 +172,12 @@
     .catBtn{
       cursor:pointer;
       border:1px solid var(--border);
-      background:#fff;
+      background:transparent;   /* ✅ “배경색 없이” */
       padding:8px 12px;
       border-radius:999px;
-      font-weight:800;
+      font-weight:900;
       font-size:13px;
+      color:#111;
     }
     .catBtn.active{
       border-color:var(--purple);
@@ -141,6 +185,27 @@
       box-shadow:0 0 0 3px rgba(106,13,173,.08);
     }
 
+    /* 관리자 패널 */
+    .adminPanel{
+      display:none;
+      margin-top:12px;
+      padding:14px;
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:16px;
+      box-shadow:0 10px 22px rgba(0,0,0,.08);
+      backdrop-filter: blur(4px);
+    }
+    .adminGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .adminGrid .full{grid-column:1 / -1}
+
+    /* =========================
+       본문/카드(기능 그대로)
+       ========================= */
     main .wrap{padding:18px 16px 70px}
     h2{
       margin:24px 0 12px;
@@ -152,7 +217,6 @@
       margin-top:-6px;
       margin-bottom:14px;
     }
-
     .grid{
       display:flex;
       flex-wrap:wrap;
@@ -173,9 +237,7 @@
       background:#e9e9e9;
       filter:grayscale(0.15);
     }
-    .card .body{
-      padding:14px 14px 12px;
-    }
+    .card .body{ padding:14px 14px 12px; }
     .row{
       display:flex;
       justify-content:space-between;
@@ -227,7 +289,6 @@
       align-items:center;
       justify-content:space-between;
     }
-
     .bidBox{
       margin-top:10px;
       padding:10px;
@@ -245,101 +306,101 @@
     .countdown{font-weight:900}
     .lastBidder{font-weight:900; color:#111;}
 
-    /* Admin panel */
-    .adminPanel{
-      display:none;
-      margin-top:12px;
-      padding:14px;
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:16px;
-      box-shadow:0 10px 22px rgba(0,0,0,.06);
-    }
-    .adminGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    .adminGrid .full{grid-column:1 / -1}
     @media (max-width:720px){
       .adminGrid{grid-template-columns:1fr}
       input[type="text"]{min-width:140px}
       .brand{min-width:auto}
+      .brand img{height:56px;}
     }
   </style>
 </head>
 
 <body>
   <header>
-    <div class="wrap">
-      <div class="topbar">
-        <div class="brand">
-          <img src="logo.png" alt="MWODEUN 모든경매" onerror="this.style.display='none'">
-          <div>
-            <div class="title">MWODEUN 모든경매</div>
-            <div class="sub">중고 물품 경매 플랫폼 (시작가+마감시간+자동연장)</div>
+    <!-- ✅ 하늘 배너 영역 -->
+    <div class="skyBanner">
+      <div class="wrap">
+        <div class="topbar">
+          <div class="brand">
+            <img src="logo.png" alt="MWODEUN 모든경매" onerror="this.style.display='none'">
+            <div>
+              <div class="title">MWODEUN 모든경매</div>
+              <div class="sub">중고 물품만 등록 · 시작가+마감시간+자동연장</div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <div class="chip">
+              <label>닉네임</label>
+              <input id="nickname" type="text" placeholder="입찰 닉네임" />
+            </div>
+
+            <div class="chip">
+              <label>자동 증가</label>
+              <select id="incSelect">
+                <option value="1000">+1,000원</option>
+                <option value="5000">+5,000원</option>
+                <option value="10000">+10,000원</option>
+                <option value="50000">+50,000원</option>
+              </select>
+            </div>
+
+            <button class="btn primary" onclick="toggleAdmin()">관리자 상품추가</button>
+            <button class="btn gray" onclick="resetToSample()" title="샘플데이터로 초기화">샘플초기화</button>
           </div>
         </div>
 
-        <div class="controls">
-          <div class="chip">
-            <label>닉네임</label>
-            <input id="nickname" type="text" placeholder="입찰 닉네임" />
-          </div>
+        <div class="adminPanel" id="adminPanel">
+          <div class="adminGrid">
+            <div>
+              <div class="smallText">상품명</div>
+              <input id="a_title" type="text" placeholder="예) 캠핑 테이블" />
+            </div>
+            <div>
+              <div class="smallText">카테고리</div>
+              <select id="a_category">
+                <option value="가전">가전</option>
+                <option value="공구/장비">공구/장비</option>
+                <option value="전자스크랩">전자스크랩</option>
+                <option value="생활용품/레저용품">생활용품/레저용품</option>
+                <option value="건설 잔여자재">건설 잔여자재</option>
+              </select>
+            </div>
 
-          <div class="chip">
-            <label>자동 증가</label>
-            <select id="incSelect">
-              <option value="1000">+1,000원</option>
-              <option value="5000">+5,000원</option>
-              <option value="10000">+10,000원</option>
-              <option value="50000">+50,000원</option>
-            </select>
-          </div>
+            <div>
+              <div class="smallText">시작가(원)</div>
+              <input id="a_startPrice" type="number" min="0" placeholder="예) 15000" />
+            </div>
+            <div>
+              <div class="smallText">마감시간</div>
+              <input id="a_endTime" type="datetime-local" />
+            </div>
 
-          <button class="btn primary" id="adminToggleBtn" onclick="toggleAdmin()">관리자 상품추가</button>
-          <button class="btn gray" onclick="resetToSample()" title="샘플데이터로 초기화">샘플초기화</button>
+            <div class="full" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-start; margin-top:6px;">
+              <button class="btn primary" onclick="adminSave()">등록/수정 저장</button>
+              <button class="btn gray" onclick="adminClear()">입력칸 비우기</button>
+              <span class="smallText" id="adminModeText">현재: 새 상품 등록 모드</span>
+            </div>
+          </div>
         </div>
+
       </div>
+    </div>
 
-      <!-- ✅ 문제1: “두칸(두 줄)로 분리”가 확실히 보이도록 구분선 + 박스 -->
-      <div class="headerDivider"></div>
-      <div class="catWrap" id="categoryBar"></div>
-
-      <div class="adminPanel" id="adminPanel">
-        <div class="adminGrid">
-          <div>
-            <div class="smallText">상품명</div>
-            <input id="a_title" type="text" placeholder="예) 캠핑 테이블" />
-          </div>
-          <div>
-            <div class="smallText">카테고리</div>
-            <select id="a_category">
-              <option value="가전">가전</option>
-              <option value="공구/장비">공구/장비</option>
-              <option value="전자스크랩">전자스크랩</option>
-              <option value="생활용품/레저용품">생활용품/레저용품</option>
-              <option value="건설 잔여자재">건설 잔여자재</option>
-            </select>
-          </div>
-
-          <div>
-            <div class="smallText">시작가(원)</div>
-            <input id="a_startPrice" type="number" min="0" placeholder="예) 15000" />
-          </div>
-          <div>
-            <div class="smallText">마감시간</div>
-            <input id="a_endTime" type="datetime-local" />
-          </div>
-
-          <div class="full" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-start; margin-top:6px;">
-            <button class="btn primary" onclick="adminSave()">등록/수정 저장</button>
-            <button class="btn gray" onclick="adminClear()">입력칸 비우기</button>
-            <span class="smallText" id="adminModeText">현재: 새 상품 등록 모드</span>
-          </div>
-        </div>
+    <!-- ✅ 1번째 메뉴줄(보라색 바) - 사진처럼 “배열 느낌” -->
+    <div class="primaryNav">
+      <div class="wrap">
+        <a class="navLink" href="#" onclick="return false;">HOME</a>
+        <a class="navLink" href="#" onclick="return false;">회원가입</a>
+        <a class="navLink" href="#" onclick="return false;">로그인</a>
+        <a class="navLink" href="#" onclick="return false;">이용안내</a>
+        <a class="navLink" href="#" onclick="return false;">고객센터</a>
       </div>
+    </div>
 
+    <!-- ✅ 2번째 메뉴줄(배경색 없는 타원형 카테고리) -->
+    <div class="categoryRow">
+      <div class="wrap" id="categoryBar"></div>
     </div>
   </header>
 
@@ -349,7 +410,7 @@
       <div class="sectionHint">마감시간이 지나면 자동으로 “마감 카드”로 이동합니다. (LocalStorage 저장됨)</div>
       <div class="grid" id="openGrid"></div>
 
-      <!-- ✅ 문제2: 마감 상품이 0개면 이 섹션 자체를 숨김 -->
+      <!-- 마감 상품이 0개면 숨김 -->
       <div id="closedSection" style="display:none;">
         <h2 style="margin-top:42px;">마감 카드</h2>
         <div class="sectionHint">마감된 상품만 이곳에 모입니다. (없으면 이 영역은 표시되지 않습니다)</div>
@@ -360,10 +421,10 @@
 
   <script>
     /***********************
-     * 5) 실제 데이터 저장(LocalStorage)
+     * LocalStorage
      ***********************/
-    const LS_KEY = "mwodeun_products_v2";
-    const LS_FILTER = "mwodeun_filter_v2";
+    const LS_KEY = "mwodeun_products_layout_restore_v1";
+    const LS_FILTER = "mwodeun_filter_layout_restore_v1";
 
     function nowISO(){ return new Date().toISOString(); }
 
@@ -371,18 +432,13 @@
       const pad = n => String(n).padStart(2,'0');
       return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
     }
-
-    function formatMoney(n){
-      return Number(n||0).toLocaleString("ko-KR");
-    }
-
+    function formatMoney(n){ return Number(n||0).toLocaleString("ko-KR"); }
     function formatEndTime(iso){
       const d = new Date(iso);
       if (isNaN(d.getTime())) return "시간정보 없음";
       return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ` +
              `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     }
-
     function calcRemain(endIso){
       const end = new Date(endIso).getTime();
       const now = Date.now();
@@ -403,13 +459,9 @@
         const parsed = JSON.parse(raw);
         if(!Array.isArray(parsed)) return null;
         return parsed;
-      }catch(e){
-        return null;
-      }
+      }catch(e){ return null; }
     }
-    function saveProducts(){
-      localStorage.setItem(LS_KEY, JSON.stringify(state.products));
-    }
+    function saveProducts(){ localStorage.setItem(LS_KEY, JSON.stringify(state.products)); }
 
     function cryptoRandomId(){
       return "p_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
@@ -418,7 +470,6 @@
     function seedSample(){
       const base = new Date();
       const plusMin = (min)=> new Date(base.getTime() + min*60*1000);
-
       return [
         { id: cryptoRandomId(), title:"전동드릴 세트", category:"공구/장비", startPrice:15000, currentPrice:15000,
           endTime: plusMin(180).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false },
@@ -444,7 +495,7 @@
     }
 
     /***********************
-     * 1단계 – 마감되면 자동으로 마감카드로 이동
+     * 마감 이동
      ***********************/
     function syncClosedFlags(){
       const now = Date.now();
@@ -481,9 +532,7 @@
     }
 
     /***********************
-     * 1) 입찰 자동 증가
-     * 2) 닉네임 표시
-     * 3) 보증금 체크 후 입찰
+     * 입찰 기능(자동증가/닉네임/보증금/자동연장)
      ***********************/
     function doBid(productId){
       const nick = (document.getElementById("nickname").value || "").trim();
@@ -531,7 +580,7 @@
     }
 
     /***********************
-     * 4) 관리자 추가/수정/삭제
+     * 관리자(추가/수정/삭제)
      ***********************/
     function toggleAdmin(){
       const panel = document.getElementById("adminPanel");
@@ -613,7 +662,7 @@
     }
 
     /***********************
-     * 렌더
+     * 렌더링
      ***********************/
     function escapeHtml(str){
       return String(str)
@@ -765,7 +814,6 @@
         open.forEach(p=> openGrid.appendChild(renderCard(p)));
       }
 
-      // ✅ 문제2 해결: 마감이 없으면 섹션 자체 숨김
       const closedSection = document.getElementById("closedSection");
       if(closed.length === 0){
         closedSection.style.display = "none";
