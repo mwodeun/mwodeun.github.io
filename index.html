@@ -12,7 +12,6 @@
       --card:#ffffff;
       --muted:#666;
       --border:#e6e6e6;
-      --dark:#101114;
     }
     *{box-sizing:border-box}
     body{
@@ -22,9 +21,6 @@
       color:#111;
     }
 
-    /* =========================
-       상단 고정
-       ========================= */
     header{
       position:sticky;
       top:0;
@@ -33,7 +29,6 @@
       border-bottom:1px solid var(--border);
     }
 
-    /* ✅ 문제2: 배너 배경(무늬/회색원/하늘) 제거 → 흰 배경 */
     .bannerArea{
       background:#fff;
       border-bottom:1px solid rgba(0,0,0,.05);
@@ -59,7 +54,6 @@
       gap:12px;
       min-width:260px;
     }
-    /* ✅ 문제1: 로고 더 키움 */
     .brand img{
       height:78px;
       width:auto;
@@ -79,7 +73,6 @@
       font-weight:700;
     }
 
-    /* ✅ 문제2: 배너 문구(가운데 정렬 + 좌→우 흐름) */
     .bannerMarquee{
       margin-top:8px;
       border:1px solid var(--border);
@@ -91,7 +84,7 @@
     .marqueeTrack{
       display:flex;
       width:100%;
-      justify-content:center; /* 가운데 정렬 기준 */
+      justify-content:center;
       overflow:hidden;
     }
     .marqueeText{
@@ -107,7 +100,6 @@
       100%{ transform: translateX(55%); }
     }
 
-    /* 상단 오른쪽 컨트롤(닉네임/자동증가/관리자버튼) */
     .controls{
       display:flex;
       align-items:center;
@@ -155,8 +147,10 @@
     .btn.gray{background:#eee; color:#111;}
     .btn.danger{background:#d93025; color:#fff;}
     .btn.small{padding:7px 10px; border-radius:10px; font-size:12px}
+    .btn.soft{background:#f3f0ff; color:#2b0a4a; border:1px solid rgba(106,13,173,.18);}
+    .btn.soft:disabled{opacity:.5; cursor:not-allowed;}
+    .btn.primary:disabled{opacity:.55; cursor:not-allowed;}
 
-    /* ✅ 문제3: 보라색 메뉴줄 → 전부 오른쪽 정렬 */
     .primaryNav{
       background: linear-gradient(90deg, var(--purple) 0%, var(--purple2) 100%);
       border-top:1px solid rgba(255,255,255,.18);
@@ -168,7 +162,7 @@
       gap:10px;
       align-items:center;
       flex-wrap:wrap;
-      justify-content:flex-end;  /* ✅ 오른쪽 정렬 */
+      justify-content:flex-end;
     }
     .navLink{
       color:#fff;
@@ -182,7 +176,6 @@
     }
     .navLink:hover{ background:rgba(255,255,255,.14); }
 
-    /* 2번째 메뉴줄(카테고리): 배경색 없이 타원형 */
     .categoryRow{
       background:#fff;
       border-bottom:1px solid var(--border);
@@ -210,7 +203,6 @@
       box-shadow:0 0 0 3px rgba(106,13,173,.08);
     }
 
-    /* 관리자 패널 */
     .adminPanel{
       display:none;
       margin-top:12px;
@@ -227,9 +219,6 @@
     }
     .adminGrid .full{grid-column:1 / -1}
 
-    /* =========================
-       본문/카드(기능 유지)
-       ========================= */
     main .wrap{padding:18px 16px 70px}
     h2{
       margin:24px 0 12px;
@@ -241,6 +230,7 @@
       margin-top:-6px;
       margin-bottom:14px;
     }
+
     .grid{
       display:flex;
       flex-wrap:wrap;
@@ -284,6 +274,8 @@
       color:#222;
       border-color:rgba(0,0,0,.1);
     }
+    .badge.bad{background:rgba(217,48,37,.10); color:#b42318; border-color:rgba(217,48,37,.25);}
+    .badge.good{background:rgba(0,128,0,.10); color:#0f6a1a; border-color:rgba(0,128,0,.22);}
     .name{
       font-size:18px;
       font-weight:900;
@@ -330,9 +322,7 @@
     .countdown{font-weight:900}
     .lastBidder{font-weight:900; color:#111;}
 
-    /* =========================
-       ✅ 문제4: 하단 카테고리별 목록(세로선 구분)
-       ========================= */
+    /* 하단 요약 박스 */
     .summaryBox{
       margin-top:22px;
       background:#fff;
@@ -360,12 +350,12 @@
     }
     .summaryGrid{
       display:grid;
-      grid-template-columns: repeat(5, 1fr); /* 가전/공구/전자스크랩/생활용품/건설 */
+      grid-template-columns: repeat(5, 1fr);
     }
     .sumCol{
       padding:12px 12px 14px;
       min-height:140px;
-      border-left:1px solid var(--border); /* ✅ 세로선 */
+      border-left:1px solid var(--border);
     }
     .sumCol:first-child{border-left:none;}
     .sumTitle{
@@ -397,7 +387,6 @@
       .sumCol{ border-left:none; border-top:1px solid var(--border); }
       .sumCol:first-child{ border-top:none; }
     }
-
     @media (max-width:720px){
       .adminGrid{grid-template-columns:1fr}
       input[type="text"]{min-width:140px}
@@ -409,7 +398,6 @@
 
 <body>
   <header>
-    <!-- 배너(흰 배경) -->
     <div class="bannerArea">
       <div class="wrap">
         <div class="topbar">
@@ -442,11 +430,10 @@
           </div>
         </div>
 
-        <!-- ✅ 배너 문구(가운데 정렬 + 좌→우) -->
         <div class="bannerMarquee">
           <div class="marqueeTrack">
-            <div class="marqueeText">
-              MWODEUN 모든경매에 오신 것을 환영합니다 · 중고물품만 등록 · 입찰은 보증금 확인 후 진행 · 마감 60초 이내 입찰 시 자동연장(60초)
+            <div class="marqueeText" id="bannerText">
+              MWODEUN 모든경매에 오신 것을 환영합니다 · 보증금 10,000원 계좌입금 후 입찰 · 낙찰 후 48시간 내 결제완료 · 거래완료(판매자+구매자) 확인 시 보증금 환불 · 미이행 시 보증금(판매자 8,000 / 플랫폼 2,000) 분배
             </div>
           </div>
         </div>
@@ -482,13 +469,17 @@
               <button class="btn gray" onclick="adminClear()">입력칸 비우기</button>
               <span class="smallText" id="adminModeText">현재: 새 상품 등록 모드</span>
             </div>
+
+            <div class="full" style="margin-top:8px;">
+              <div class="smallText" style="font-weight:900; margin-bottom:6px;">보증금 입금 계좌(안내/기록용)</div>
+              <div class="smallText" id="depositAccountText"></div>
+            </div>
           </div>
         </div>
 
       </div>
     </div>
 
-    <!-- 보라색 메뉴(오른쪽 정렬) -->
     <div class="primaryNav">
       <div class="wrap">
         <a class="navLink" href="#" onclick="return false;">HOME</a>
@@ -499,7 +490,6 @@
       </div>
     </div>
 
-    <!-- 카테고리(타원형) -->
     <div class="categoryRow">
       <div class="wrap" id="categoryBar"></div>
     </div>
@@ -511,23 +501,18 @@
       <div class="sectionHint">마감시간이 지나면 자동으로 “마감 카드”로 이동합니다. (LocalStorage 저장됨)</div>
       <div class="grid" id="openGrid"></div>
 
-      <!-- 마감 상품이 0개면 숨김 -->
       <div id="closedSection" style="display:none;">
         <h2 style="margin-top:42px;">마감 카드</h2>
-        <div class="sectionHint">마감된 상품만 이곳에 모입니다. (없으면 이 영역은 표시되지 않습니다)</div>
+        <div class="sectionHint">마감된 상품만 이곳에 모입니다. (낙찰/결제/거래완료/미이행 관리 포함)</div>
         <div class="grid" id="closedGrid"></div>
       </div>
 
-      <!-- ✅ 문제4: 하단 카테고리별 목록(예전 방식 복구) -->
       <div class="summaryBox" id="summaryBox">
         <div class="summaryHead">
           <div class="ttl">진행중인 경매</div>
-          <div class="hint">카테고리별로 “상품명 / 현재가 / 남은시간” 표시</div>
+          <div class="hint">카테고리별 “상품명 / 현재가 / 남은시간”</div>
         </div>
-
-        <div class="summaryGrid" id="summaryGrid">
-          <!-- JS로 채움 -->
-        </div>
+        <div class="summaryGrid" id="summaryGrid"></div>
       </div>
 
     </div>
@@ -535,10 +520,37 @@
 
   <script>
     /***********************
-     * LocalStorage
+     * 설정(원장호님 규칙)
      ***********************/
-    const LS_KEY = "mwodeun_products_final_v1";
+    const RULES = {
+      depositAmount: 10000,
+      nonPaymentHours: 48,
+      penalty: { seller: 8000, platform: 2000 },
+      sanctions: {
+        warnAt: 1,
+        suspendAt: 2,
+        suspendDays: 30,
+        banAt: 3
+      }
+    };
+
+    // 입금계좌 안내(나중에 원장호님 계좌로 바꾸면 됨)
+    const DEPOSIT_ACCOUNT = {
+      bank: "농협",
+      number: "000-0000-0000-00",
+      name: "MWODEUN(예치금)"
+    };
+
+    /***********************
+     * LocalStorage Keys (기존 데이터 최대 보존)
+     * - 이전 버전에서 쓰던 키(mwodeun_products_final_v1)가 있으면 그대로 가져와서 확장
+     ***********************/
+    const LS_KEY_NEW = "mwodeun_products_rules_v2";
+    const LS_KEY_OLD = "mwodeun_products_final_v1";
+
     const LS_FILTER = "mwodeun_filter_final_v1";
+    const LS_USERS = "mwodeun_users_rules_v2";
+    const LS_LEDGER = "mwodeun_ledger_rules_v2";
 
     function nowISO(){ return new Date().toISOString(); }
 
@@ -561,6 +573,17 @@
       return {closed:false, text:`${h}시간 ${m}분 ${s}초`};
     }
 
+    function calcRemainFromMs(targetMs){
+      const now = Date.now();
+      const diff = targetMs - now;
+      if (diff <= 0) return {over:true, text:"기한 만료"};
+      const sec = Math.floor(diff/1000);
+      const h = Math.floor(sec/3600);
+      const m = Math.floor((sec%3600)/60);
+      const s = sec%60;
+      return {over:false, text:`${h}시간 ${m}분 ${s}초`};
+    }
+
     function formatEndTime(iso){
       const d = new Date(iso);
       if (isNaN(d.getTime())) return "시간정보 없음";
@@ -568,31 +591,151 @@
              `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     }
 
-    function loadProducts(){
-      try{
-        const raw = localStorage.getItem(LS_KEY);
-        if(!raw) return null;
-        const parsed = JSON.parse(raw);
-        if(!Array.isArray(parsed)) return null;
-        return parsed;
-      }catch(e){ return null; }
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
-    function saveProducts(){ localStorage.setItem(LS_KEY, JSON.stringify(state.products)); }
 
     function cryptoRandomId(){
       return "p_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+    }
+
+    /***********************
+     * Users(Sanctions)
+     ***********************/
+    function loadUsers(){
+      try{
+        const raw = localStorage.getItem(LS_USERS);
+        if(!raw) return {};
+        const parsed = JSON.parse(raw);
+        if(!parsed || typeof parsed !== "object") return {};
+        return parsed;
+      }catch(e){ return {}; }
+    }
+    function saveUsers(users){
+      localStorage.setItem(LS_USERS, JSON.stringify(users));
+    }
+    function getUser(users, nick){
+      if(!users[nick]){
+        users[nick] = { nick, strikes:0, warned:false, suspendedUntil:0, banned:false, createdAt: nowISO() };
+      }
+      return users[nick];
+    }
+    function userStatusText(u){
+      if(u.banned) return "영구정지";
+      if(u.suspendedUntil && u.suspendedUntil > Date.now()){
+        const remain = calcRemainFromMs(u.suspendedUntil);
+        return `정지중(${remain.text})`;
+      }
+      if(u.strikes >= 1) return `경고/누적 ${u.strikes}`;
+      return "정상";
+    }
+    function canBid(u){
+      if(u.banned) return {ok:false, msg:"영구정지 상태라 입찰할 수 없습니다."};
+      if(u.suspendedUntil && u.suspendedUntil > Date.now()){
+        return {ok:false, msg:"정지 기간 중에는 입찰할 수 없습니다."};
+      }
+      return {ok:true, msg:"OK"};
+    }
+
+    /***********************
+     * Ledger(기록)
+     ***********************/
+    function loadLedger(){
+      try{
+        const raw = localStorage.getItem(LS_LEDGER);
+        if(!raw) return [];
+        const parsed = JSON.parse(raw);
+        if(!Array.isArray(parsed)) return [];
+        return parsed;
+      }catch(e){ return []; }
+    }
+    function saveLedger(arr){
+      localStorage.setItem(LS_LEDGER, JSON.stringify(arr));
+    }
+    function ledgerAdd(type, payload){
+      const ledger = loadLedger();
+      ledger.unshift({ id: cryptoRandomId(), type, at: nowISO(), ...payload });
+      saveLedger(ledger);
+    }
+
+    /***********************
+     * Products (Load with migration)
+     ***********************/
+    function normalizeProduct(p){
+      // 기존 구조 유지 + 새 필드 추가
+      const n = {...p};
+
+      n.id = n.id || cryptoRandomId();
+      n.title = n.title || "-";
+      n.category = n.category || "가전";
+      n.startPrice = Number(n.startPrice || 0);
+      n.currentPrice = Number(n.currentPrice || n.startPrice || 0);
+      n.endTime = n.endTime || new Date(Date.now()+3600*1000).toISOString();
+
+      n.highestBidder = n.highestBidder || ""; // 진행 중 최종입찰자
+      n.bidCount = Number(n.bidCount || 0);
+      n.createdAt = n.createdAt || nowISO();
+      n.closed = !!n.closed;
+
+      // ✅ 새 규칙 필드
+      n.winnerNick = n.winnerNick || "";             // 낙찰자
+      n.winnerFinalPrice = Number(n.winnerFinalPrice || 0);
+      n.closedAt = n.closedAt || "";                 // 마감 확정 시간
+      n.payDueAt = Number(n.payDueAt || 0);          // 48시간 기한(ms)
+      n.buyerPaid = !!n.buyerPaid;                   // 구매자 결제완료 클릭
+      n.sellerConfirmed = !!n.sellerConfirmed;       // 판매자 거래완료 확인
+      n.depositHeld = (n.depositHeld === undefined) ? false : !!n.depositHeld; // 보증금 예치 상태
+      n.depositRefunded = !!n.depositRefunded;       // 보증금 환불 완료
+      n.depositForfeited = !!n.depositForfeited;     // 보증금 몰수(미이행)
+      n.defaulted = !!n.defaulted;                   // 미이행 처리
+      n.defaultedAt = n.defaultedAt || "";           // 미이행 발생시간
+      n.defaultReason = n.defaultReason || "";       // 사유
+
+      return n;
+    }
+
+    function loadProducts(){
+      // 새 키 우선
+      let raw = localStorage.getItem(LS_KEY_NEW);
+      if(raw){
+        try{
+          const parsed = JSON.parse(raw);
+          if(Array.isArray(parsed)) return parsed.map(normalizeProduct);
+        }catch(e){}
+      }
+      // 이전 키가 있으면 마이그레이션
+      raw = localStorage.getItem(LS_KEY_OLD);
+      if(raw){
+        try{
+          const parsed = JSON.parse(raw);
+          if(Array.isArray(parsed)){
+            const migrated = parsed.map(normalizeProduct);
+            localStorage.setItem(LS_KEY_NEW, JSON.stringify(migrated));
+            return migrated;
+          }
+        }catch(e){}
+      }
+      return null;
+    }
+    function saveProducts(){
+      localStorage.setItem(LS_KEY_NEW, JSON.stringify(state.products));
     }
 
     function seedSample(){
       const base = new Date();
       const plusMin = (min)=> new Date(base.getTime() + min*60*1000);
       return [
-        { id: cryptoRandomId(), title:"전동드릴 세트", category:"공구/장비", startPrice:15000, currentPrice:15000,
-          endTime: plusMin(180).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false },
-        { id: cryptoRandomId(), title:"LG 55인치 TV (고장)", category:"가전", startPrice:15000, currentPrice:15000,
-          endTime: plusMin(90).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false },
-        { id: cryptoRandomId(), title:"캠핑 테이블", category:"생활용품/레저용품", startPrice:15000, currentPrice:15000,
-          endTime: plusMin(15).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false }
+        normalizeProduct({ id: cryptoRandomId(), title:"전동드릴 세트", category:"공구/장비", startPrice:15000, currentPrice:15000,
+          endTime: plusMin(180).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false }),
+        normalizeProduct({ id: cryptoRandomId(), title:"LG 55인치 TV (고장)", category:"가전", startPrice:15000, currentPrice:15000,
+          endTime: plusMin(90).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false }),
+        normalizeProduct({ id: cryptoRandomId(), title:"캠핑 테이블", category:"생활용품/레저용품", startPrice:15000, currentPrice:15000,
+          endTime: plusMin(15).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false })
       ];
     }
 
@@ -611,13 +754,176 @@
     }
 
     /***********************
-     * 마감 이동
+     * 마감 처리(낙찰/48시간 기한 생성/보증금 예치 기록)
      ***********************/
+    function onCloseFinalize(p){
+      if(p.closedAt) return; // 이미 한번 확정됨
+
+      p.closedAt = nowISO();
+      // 낙찰자 확정 (최종 입찰자)
+      p.winnerNick = p.highestBidder || "";
+      p.winnerFinalPrice = Number(p.currentPrice || p.startPrice || 0);
+
+      // 48시간 기한 설정
+      const closedMs = new Date(p.closedAt).getTime();
+      const dueMs = closedMs + RULES.nonPaymentHours * 60 * 60 * 1000;
+      p.payDueAt = dueMs;
+
+      // 낙찰자가 있으면 보증금 예치로 기록
+      if(p.winnerNick){
+        p.depositHeld = true;
+        ledgerAdd("DEPOSIT_HELD", {
+          productId: p.id,
+          title: p.title,
+          nick: p.winnerNick,
+          amount: RULES.depositAmount,
+          note: "낙찰 시 보증금 예치 처리(기록)"
+        });
+      }
+    }
+
     function syncClosedFlags(){
       const now = Date.now();
       state.products.forEach(p=>{
         const end = new Date(p.endTime).getTime();
-        if(!isNaN(end) && end <= now) p.closed = true;
+        if(!isNaN(end) && end <= now){
+          if(!p.closed) p.closed = true;
+          onCloseFinalize(p);
+        }
+      });
+    }
+
+    /***********************
+     * 미이행 자동처리(48시간 경과 & 결제완료 없음)
+     ***********************/
+    function applyDefault(p){
+      if(!p.closed) return;
+      if(p.defaulted) return;
+      if(!p.winnerNick) return;       // 낙찰자 없으면 미이행 대상 아님
+      if(p.buyerPaid) return;         // 결제완료 했으면 미이행 아님
+      if(!p.payDueAt) return;
+
+      if(Date.now() > p.payDueAt){
+        p.defaulted = true;
+        p.defaultedAt = nowISO();
+        p.defaultReason = "낙찰 후 48시간 내 결제완료 미이행";
+
+        // 보증금 몰수/분배 기록
+        if(p.depositHeld && !p.depositForfeited && !p.depositRefunded){
+          p.depositForfeited = true;
+          p.depositHeld = false;
+
+          ledgerAdd("DEPOSIT_FORFEIT", {
+            productId: p.id,
+            title: p.title,
+            nick: p.winnerNick,
+            amount: RULES.depositAmount,
+            distribution: RULES.penalty,
+            note: "미이행으로 보증금 몰수(판매자 8,000 / 플랫폼 2,000)"
+          });
+        }
+
+        // 제재 적용
+        const users = loadUsers();
+        const u = getUser(users, p.winnerNick);
+        u.strikes += 1;
+
+        if(u.strikes >= RULES.sanctions.banAt){
+          u.banned = true;
+          u.suspendedUntil = 0;
+        }else if(u.strikes >= RULES.sanctions.suspendAt){
+          u.suspendedUntil = Date.now() + RULES.sanctions.suspendDays * 24 * 60 * 60 * 1000;
+        }
+        saveUsers(users);
+
+        ledgerAdd("SANCTION", {
+          nick: p.winnerNick,
+          strikes: u.strikes,
+          status: userStatusText(u),
+          productId: p.id,
+          title: p.title,
+          note: "미이행 제재 적용"
+        });
+      }
+    }
+
+    /***********************
+     * 결제완료(구매자) / 거래완료(판매자) / 환불
+     ***********************/
+    function markBuyerPaid(productId){
+      const nick = (document.getElementById("nickname").value || "").trim();
+      if(!nick){ alert("닉네임을 입력해주세요."); return; }
+
+      const p = state.products.find(x=>x.id===productId);
+      if(!p) return;
+
+      if(!p.closed){ alert("아직 마감되지 않았습니다."); return; }
+      if(!p.winnerNick){ alert("낙찰자가 없습니다."); return; }
+      if(nick !== p.winnerNick){
+        alert("결제완료는 낙찰자 닉네임으로만 가능합니다.");
+        return;
+      }
+      if(p.defaulted){
+        alert("이미 미이행 처리된 건입니다.");
+        return;
+      }
+
+      p.buyerPaid = true;
+      ledgerAdd("BUYER_PAID", {
+        productId: p.id,
+        title: p.title,
+        nick: p.winnerNick,
+        price: p.winnerFinalPrice,
+        note: "구매자 결제완료 처리"
+      });
+
+      saveProducts();
+      renderAll();
+    }
+
+    function markSellerConfirm(productId){
+      const p = state.products.find(x=>x.id===productId);
+      if(!p) return;
+
+      if(!p.closed){ alert("아직 마감되지 않았습니다."); return; }
+      if(!p.winnerNick){ alert("낙찰자가 없습니다."); return; }
+      if(p.defaulted){ alert("미이행 처리된 건은 거래완료가 불가합니다."); return; }
+
+      // 판매자 확인(관리자/판매자)
+      p.sellerConfirmed = true;
+      ledgerAdd("SELLER_CONFIRMED", {
+        productId: p.id,
+        title: p.title,
+        nick: p.winnerNick,
+        note: "판매자(관리자) 거래완료 확인"
+      });
+
+      // 구매자 결제완료 + 판매자 확인 → 환불 처리
+      maybeRefund(p);
+
+      saveProducts();
+      renderAll();
+    }
+
+    function maybeRefund(p){
+      if(!p.buyerPaid) return;
+      if(!p.sellerConfirmed) return;
+      if(p.depositRefunded) return;
+      if(p.depositForfeited) return;
+      if(!p.winnerNick) return;
+
+      // 환불 처리(기록)
+      if(p.depositHeld){
+        p.depositHeld = false;
+      }
+      p.depositRefunded = true;
+
+      ledgerAdd("DEPOSIT_REFUND", {
+        productId: p.id,
+        title: p.title,
+        nick: p.winnerNick,
+        amount: RULES.depositAmount,
+        note: "거래완료(판매자+구매자) 확인으로 보증금 환불"
       });
     }
 
@@ -625,7 +931,6 @@
      * 카테고리
      ***********************/
     const CATEGORIES = ["전체","가전","공구/장비","전자스크랩","생활용품/레저용품","건설 잔여자재"];
-
     function renderCategoryBar(){
       const bar = document.getElementById("categoryBar");
       bar.innerHTML = "";
@@ -641,7 +946,6 @@
         bar.appendChild(btn);
       });
     }
-
     function passFilter(p){
       if(state.filterCategory === "전체") return true;
       return p.category === state.filterCategory;
@@ -658,6 +962,16 @@
         return;
       }
 
+      // 제재 체크
+      const users = loadUsers();
+      const u = getUser(users, nick);
+      const ok = canBid(u);
+      if(!ok.ok){
+        alert(ok.msg + `\n\n현재 상태: ${userStatusText(u)}`);
+        return;
+      }
+      saveUsers(users);
+
       const p = state.products.find(x=>x.id===productId);
       if(!p) return;
 
@@ -670,7 +984,7 @@
 
       const chk = document.getElementById("dep_"+productId);
       if(!chk || !chk.checked){
-        alert("입찰보증금(10,000원) 확인 체크 후 입찰할 수 있습니다.");
+        alert(`입찰보증금(${formatMoney(RULES.depositAmount)}원) 확인 체크 후 입찰할 수 있습니다.\n\n입금 계좌: ${DEPOSIT_ACCOUNT.bank} ${DEPOSIT_ACCOUNT.number} (${DEPOSIT_ACCOUNT.name})`);
         return;
       }
 
@@ -755,10 +1069,12 @@
         if(Number(p.currentPrice || 0) < startPrice) p.currentPrice = startPrice;
         p.endTime = endIso;
 
-        p.closed = false;
-        syncClosedFlags();
+        // 수정 시 상태는 유지하되, 마감시간이 미래면 closed=false로 되돌릴 수 있음
+        if(new Date(p.endTime).getTime() > Date.now()){
+          p.closed = false;
+        }
       }else{
-        state.products.unshift({
+        state.products.unshift(normalizeProduct({
           id: cryptoRandomId(),
           title, category,
           startPrice,
@@ -768,8 +1084,7 @@
           bidCount:0,
           createdAt: nowISO(),
           closed:false
-        });
-        syncClosedFlags();
+        }));
       }
 
       saveProducts();
@@ -778,27 +1093,39 @@
     }
 
     /***********************
-     * 렌더링
+     * 카드 렌더
      ***********************/
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
     function renderCard(p){
       const remain = calcRemain(p.endTime);
       const closed = p.closed || remain.closed;
 
+      // 마감 확정/미이행 자동처리 체크
+      if(closed){
+        onCloseFinalize(p);
+        applyDefault(p);
+      }
+
       const card = document.createElement("div");
       card.className = "card" + (closed ? " closed":"");
 
+      // 상태 배지
+      let badgeClass = closed ? "badge closed" : "badge";
+      let badgeText = closed ? "마감" : "진행중";
+
+      if(closed && p.defaulted){
+        badgeClass = "badge bad";
+        badgeText = "미이행";
+      }else if(closed && p.depositRefunded){
+        badgeClass = "badge good";
+        badgeText = "거래완료";
+      }else if(closed && p.buyerPaid){
+        badgeClass = "badge good";
+        badgeText = "결제완료";
+      }
+
       const badge = document.createElement("div");
-      badge.className = "badge" + (closed ? " closed":"");
-      badge.textContent = closed ? "마감" : "진행중";
+      badge.className = badgeClass;
+      badge.textContent = badgeText;
 
       const topRow = document.createElement("div");
       topRow.className = "row";
@@ -820,10 +1147,26 @@
       const meta = document.createElement("div");
       meta.className = "meta";
       const bidderText = p.highestBidder ? `<span class="lastBidder">${escapeHtml(p.highestBidder)}</span>` : "-";
-      meta.innerHTML =
-        `마감: <span class="countdown" id="cd_${p.id}">${closed ? "마감" : remain.text}</span><br>` +
-        `마감시간: ${formatEndTime(p.endTime)}<br>` +
-        `입찰자: ${bidderText} / 입찰횟수: <b id="bc_${p.id}">${Number(p.bidCount||0)}</b>회`;
+
+      // 진행중/마감 표시 줄 구성
+      if(!closed){
+        meta.innerHTML =
+          `마감: <span class="countdown" id="cd_${p.id}">${remain.text}</span><br>` +
+          `마감시간: ${formatEndTime(p.endTime)}<br>` +
+          `입찰자: ${bidderText} / 입찰횟수: <b id="bc_${p.id}">${Number(p.bidCount||0)}</b>회`;
+      }else{
+        // 마감 후 낙찰/48시간 표시
+        const winner = p.winnerNick ? `<span class="lastBidder">${escapeHtml(p.winnerNick)}</span>` : "-";
+        const due = p.payDueAt ? calcRemainFromMs(p.payDueAt) : {over:false, text:"-"};
+        const dueText = p.winnerNick ? (due.over ? "기한 만료" : due.text) : "-";
+        meta.innerHTML =
+          `마감시간: ${formatEndTime(p.endTime)}<br>` +
+          `낙찰자: ${winner} / 낙찰가: <b>${formatMoney(p.winnerFinalPrice || p.currentPrice || p.startPrice)}</b>원<br>` +
+          `결제기한(48H): <b id="due_${p.id}">${dueText}</b>`;
+        if(p.defaulted){
+          meta.innerHTML += `<br><span style="color:#b42318; font-weight:900;">사유: ${escapeHtml(p.defaultReason || "미이행")}</span>`;
+        }
+      }
 
       const price = document.createElement("div");
       price.className = "price";
@@ -835,12 +1178,13 @@
       const actions = document.createElement("div");
       actions.className = "actions";
 
-      const bidBtn = document.createElement("button");
-      bidBtn.className = "btn primary";
-      bidBtn.textContent = closed ? "마감" : "입찰하기";
-      bidBtn.disabled = closed;
-      bidBtn.onclick = ()=>doBid(p.id);
+      // 좌측 버튼 영역
+      const leftBox = document.createElement("div");
+      leftBox.style.display = "flex";
+      leftBox.style.gap = "8px";
+      leftBox.style.flexWrap = "wrap";
 
+      // 우측 관리자 버튼 영역(수정/삭제)
       const adminArea = document.createElement("div");
       adminArea.style.display="flex";
       adminArea.style.gap="8px";
@@ -858,35 +1202,71 @@
       adminArea.appendChild(editBtn);
       adminArea.appendChild(delBtn);
 
-      actions.appendChild(bidBtn);
+      if(!closed){
+        const bidBtn = document.createElement("button");
+        bidBtn.className = "btn primary";
+        bidBtn.textContent = "입찰하기";
+        bidBtn.onclick = ()=>doBid(p.id);
+        leftBox.appendChild(bidBtn);
+      }else{
+        // ✅ 마감 카드: 결제완료/거래완료/환불 상태
+        const buyerPaidBtn = document.createElement("button");
+        buyerPaidBtn.className = "btn primary";
+        buyerPaidBtn.textContent = p.buyerPaid ? "결제완료됨" : "결제완료(구매자)";
+        buyerPaidBtn.disabled = p.buyerPaid || p.defaulted || !p.winnerNick;
+        buyerPaidBtn.onclick = ()=>markBuyerPaid(p.id);
+
+        const sellerBtn = document.createElement("button");
+        sellerBtn.className = "btn soft";
+        sellerBtn.textContent = p.sellerConfirmed ? "판매자확인됨" : "거래완료 확인(판매자)";
+        sellerBtn.disabled = p.sellerConfirmed || p.defaulted || !p.winnerNick;
+        sellerBtn.onclick = ()=>markSellerConfirm(p.id);
+
+        leftBox.appendChild(buyerPaidBtn);
+        leftBox.appendChild(sellerBtn);
+      }
+
+      actions.appendChild(leftBox);
       actions.appendChild(adminArea);
 
       const bidBox = document.createElement("div");
       bidBox.className = "bidBox";
+
       const inc = Number(document.getElementById("incSelect").value || 1000);
       const next = Number(p.currentPrice || p.startPrice || 0) + inc;
 
-      bidBox.innerHTML = `
-        <div class="row" style="gap:10px; flex-wrap:wrap; justify-content:flex-start;">
-          <label style="display:flex; align-items:center; gap:8px; font-weight:900; cursor:pointer;">
-            <input type="checkbox" id="dep_${p.id}">
-            입찰보증금(10,000원) 확인
-          </label>
-          <div class="smallText" style="font-weight:900;">
-            다음 입찰가: <span id="nb_${p.id}">${formatMoney(next)}</span>원
+      // 진행중만 입찰박스 표시(마감은 상태 박스 표시)
+      if(!closed){
+        bidBox.innerHTML = `
+          <div class="row" style="gap:10px; flex-wrap:wrap; justify-content:flex-start;">
+            <label style="display:flex; align-items:center; gap:8px; font-weight:900; cursor:pointer;">
+              <input type="checkbox" id="dep_${p.id}">
+              입찰보증금(${formatMoney(RULES.depositAmount)}원) 확인
+            </label>
+            <div class="smallText" style="font-weight:900;">
+              다음 입찰가: <span id="nb_${p.id}">${formatMoney(next)}</span>원
+            </div>
           </div>
-        </div>
-        <div class="bidHelp">
-          • 닉네임 입력 + 보증금 체크 후 “입찰하기” 누르면 자동으로 <b>선택한 금액만큼 증가</b>합니다.<br>
-          • 마감 60초 이내 입찰 시 자동연장(60초) 적용.
-        </div>
-      `;
+          <div class="bidHelp">
+            • 입금계좌: <b>${DEPOSIT_ACCOUNT.bank} ${DEPOSIT_ACCOUNT.number}</b> (${DEPOSIT_ACCOUNT.name})<br>
+            • 닉네임 + 보증금 체크 후 “입찰하기” 누르면 자동 증가합니다.<br>
+            • 마감 60초 이내 입찰 시 자동연장(60초) 적용.
+          </div>
+        `;
+      }else{
+        // 마감 상태 요약
+        const depositState =
+          p.depositRefunded ? "환불 완료" :
+          p.depositForfeited ? "몰수(판매자/플랫폼 분배)" :
+          p.depositHeld ? "예치 중" : "-";
 
-      if(closed){
-        setTimeout(()=>{
-          const chk = document.getElementById("dep_"+p.id);
-          if(chk) chk.disabled = true;
-        },0);
+        bidBox.innerHTML = `
+          <div class="bidHelp">
+            • 보증금 상태: <b>${depositState}</b> (금액: ${formatMoney(RULES.depositAmount)}원)<br>
+            • 낙찰 후 48시간 내 결제완료 없으면 자동 “미이행” 처리됩니다.<br>
+            • 거래완료(구매자 결제완료 + 판매자 확인) 시 보증금 환불 처리(기록).
+          </div>
+        `;
       }
 
       body.appendChild(topRow);
@@ -911,7 +1291,9 @@
       });
     }
 
-    /* ✅ 문제4: 하단 목록 렌더 */
+    /***********************
+     * 하단 요약 렌더
+     ***********************/
     const SUMMARY_CATS = [
       {key:"가전", label:"가전"},
       {key:"공구/장비", label:"공구/장비"},
@@ -942,7 +1324,6 @@
           empty.textContent = "등록된 상품이 없습니다.";
           col.appendChild(empty);
         }else{
-          // 최신 등록 우선
           list.slice(0, 6).forEach(p=>{
             const remain = calcRemain(p.endTime);
             const box = document.createElement("div");
@@ -962,6 +1343,10 @@
 
     function renderAll(){
       syncClosedFlags();
+
+      // 미이행 자동처리를 한 번 더 돌려서 화면/기록 최신화
+      state.products.forEach(p=>{ if(p.closed) applyDefault(p); });
+
       renderCategoryBar();
 
       const openGrid = document.getElementById("openGrid");
@@ -989,7 +1374,7 @@
           .forEach(p=> closedGrid.appendChild(renderCard(p)));
       }
 
-      // ✅ 하단 요약 목록은 "전체 진행중(필터 무시)" 기준이 더 자연스러움:
+      // 하단 요약은 필터와 무관하게 전체 진행중 기준
       const openAll = state.products.filter(p=>!p.closed);
       renderSummary(openAll);
 
@@ -1003,20 +1388,40 @@
       state.products.forEach(p=>{
         const end = new Date(p.endTime).getTime();
         const wasClosed = !!p.closed;
-        if(!isNaN(end) && end <= now) p.closed = true;
-        if(wasClosed !== p.closed) changed = true;
 
-        const cd = document.getElementById("cd_"+p.id);
-        if(cd){
-          const remain = calcRemain(p.endTime);
-          cd.textContent = (p.closed || remain.closed) ? "마감" : remain.text;
+        if(!isNaN(end) && end <= now){
+          p.closed = true;
+          onCloseFinalize(p);
         }
 
-        // 하단 목록 남은시간 갱신
-        const sumCd = document.getElementById("sum_cd_"+p.id);
-        if(sumCd){
+        // 자동 미이행 처리
+        if(p.closed){
+          const before = p.defaulted;
+          applyDefault(p);
+          if(before !== p.defaulted) changed = true;
+        }
+
+        if(wasClosed !== p.closed) changed = true;
+
+        // 진행중 카운트다운
+        const cd = document.getElementById("cd_"+p.id);
+        if(cd && !p.closed){
           const remain = calcRemain(p.endTime);
-          sumCd.textContent = (p.closed || remain.closed) ? "마감" : remain.text;
+          cd.textContent = remain.text;
+        }
+
+        // 하단 요약 카운트다운
+        const sumCd = document.getElementById("sum_cd_"+p.id);
+        if(sumCd && !p.closed){
+          const remain = calcRemain(p.endTime);
+          sumCd.textContent = remain.text;
+        }
+
+        // 마감 카드 결제기한
+        const dueEl = document.getElementById("due_"+p.id);
+        if(dueEl && p.closed && p.payDueAt && !p.buyerPaid && !p.defaulted && p.winnerNick){
+          const due = calcRemainFromMs(p.payDueAt);
+          dueEl.textContent = due.over ? "기한 만료" : due.text;
         }
       });
 
@@ -1028,28 +1433,35 @@
 
     function resetToSample(){
       if(!confirm("샘플 데이터로 초기화할까요? (현재 저장된 상품/입찰정보가 사라집니다)")) return;
-      localStorage.removeItem(LS_KEY);
-      init();
+      localStorage.removeItem(LS_KEY_NEW);
+      localStorage.removeItem(LS_KEY_OLD);
+      localStorage.removeItem(LS_USERS);
+      localStorage.removeItem(LS_LEDGER);
+      init(true);
     }
 
-    function init(){
+    function init(forceSeed=false){
       loadFilter();
 
-      const loaded = loadProducts();
+      // 계좌 안내 표시
+      document.getElementById("depositAccountText").textContent =
+        `${DEPOSIT_ACCOUNT.bank} ${DEPOSIT_ACCOUNT.number} (예금주: ${DEPOSIT_ACCOUNT.name}) / 보증금: ${formatMoney(RULES.depositAmount)}원`;
+
+      const loaded = forceSeed ? null : loadProducts();
       if(loaded && loaded.length){
-        state.products = loaded;
+        state.products = loaded.map(normalizeProduct);
       }else{
         state.products = seedSample();
-        saveProducts();
       }
 
+      saveProducts();
       syncClosedFlags();
       renderAll();
 
       document.getElementById("incSelect").addEventListener("change", updateNextBidLabels);
     }
 
-    init();
+    init(false);
     setInterval(tick, 1000);
   </script>
 </body>
