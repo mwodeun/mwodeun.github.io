@@ -19,6 +19,8 @@
       background:var(--bg);
       color:#111;
     }
+
+    /* ✅ 상단 고정(두 줄 구조 유지) */
     header{
       position:sticky;
       top:0;
@@ -26,11 +28,13 @@
       background:#fff;
       border-bottom:1px solid var(--border);
     }
+
     .wrap{
       max-width:1200px;
       margin:0 auto;
       padding:14px 16px;
     }
+
     .topbar{
       display:flex;
       gap:14px;
@@ -106,12 +110,21 @@
     .btn.danger{background:#d93025; color:#fff;}
     .btn.small{padding:7px 10px; border-radius:9px; font-size:12px}
 
-    .categoryBar{
-      margin-top:10px;
-      padding:10px 0 0;
+    /* ✅ 문제1 해결: 상단 2번째 줄(카테고리)이 “따로 분리된 칸”처럼 보이게 */
+    .headerDivider{
+      height:1px;
+      background:var(--border);
+      margin:12px 0 10px;
+    }
+    .catWrap{
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:14px;
+      padding:10px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      align-items:center;
     }
     .catBtn{
       cursor:pointer;
@@ -119,7 +132,7 @@
       background:#fff;
       padding:8px 12px;
       border-radius:999px;
-      font-weight:700;
+      font-weight:800;
       font-size:13px;
     }
     .catBtn.active{
@@ -172,7 +185,7 @@
     }
     .badge{
       font-size:12px;
-      font-weight:800;
+      font-weight:900;
       padding:6px 10px;
       border-radius:999px;
       background:rgba(106,13,173,.1);
@@ -222,7 +235,6 @@
       border-radius:12px;
       background:rgba(106,13,173,.04);
     }
-    .bidBox .row{justify-content:flex-start}
     .bidHelp{
       font-size:12px;
       color:var(--muted);
@@ -230,11 +242,8 @@
       line-height:1.35;
     }
     .smallText{font-size:12px; color:var(--muted)}
-    .countdown{font-weight:800}
-    .lastBidder{
-      font-weight:800;
-      color:#111;
-    }
+    .countdown{font-weight:900}
+    .lastBidder{font-weight:900; color:#111;}
 
     /* Admin panel */
     .adminPanel{
@@ -293,7 +302,9 @@
         </div>
       </div>
 
-      <div class="categoryBar" id="categoryBar"></div>
+      <!-- ✅ 문제1: “두칸(두 줄)로 분리”가 확실히 보이도록 구분선 + 박스 -->
+      <div class="headerDivider"></div>
+      <div class="catWrap" id="categoryBar"></div>
 
       <div class="adminPanel" id="adminPanel">
         <div class="adminGrid">
@@ -335,12 +346,15 @@
   <main>
     <div class="wrap">
       <h2>진행중 경매</h2>
-      <div class="sectionHint">마감시간이 지나면 자동으로 “마감된 경매”로 이동합니다. (LocalStorage 저장됨)</div>
+      <div class="sectionHint">마감시간이 지나면 자동으로 “마감 카드”로 이동합니다. (LocalStorage 저장됨)</div>
       <div class="grid" id="openGrid"></div>
 
-      <h2 style="margin-top:42px;">마감된 경매</h2>
-      <div class="sectionHint">마감된 상품은 입찰이 불가하며, 자동으로 아래로 이동됩니다.</div>
-      <div class="grid" id="closedGrid"></div>
+      <!-- ✅ 문제2: 마감 상품이 0개면 이 섹션 자체를 숨김 -->
+      <div id="closedSection" style="display:none;">
+        <h2 style="margin-top:42px;">마감 카드</h2>
+        <div class="sectionHint">마감된 상품만 이곳에 모입니다. (없으면 이 영역은 표시되지 않습니다)</div>
+        <div class="grid" id="closedGrid"></div>
+      </div>
     </div>
   </main>
 
@@ -348,28 +362,18 @@
     /***********************
      * 5) 실제 데이터 저장(LocalStorage)
      ***********************/
-    const LS_KEY = "mwodeun_products_v1";
-    const LS_FILTER = "mwodeun_filter_v1";
+    const LS_KEY = "mwodeun_products_v2";
+    const LS_FILTER = "mwodeun_filter_v2";
 
-    function nowISO(){
-      const d = new Date();
-      return d.toISOString();
-    }
+    function nowISO(){ return new Date().toISOString(); }
 
     function toLocalInputValue(date){
-      // datetime-local은 timezone 반영된 "YYYY-MM-DDTHH:MM"
       const pad = n => String(n).padStart(2,'0');
-      const y = date.getFullYear();
-      const m = pad(date.getMonth()+1);
-      const day = pad(date.getDate());
-      const h = pad(date.getHours());
-      const min = pad(date.getMinutes());
-      return `${y}-${m}-${day}T${h}:${min}`;
+      return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
     }
 
     function formatMoney(n){
-      const num = Number(n || 0);
-      return num.toLocaleString("ko-KR");
+      return Number(n||0).toLocaleString("ko-KR");
     }
 
     function formatEndTime(iso){
@@ -403,9 +407,12 @@
         return null;
       }
     }
-
     function saveProducts(){
       localStorage.setItem(LS_KEY, JSON.stringify(state.products));
+    }
+
+    function cryptoRandomId(){
+      return "p_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
     }
 
     function seedSample(){
@@ -413,53 +420,15 @@
       const plusMin = (min)=> new Date(base.getTime() + min*60*1000);
 
       return [
-        {
-          id: cryptoRandomId(),
-          title:"캠핑 테이블",
-          category:"생활용품/레저용품",
-          startPrice:15000,
-          currentPrice:15000,
-          endTime: plusMin(180).toISOString(),
-          highestBidder:"",
-          bidCount:0,
-          createdAt: nowISO(),
-          closed:false
-        },
-        {
-          id: cryptoRandomId(),
-          title:"임팩드릴(중고)",
-          category:"공구/장비",
-          startPrice:30000,
-          currentPrice:30000,
-          endTime: plusMin(90).toISOString(),
-          highestBidder:"",
-          bidCount:0,
-          createdAt: nowISO(),
-          closed:false
-        },
-        {
-          id: cryptoRandomId(),
-          title:"전자스크랩 박스 1kg",
-          category:"전자스크랩",
-          startPrice:8000,
-          currentPrice:8000,
-          endTime: plusMin(15).toISOString(),
-          highestBidder:"",
-          bidCount:0,
-          createdAt: nowISO(),
-          closed:false
-        }
+        { id: cryptoRandomId(), title:"전동드릴 세트", category:"공구/장비", startPrice:15000, currentPrice:15000,
+          endTime: plusMin(180).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false },
+        { id: cryptoRandomId(), title:"LG 55인치 TV (고장)", category:"가전", startPrice:15000, currentPrice:15000,
+          endTime: plusMin(90).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false },
+        { id: cryptoRandomId(), title:"캠핑 테이블", category:"생활용품/레저용품", startPrice:15000, currentPrice:15000,
+          endTime: plusMin(15).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false }
       ];
     }
 
-    function cryptoRandomId(){
-      // 브라우저 호환용 간단 ID
-      return "p_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
-    }
-
-    /***********************
-     * 전역 상태
-     ***********************/
     const state = {
       products: [],
       filterCategory: "전체",
@@ -470,7 +439,6 @@
       const raw = localStorage.getItem(LS_FILTER);
       if(raw) state.filterCategory = raw;
     }
-
     function saveFilter(){
       localStorage.setItem(LS_FILTER, state.filterCategory);
     }
@@ -487,7 +455,7 @@
     }
 
     /***********************
-     * 카테고리 UI
+     * 카테고리
      ***********************/
     const CATEGORIES = ["전체","가전","공구/장비","전자스크랩","생활용품/레저용품","건설 잔여자재"];
 
@@ -513,10 +481,9 @@
     }
 
     /***********************
-     * 1) 입찰 금액 자동 증가 시스템
-     * 2) 입찰자 닉네임 표시
-     * 3) 보증금 확인 후 입찰 (체크해야 입찰됨)
-     * + 마감 시 입찰 불가
+     * 1) 입찰 자동 증가
+     * 2) 닉네임 표시
+     * 3) 보증금 체크 후 입찰
      ***********************/
     function doBid(productId){
       const nick = (document.getElementById("nickname").value || "").trim();
@@ -536,7 +503,6 @@
         return;
       }
 
-      // 보증금 체크 확인
       const chk = document.getElementById("dep_"+productId);
       if(!chk || !chk.checked){
         alert("입찰보증금(10,000원) 확인 체크 후 입찰할 수 있습니다.");
@@ -546,7 +512,7 @@
       const inc = Number(document.getElementById("incSelect").value || 1000);
       const next = Number(p.currentPrice || p.startPrice || 0) + inc;
 
-      // 자동연장(옵션): 마감 60초 이내 입찰 시 60초 연장
+      // 자동연장: 마감 60초 이내 입찰 시 60초 연장
       const endMs = new Date(p.endTime).getTime();
       const now = Date.now();
       if(!isNaN(endMs)){
@@ -565,7 +531,7 @@
     }
 
     /***********************
-     * 4) 관리자 상품 추가 + 수정/삭제 버튼
+     * 4) 관리자 추가/수정/삭제
      ***********************/
     function toggleAdmin(){
       const panel = document.getElementById("adminPanel");
@@ -606,7 +572,7 @@
       const title = (document.getElementById("a_title").value || "").trim();
       const category = document.getElementById("a_category").value;
       const startPrice = Number(document.getElementById("a_startPrice").value || 0);
-      const endLocal = document.getElementById("a_endTime").value; // "YYYY-MM-DDTHH:MM"
+      const endLocal = document.getElementById("a_endTime").value;
 
       if(!title){ alert("상품명을 입력하세요."); return; }
       if(!startPrice || startPrice < 0){ alert("시작가를 올바르게 입력하세요."); return; }
@@ -621,21 +587,15 @@
         p.title = title;
         p.category = category;
         p.startPrice = startPrice;
-
-        // 현재가가 시작가보다 작으면 시작가로 보정
-        if(Number(p.currentPrice || 0) < startPrice){
-          p.currentPrice = startPrice;
-        }
+        if(Number(p.currentPrice || 0) < startPrice) p.currentPrice = startPrice;
         p.endTime = endIso;
 
-        // 수정 시 마감여부 다시 계산
         p.closed = false;
         syncClosedFlags();
       }else{
-        const newP = {
+        state.products.unshift({
           id: cryptoRandomId(),
-          title,
-          category,
+          title, category,
           startPrice,
           currentPrice: startPrice,
           endTime: endIso,
@@ -643,8 +603,7 @@
           bidCount:0,
           createdAt: nowISO(),
           closed:false
-        };
-        state.products.unshift(newP);
+        });
         syncClosedFlags();
       }
 
@@ -654,8 +613,17 @@
     }
 
     /***********************
-     * 렌더링
+     * 렌더
      ***********************/
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
     function renderCard(p){
       const remain = calcRemain(p.endTime);
       const closed = p.closed || remain.closed;
@@ -702,14 +670,12 @@
       const actions = document.createElement("div");
       actions.className = "actions";
 
-      // 입찰 버튼
       const bidBtn = document.createElement("button");
       bidBtn.className = "btn primary";
       bidBtn.textContent = closed ? "마감" : "입찰하기";
       bidBtn.disabled = closed;
       bidBtn.onclick = ()=>doBid(p.id);
 
-      // 관리자 버튼들
       const adminArea = document.createElement("div");
       adminArea.style.display="flex";
       adminArea.style.gap="8px";
@@ -730,15 +696,14 @@
       actions.appendChild(bidBtn);
       actions.appendChild(adminArea);
 
-      // 입찰 박스(보증금 체크 + 다음 입찰가 표시)
       const bidBox = document.createElement("div");
       bidBox.className = "bidBox";
       const inc = Number(document.getElementById("incSelect").value || 1000);
       const next = Number(p.currentPrice || p.startPrice || 0) + inc;
 
       bidBox.innerHTML = `
-        <div class="row" style="gap:10px; flex-wrap:wrap;">
-          <label style="display:flex; align-items:center; gap:8px; font-weight:800; cursor:pointer;">
+        <div class="row" style="gap:10px; flex-wrap:wrap; justify-content:flex-start;">
+          <label style="display:flex; align-items:center; gap:8px; font-weight:900; cursor:pointer;">
             <input type="checkbox" id="dep_${p.id}">
             입찰보증금(10,000원) 확인
           </label>
@@ -753,7 +718,6 @@
       `;
 
       if(closed){
-        // 마감이면 체크 비활성화
         setTimeout(()=>{
           const chk = document.getElementById("dep_"+p.id);
           if(chk) chk.disabled = true;
@@ -772,38 +736,6 @@
       return card;
     }
 
-    function renderAll(){
-      syncClosedFlags();
-      renderCategoryBar();
-
-      const openGrid = document.getElementById("openGrid");
-      const closedGrid = document.getElementById("closedGrid");
-      openGrid.innerHTML = "";
-      closedGrid.innerHTML = "";
-
-      const filtered = state.products.filter(passFilter);
-
-      const open = filtered.filter(p=>!p.closed);
-      const closed = filtered.filter(p=>p.closed);
-
-      if(open.length===0){
-        openGrid.innerHTML = `<div class="smallText" style="padding:18px;">진행중 경매가 없습니다.</div>`;
-      }else{
-        open.forEach(p=> openGrid.appendChild(renderCard(p)));
-      }
-
-      if(closed.length===0){
-        closedGrid.innerHTML = `<div class="smallText" style="padding:18px;">마감된 경매가 없습니다.</div>`;
-      }else{
-        closed
-          .sort((a,b)=> new Date(b.endTime).getTime() - new Date(a.endTime).getTime())
-          .forEach(p=> closedGrid.appendChild(renderCard(p)));
-      }
-
-      // “자동 증가” 선택이 바뀌면 각 카드의 “다음 입찰가” 갱신
-      updateNextBidLabels();
-    }
-
     function updateNextBidLabels(){
       const inc = Number(document.getElementById("incSelect").value || 1000);
       state.products.forEach(p=>{
@@ -814,7 +746,39 @@
       });
     }
 
-    // 1단계: 1초마다 마감 체크 + 카운트다운 갱신 + 자동 이동(렌더 기반)
+    function renderAll(){
+      syncClosedFlags();
+      renderCategoryBar();
+
+      const openGrid = document.getElementById("openGrid");
+      const closedGrid = document.getElementById("closedGrid");
+      openGrid.innerHTML = "";
+      closedGrid.innerHTML = "";
+
+      const filtered = state.products.filter(passFilter);
+      const open = filtered.filter(p=>!p.closed);
+      const closed = filtered.filter(p=>p.closed);
+
+      if(open.length===0){
+        openGrid.innerHTML = `<div class="smallText" style="padding:18px;">진행중 경매가 없습니다.</div>`;
+      }else{
+        open.forEach(p=> openGrid.appendChild(renderCard(p)));
+      }
+
+      // ✅ 문제2 해결: 마감이 없으면 섹션 자체 숨김
+      const closedSection = document.getElementById("closedSection");
+      if(closed.length === 0){
+        closedSection.style.display = "none";
+      }else{
+        closedSection.style.display = "block";
+        closed
+          .sort((a,b)=> new Date(b.endTime).getTime() - new Date(a.endTime).getTime())
+          .forEach(p=> closedGrid.appendChild(renderCard(p)));
+      }
+
+      updateNextBidLabels();
+    }
+
     function tick(){
       let changed = false;
       const now = Date.now();
@@ -838,27 +802,12 @@
       }
     }
 
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    /***********************
-     * 샘플 초기화
-     ***********************/
     function resetToSample(){
       if(!confirm("샘플 데이터로 초기화할까요? (현재 저장된 상품/입찰정보가 사라집니다)")) return;
       localStorage.removeItem(LS_KEY);
       init();
     }
 
-    /***********************
-     * 초기화
-     ***********************/
     function init(){
       loadFilter();
 
@@ -873,14 +822,11 @@
       syncClosedFlags();
       renderAll();
 
-      document.getElementById("incSelect").addEventListener("change", ()=>{
-        updateNextBidLabels();
-      });
+      document.getElementById("incSelect").addEventListener("change", updateNextBidLabels);
     }
 
     init();
     setInterval(tick, 1000);
   </script>
 </body>
-</html>
 </html>
