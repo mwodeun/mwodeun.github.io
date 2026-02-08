@@ -4,373 +4,308 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MWODEUN 모든경매</title>
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --brand:#6a0dad;
-  --dark:#0f172a;
-  --bg:#f5f5f5;
   --danger:#d40000;
 }
-
 *{box-sizing:border-box;}
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);}
+body{margin:0;font-family:Arial;background:#f5f5f5;}
 
-/* ================= TOP ================= */
+/* ================= 하늘 배경 ================= */
+.sky{
+background:linear-gradient(180deg,#48b2ff 0%,#86cfff 50%,#d9f3ff 100%);
+padding:20px;
+}
 
-.topWrap{background:#fff;border-bottom:1px solid #eee;}
-.topInner{max-width:1100px;margin:auto;padding:18px;}
+/* ================= 로고 ================= */
+.logoWrap{
+display:flex;
+align-items:center;
+gap:15px;
+}
+.logoCircle{
+width:100px;
+height:100px;
+border-radius:50%;
+background:white;
+display:flex;
+align-items:center;
+justify-content:center;
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+.logoCircle img{height:70px;}
 
-.brandRow{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.brandRow img{height:60px;}
-.brandName{font-weight:900;font-size:18px;}
-.brandSub{font-size:12px;color:#666;}
+.titleText{
+font-weight:900;
+font-size:22px;
+}
 
+/* ================= 배너 ================= */
 .banner{
-  border-radius:14px;
-  padding:24px;
-  text-align:center;
-  background:linear-gradient(180deg,#4fb4ff 0%,#8fd3ff 50%,#d7f2ff 100%);
-  color:#08324d;
-  font-weight:900;
-  line-height:1.5;
-  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+margin-top:15px;
+background:rgba(255,255,255,0.6);
+border-radius:16px;
+padding:15px;
+overflow:hidden;
+}
+.marquee{
+font-family:"Jua",sans-serif;
+font-size:18px;
+white-space:nowrap;
+animation:slideStop 6s ease-out forwards;
+transform:translateX(-60%);
+}
+@keyframes slideStop{
+0%{transform:translateX(-60%);}
+70%{transform:translateX(0);}
+100%{transform:translateX(0);}
 }
 
-/* ====== 2줄 메뉴 ====== */
-
-.navWrap{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
-
+/* ================= 메뉴 ================= */
 .navTop{
-  background:var(--dark);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:10px;
-  border-radius:12px;
+margin-top:15px;
+background:var(--brand);
+padding:10px;
+border-radius:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
-
-.navTopLeft,.navTopRight{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  flex-wrap:wrap;
-}
-
 .navTop a{
-  color:white;
-  text-decoration:none;
-  padding:8px 12px;
-  border-radius:10px;
-  font-weight:800;
-  font-size:13px;
+color:white;
+text-decoration:none;
+padding:8px 12px;
+border-radius:10px;
+font-weight:900;
 }
-.navTop a:hover{background:rgba(255,255,255,0.15);}
-
-.userStatus{
-  font-size:12px;
-  font-weight:900;
-  color:#cbd5e1;
-}
-
 .navBottom{
-  background:#222;
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:8px;
-  padding:10px;
-  border-radius:12px;
+margin-top:8px;
+background:#222;
+padding:10px;
+border-radius:12px;
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+justify-content:center;
 }
-
 .navBottom a{
-  color:white;
-  text-decoration:none;
-  padding:8px 12px;
-  border-radius:10px;
-  font-weight:700;
-  font-size:13px;
+color:white;
+text-decoration:none;
+padding:8px 12px;
+border-radius:10px;
+font-weight:800;
 }
-.navBottom a:hover{background:rgba(106,13,173,0.4);}
 
-/* ================= CONTENT ================= */
+/* ================= 컨텐츠 ================= */
+.container{
+max-width:1100px;
+margin:20px auto;
+padding:0 15px;
+}
 
-.container{max-width:1100px;margin:25px auto;padding:0 18px;}
+/* ================= 마감임박 강조 ================= */
+.closingBox{
+background:#fff5f5;
+border:2px solid var(--danger);
+border-radius:16px;
+padding:15px;
+margin-bottom:20px;
+}
+.closingBox h3{
+color:var(--danger);
+margin:0 0 10px;
+}
+.closingItem{
+margin-bottom:8px;
+font-size:13px;
+}
 
-.cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;}
+/* ================= 7칸 텍스트 ================= */
+.textBoard{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+background:white;
+border-radius:14px;
+overflow:hidden;
+box-shadow:0 6px 16px rgba(0,0,0,0.06);
+}
+.textCol{
+border-right:1px solid #eee;
+padding:10px;
+font-size:12px;
+min-height:200px;
+}
+.textCol:last-child{border-right:none;}
+.textCol h4{
+margin:0 0 8px;
+border-bottom:1px solid #eee;
+padding-bottom:6px;
+font-size:13px;
+}
 
+/* ================= 카드 ================= */
+.cards{
+display:flex;
+flex-wrap:wrap;
+gap:20px;
+justify-content:center;
+margin-top:25px;
+}
 .card{
-  width:300px;
-  background:white;
-  padding:16px;
-  border-radius:14px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-  position:relative;
+width:300px;
+background:white;
+padding:15px;
+border-radius:14px;
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
 }
-
 .card img{
-  width:100%;
-  height:170px;
-  object-fit:cover;
-  border-radius:12px;
+width:100%;
+height:170px;
+object-fit:cover;
+border-radius:12px;
 }
-
 .card h3{margin:10px 0;}
-
-.price{font-weight:900;}
-.remain{color:var(--danger);font-size:13px;margin:6px 0;}
-
+.remain{color:var(--danger);font-size:13px;}
 button{
-  background:var(--brand);
-  color:white;
-  border:none;
-  padding:8px 14px;
-  border-radius:10px;
-  cursor:pointer;
-}
-button:hover{background:#5300a8;}
-
-.closedBadge{
-  position:absolute;
-  top:12px;
-  left:12px;
-  background:black;
-  color:white;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:900;
+background:var(--brand);
+color:white;
+border:none;
+padding:8px 12px;
+border-radius:10px;
+cursor:pointer;
 }
 
-.hidden{display:none !important;}
-
-/* ================= MODAL ================= */
-
-.modal-bg{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.5);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
-}
-
+/* ================= 모달 ================= */
 .modal{
-  background:white;
-  width:90%;
-  max-width:450px;
-  border-radius:14px;
-  overflow:hidden;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.5);
+display:none;
+align-items:center;
+justify-content:center;
 }
-
-.modal-header{
-  background:var(--brand);
-  color:white;
-  padding:14px;
-  font-weight:900;
-  display:flex;
-  justify-content:space-between;
+.modalContent{
+background:white;
+padding:20px;
+border-radius:14px;
+width:300px;
 }
-
-.modal-body{padding:16px;font-size:14px;}
-.modal-actions{display:flex;justify-content:flex-end;gap:10px;padding:16px;}
-
-input{width:100%;padding:8px;margin-top:6px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc;}
-.checkRow{background:#fff8ea;border:1px solid #ffe1b8;padding:10px;border-radius:10px;font-size:13px;}
 </style>
 </head>
 
 <body>
 
-<div class="topWrap">
-<div class="topInner">
-
-<div class="brandRow">
+<div class="sky">
+<div class="logoWrap">
+<div class="logoCircle">
 <img src="logo.png">
-<div>
-<div class="brandName">MWODEUN 모든경매</div>
-<div class="brandSub">중고 물품 경매 플랫폼 (데모)</div>
 </div>
+<div class="titleText">MWODEUN 모든경매</div>
 </div>
 
 <div class="banner">
-어쩌면 버려질지도 모르는 당신의 모든것을<br>
-절실하게 합리적인 가격으로 재사용될수 있게 만들어 드립니다
+<div class="marquee">
+어쩌면 버려질지도 모르는 당신의 모든것을 절실하게 합리적인 가격으로 재사용될수 있게 만들어 드립니다
 </div>
-
-<div class="navWrap">
+</div>
 
 <div class="navTop">
-<div class="navTopLeft">
-<a href="#" id="homeBtn">HOME</a>
+<div>
+<a href="#">HOME</a>
 <a href="#">운영규칙</a>
-<a href="#" id="sellBtn">판매등록</a>
-<a href="#">마이페이지</a>
-</div>
-<div class="navTopRight">
-<span class="userStatus" id="userStatus">로그인 안됨</span>
-<a href="#" id="loginBtn">로그인</a>
-<a href="#" id="signupBtn">회원가입</a>
-<a href="#" id="logoutBtn" class="hidden">로그아웃</a>
+<a href="#">판매등록</a>
+<a href="#">마이페이지 ▾</a>
 </div>
 </div>
 
 <div class="navBottom">
-<a href="#" id="showAll">진행중인 경매</a>
-<a href="#" data-cat="건설 잔여자재">건설잔여자재</a>
-<a href="#" data-cat="가전제품">가전제품</a>
-<a href="#" data-cat="공구/장비">공구/장비</a>
-<a href="#" data-cat="레저용품">레저용품</a>
-<a href="#" data-cat="고장&파손제품">고장&파손품</a>
-<a href="#" id="closingBtn">마감임박</a>
-<a href="#" data-cat="구해요">구해요</a>
+<a href="#">진행중인 경매</a>
+<a href="#">건설잔여자재</a>
+<a href="#">가전제품</a>
+<a href="#">공구/장비</a>
+<a href="#">레저용품</a>
+<a href="#">고장&파손품</a>
+<a href="#">마감임박</a>
+<a href="#">구해요</a>
 </div>
 
-</div>
-</div>
 </div>
 
 <div class="container">
-<h2>진행중인 경매</h2>
-<div class="cards" id="activeCards"></div>
 
-<h2>마감된 경매</h2>
-<div class="cards" id="closedCards"></div>
+<!-- 🔴 마감임박 강조 박스 -->
+<div class="closingBox">
+<h3>🔥 마감임박 (1시간 이하)</h3>
+<div id="closingList"></div>
 </div>
 
-<!-- 입찰 모달 -->
-<div class="modal-bg" id="bidModal">
-<div class="modal">
-<div class="modal-header">입찰하기 <span onclick="closeBid()">✕</span></div>
-<div class="modal-body">
-<div id="modalItem"></div>
-현재가: <span id="modalPrice"></span><br><br>
-입찰가 (1,000원 단위):
-<input type="number" id="bidInput" step="1000">
-<div class="checkRow">
-<input type="checkbox" id="depositCheck"> 입찰 보증금 10,000원 안내 확인
+<!-- 7칸 텍스트 -->
+<div class="textBoard">
+<div class="textCol" data-cat="건설 잔여자재"><h4>건설잔여자재</h4></div>
+<div class="textCol" data-cat="가전제품"><h4>가전제품</h4></div>
+<div class="textCol" data-cat="공구/장비"><h4>공구/장비</h4></div>
+<div class="textCol" data-cat="고장&파손제품"><h4>고장&파손품</h4></div>
+<div class="textCol" data-cat="레저용품"><h4>레저용품</h4></div>
+<div class="textCol" data-cat="구해요"><h4>구해요</h4></div>
+<div class="textCol"><h4>기타</h4></div>
 </div>
-</div>
-<div class="modal-actions">
-<button onclick="closeBid()">취소</button>
-<button onclick="submitBid()">입찰</button>
-</div>
-</div>
+
+<!-- 카드 4개 -->
+<div class="cards" id="cards"></div>
+
 </div>
 
 <script>
-let products = [
-{id:1,title:"전동드릴 세트",cat:"공구/장비",price:10000,bids:3,end:Date.now()+3600000},
-{id:2,title:"LG TV",cat:"가전제품",price:5000,bids:1,end:Date.now()+7200000}
+let products=[
+{id:1,title:"전동드릴",cat:"공구/장비",price:10000,end:Date.now()+1800000},
+{id:2,title:"TV 고장",cat:"고장&파손제품",price:5000,end:Date.now()+4000000},
+{id:3,title:"건설철물",cat:"건설 잔여자재",price:15000,end:Date.now()+2000000},
+{id:4,title:"캠핑테이블",cat:"레저용품",price:7000,end:Date.now()+3500000}
 ];
 
-let currentProduct=null;
-let filterMode="all";
-let selectedCat="all";
-
-/* 렌더 */
 function render(){
-const active=document.getElementById("activeCards");
-const closed=document.getElementById("closedCards");
-active.innerHTML="";closed.innerHTML="";
-const now=Date.now();
+let now=Date.now();
+let cards=document.getElementById("cards");
+cards.innerHTML="";
+let closing=document.getElementById("closingList");
+closing.innerHTML="";
+
+document.querySelectorAll(".textCol").forEach(c=>c.innerHTML="<h4>"+c.querySelector("h4").innerText+"</h4>");
 
 products.forEach(p=>{
-if(selectedCat!=="all" && p.cat!==selectedCat) return;
+let diff=p.end-now;
+let mins=Math.floor(diff/60000);
 
-const diff=p.end-now;
-const isClosed=diff<=0;
-if(filterMode==="closing" && !isClosed && diff>3600000) return;
-
-const card=document.createElement("div");
-card.className="card";
-if(isClosed){
-card.innerHTML='<div class="closedBadge">마감</div>';
+if(diff>0 && diff<=3600000){
+closing.innerHTML+=`<div class="closingItem">${p.title} | ${p.price.toLocaleString()}원 | ${mins}분 남음</div>`;
 }
 
-card.innerHTML+=`
+if(diff>0){
+cards.innerHTML+=`
+<div class="card">
+<img src="https://via.placeholder.com/300x180/6a0dad/ffffff?text=${encodeURIComponent(p.title)}">
 <h3>${p.title}</h3>
-<div class="price">현재가: ${p.price.toLocaleString()}원</div>
-<div class="remain">${isClosed?"마감":Math.floor(diff/60000)+"분 남음"}</div>
-${isClosed?"":'<button onclick="openBid('+p.id+')">입찰하기</button>'}
+<div>${p.price.toLocaleString()}원</div>
+<div class="remain">${mins}분 남음</div>
+<button>입찰하기</button>
+</div>
 `;
+}
 
-(isClosed?closed:active).appendChild(card);
+document.querySelectorAll(".textCol").forEach(col=>{
+if(col.getAttribute("data-cat")===p.cat && diff>0){
+col.innerHTML+=`<div>${p.title}<br>${p.price.toLocaleString()}원<br>${mins}분 남음</div><br>`;
+}
+});
+
 });
 }
 
-/* 입찰 */
-function openBid(id){
-currentProduct=products.find(p=>p.id===id);
-document.getElementById("modalItem").innerText=currentProduct.title;
-document.getElementById("modalPrice").innerText=currentProduct.price.toLocaleString()+"원";
-document.getElementById("bidModal").style.display="flex";
-}
-function closeBid(){
-document.getElementById("bidModal").style.display="none";
-}
-function submitBid(){
-const val=Number(document.getElementById("bidInput").value);
-if(val%1000!==0) return alert("1,000원 단위로 입력하세요.");
-if(val<=currentProduct.price) return alert("현재가보다 높게 입력하세요.");
-if(!document.getElementById("depositCheck").checked) return alert("보증금 안내 체크하세요.");
-currentProduct.price=val;
-currentProduct.bids++;
-closeBid();
 render();
-}
-
-/* 필터 */
-document.querySelectorAll("[data-cat]").forEach(a=>{
-a.onclick=e=>{
-e.preventDefault();
-selectedCat=a.getAttribute("data-cat");
-render();
-};
-});
-document.getElementById("showAll").onclick=e=>{e.preventDefault();selectedCat="all";filterMode="all";render();}
-document.getElementById("closingBtn").onclick=e=>{e.preventDefault();filterMode="closing";render();}
-
-/* 로그인 데모 */
-document.getElementById("loginBtn").onclick=e=>{
-e.preventDefault();
-const name=prompt("아이디 입력:");
-if(!name)return;
-localStorage.setItem("user",name);
-updateUser();
-};
-document.getElementById("signupBtn").onclick=e=>{
-e.preventDefault();
-const name=prompt("회원가입 이름:");
-if(!name)return;
-localStorage.setItem("user",name);
-updateUser();
-};
-document.getElementById("logoutBtn").onclick=e=>{
-e.preventDefault();
-localStorage.removeItem("user");
-updateUser();
-};
-
-function updateUser(){
-const u=localStorage.getItem("user");
-if(u){
-document.getElementById("userStatus").innerText=u+"님";
-document.getElementById("loginBtn").classList.add("hidden");
-document.getElementById("signupBtn").classList.add("hidden");
-document.getElementById("logoutBtn").classList.remove("hidden");
-}else{
-document.getElementById("userStatus").innerText="로그인 안됨";
-document.getElementById("loginBtn").classList.remove("hidden");
-document.getElementById("signupBtn").classList.remove("hidden");
-document.getElementById("logoutBtn").classList.add("hidden");
-}
-}
-
-updateUser();
-render();
-setInterval(render,1000);
+setInterval(render,10000);
 </script>
 
 </body>
