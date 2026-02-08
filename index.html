@@ -229,6 +229,7 @@
       font-size:13px;
       margin-top:-6px;
       margin-bottom:14px;
+      line-height:1.45;
     }
 
     .grid{
@@ -381,10 +382,109 @@
       padding:6px 2px;
       font-weight:700;
     }
+
+    /* ✅ 관리자 대시보드(레이아웃 영향 없음: fixed overlay) */
+    .dashBtn{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:999;
+      background:var(--purple);
+      color:#fff;
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 10px 20px rgba(0,0,0,.18);
+    }
+    .dashOverlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.35);
+      z-index:1000;
+      display:none;
+      align-items:flex-start;
+      justify-content:center;
+      padding:22px 14px;
+      overflow:auto;
+    }
+    .dashPanel{
+      width:min(1100px, 100%);
+      background:#fff;
+      border-radius:18px;
+      border:1px solid rgba(0,0,0,.12);
+      box-shadow:0 20px 60px rgba(0,0,0,.25);
+      overflow:hidden;
+    }
+    .dashTop{
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom:1px solid var(--border);
+      background:#fff;
+    }
+    .dashTop .ttl{
+      font-size:18px;
+      font-weight:900;
+    }
+    .dashTabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      padding:10px 12px;
+      border-bottom:1px solid var(--border);
+      background:#fafafa;
+    }
+    .dashTab{
+      cursor:pointer;
+      border:1px solid var(--border);
+      background:#fff;
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:13px;
+    }
+    .dashTab.active{
+      border-color:var(--purple);
+      color:var(--purple);
+      box-shadow:0 0 0 3px rgba(106,13,173,.08);
+    }
+    .dashBody{
+      padding:14px 16px 18px;
+    }
+    .dashRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 8px;
+      border-bottom:1px solid rgba(0,0,0,.06);
+      flex-wrap:wrap;
+    }
+    .dashRow b{font-weight:900}
+    .dashKpi{
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+    .kpiCard{
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:14px;
+      padding:12px 12px;
+      background:#fff;
+      box-shadow:0 8px 16px rgba(0,0,0,.05);
+    }
+    .kpiCard .k{font-size:12px; color:var(--muted); font-weight:900;}
+    .kpiCard .v{font-size:16px; font-weight:900; margin-top:6px;}
     @media (max-width:980px){
       .summaryGrid{ grid-template-columns: 1fr; }
       .sumCol{ border-left:none; border-top:1px solid var(--border); }
       .sumCol:first-child{ border-top:none; }
+      .dashKpi{ grid-template-columns: 1fr; }
     }
     @media (max-width:720px){
       .adminGrid{grid-template-columns:1fr}
@@ -520,28 +620,43 @@
     </div>
   </main>
 
-  <script>
-    /***********************
-     * 표시 개수/데모 채움(원장호님 요청)
-     ***********************/
-    const UI_LIMITS = {
-      // 진행중 카드가 최소 몇 개 유지?
-      MIN_OPEN_CARDS: 3,
+  <!-- ✅ 관리자 대시보드(고정 버튼 + 오버레이) -->
+  <button class="dashBtn" onclick="toggleDashboard()">관리자 관리</button>
+  <div class="dashOverlay" id="dashOverlay" onclick="dashBackdropClose(event)">
+    <div class="dashPanel">
+      <div class="dashTop">
+        <div class="ttl">관리자 대시보드</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <button class="btn gray small" onclick="refreshDashboard()">새로고침</button>
+          <button class="btn danger small" onclick="toggleDashboard()">닫기</button>
+        </div>
+      </div>
 
-      // 화면에 최대 몇 개까지 보여줄지(너무 길어지는 것 방지)
+      <div class="dashTabs">
+        <button class="dashTab active" id="tab_trade" onclick="setDashTab('trade')">📊 거래 관리</button>
+        <button class="dashTab" id="tab_deposit" onclick="setDashTab('deposit')">💰 보증금 정산</button>
+        <button class="dashTab" id="tab_users" onclick="setDashTab('users')">🚫 제재 사용자</button>
+      </div>
+
+      <div class="dashBody">
+        <div id="dashTrade"></div>
+        <div id="dashDeposit" style="display:none;"></div>
+        <div id="dashUsers" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ===== 표시 개수/데모 채움 ===== */
+    const UI_LIMITS = {
+      MIN_OPEN_CARDS: 3,
       MAX_OPEN_SHOW: 12,
       MAX_CLOSED_SHOW: 12,
-
-      // ✅ 데모/테스트용 자동 채움 ON/OFF (원하면 false로 바꾸면 끝)
       DEMO_FILL_OPEN: true,
-
-      // ✅ 거래가 끝난 마감카드(환불완료/미이행완료)는 화면에서 숨김
       HIDE_FINISHED_CLOSED: true
     };
 
-    /***********************
-     * 규칙(원장호님 확정)
-     ***********************/
+    /* ===== 규칙 ===== */
     const RULES = {
       depositAmount: 10000,
       nonPaymentHours: 48,
@@ -549,15 +664,9 @@
       sanctions: { warnAt: 1, suspendAt: 2, suspendDays: 30, banAt: 3 }
     };
 
-    const DEPOSIT_ACCOUNT = {
-      bank: "농협",
-      number: "000-0000-0000-00",
-      name: "MWODEUN(예치금)"
-    };
+    const DEPOSIT_ACCOUNT = { bank: "농협", number: "000-0000-0000-00", name: "MWODEUN(예치금)" };
 
-    /***********************
-     * LocalStorage Keys
-     ***********************/
+    /* ===== LocalStorage Keys ===== */
     const LS_KEY_NEW = "mwodeun_products_rules_v3";
     const LS_KEY_PREV = "mwodeun_products_rules_v2";
     const LS_KEY_OLD  = "mwodeun_products_final_v1";
@@ -567,7 +676,6 @@
 
     function nowISO(){ return new Date().toISOString(); }
     function formatMoney(n){ return Number(n||0).toLocaleString("ko-KR"); }
-
     function toLocalInputValue(date){
       const pad = n => String(n).padStart(2,'0');
       return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
@@ -580,9 +688,7 @@
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
     }
-    function cryptoRandomId(){
-      return "p_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
-    }
+    function cryptoRandomId(){ return "p_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16); }
 
     function calcRemain(endIso){
       const end = new Date(endIso).getTime();
@@ -613,9 +719,7 @@
              `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     }
 
-    /***********************
-     * Users(Sanctions)
-     ***********************/
+    /* ===== Users(Sanctions) ===== */
     function loadUsers(){
       try{
         const raw = localStorage.getItem(LS_USERS);
@@ -627,9 +731,7 @@
     }
     function saveUsers(users){ localStorage.setItem(LS_USERS, JSON.stringify(users)); }
     function getUser(users, nick){
-      if(!users[nick]){
-        users[nick] = { nick, strikes:0, suspendedUntil:0, banned:false, createdAt: nowISO() };
-      }
+      if(!users[nick]) users[nick] = { nick, strikes:0, suspendedUntil:0, banned:false, createdAt: nowISO() };
       return users[nick];
     }
     function userStatusText(u){
@@ -643,15 +745,11 @@
     }
     function canBid(u){
       if(u.banned) return {ok:false, msg:"영구정지 상태라 입찰할 수 없습니다."};
-      if(u.suspendedUntil && u.suspendedUntil > Date.now()){
-        return {ok:false, msg:"정지 기간 중에는 입찰할 수 없습니다."};
-      }
+      if(u.suspendedUntil && u.suspendedUntil > Date.now()) return {ok:false, msg:"정지 기간 중에는 입찰할 수 없습니다."};
       return {ok:true, msg:"OK"};
     }
 
-    /***********************
-     * Ledger
-     ***********************/
+    /* ===== Ledger ===== */
     function loadLedger(){
       try{
         const raw = localStorage.getItem(LS_LEDGER);
@@ -668,9 +766,7 @@
       saveLedger(ledger);
     }
 
-    /***********************
-     * Products Load/Migrate
-     ***********************/
+    /* ===== Products Load/Migrate ===== */
     function normalizeProduct(p){
       const n = {...p};
       n.id = n.id || cryptoRandomId();
@@ -697,12 +793,8 @@
       n.defaultedAt = n.defaultedAt || "";
       n.defaultReason = n.defaultReason || "";
 
-      // ✅ 거래가 끝난 마감카드를 숨기기 위한 아카이브 플래그
       n.archived = !!n.archived;
-
-      // ✅ 데모 자동 생성 여부(나중에 구분하기 위함)
       n.isDemo = !!n.isDemo;
-
       return n;
     }
 
@@ -745,9 +837,7 @@
     }
     function saveFilter(){ localStorage.setItem(LS_FILTER, state.filterCategory); }
 
-    /***********************
-     * Close finalize
-     ***********************/
+    /* ===== Close finalize ===== */
     function onCloseFinalize(p){
       if(p.closedAt) return;
       p.closedAt = nowISO();
@@ -774,9 +864,7 @@
       });
     }
 
-    /***********************
-     * Auto default after 48h
-     ***********************/
+    /* ===== Auto default after 48h ===== */
     function applyDefault(p){
       if(!p.closed) return;
       if(p.defaulted) return;
@@ -815,9 +903,7 @@
       }
     }
 
-    /***********************
-     * Buyer/Seller complete -> refund
-     ***********************/
+    /* ===== Buyer/Seller complete -> refund ===== */
     function maybeRefund(p){
       if(!p.buyerPaid) return;
       if(!p.sellerConfirmed) return;
@@ -847,6 +933,7 @@
 
       saveProducts();
       renderAll();
+      refreshDashboard();
     }
 
     function markSellerConfirm(productId){
@@ -862,16 +949,12 @@
       maybeRefund(p);
       saveProducts();
       renderAll();
+      refreshDashboard();
     }
 
-    /***********************
-     * ✅ 거래 종료된 마감카드 자동 숨김(아카이브)
-     ***********************/
+    /* ===== 거래 종료된 마감카드 자동 숨김(아카이브) ===== */
     function archiveFinishedClosed(p){
       if(!UI_LIMITS.HIDE_FINISHED_CLOSED) return;
-
-      // "거래가 끝남" 정의:
-      // 1) 환불완료(거래완료) 또는 2) 미이행 처리 완료
       const finished = (p.depositRefunded === true) || (p.defaulted === true);
       if(p.closed && finished && !p.archived){
         p.archived = true;
@@ -879,9 +962,7 @@
       }
     }
 
-    /***********************
-     * Categories
-     ***********************/
+    /* ===== Categories ===== */
     const CATEGORIES = ["전체","가전","공구/장비","전자스크랩","생활용품/레저용품","건설 잔여자재"];
     function renderCategoryBar(){
       const bar = document.getElementById("categoryBar");
@@ -903,9 +984,7 @@
       return p.category === state.filterCategory;
     }
 
-    /***********************
-     * Bidding
-     ***********************/
+    /* ===== Bidding ===== */
     function doBid(productId){
       const nick = (document.getElementById("nickname").value || "").trim();
       if(!nick){
@@ -942,7 +1021,6 @@
       const inc = Number(document.getElementById("incSelect").value || 1000);
       const next = Number(p.currentPrice || p.startPrice || 0) + inc;
 
-      // auto extend if within 60s
       const endMs = new Date(p.endTime).getTime();
       const now = Date.now();
       if(!isNaN(endMs)){
@@ -958,11 +1036,10 @@
 
       saveProducts();
       renderAll();
+      refreshDashboard();
     }
 
-    /***********************
-     * Admin
-     ***********************/
+    /* ===== Admin 상품 ===== */
     function toggleAdmin(){
       const panel = document.getElementById("adminPanel");
       panel.style.display = (panel.style.display === "block") ? "none" : "block";
@@ -993,6 +1070,7 @@
       state.products = state.products.filter(x=>x.id!==id);
       saveProducts();
       renderAll();
+      refreshDashboard();
     }
     function adminSave(){
       const title = (document.getElementById("a_title").value || "").trim();
@@ -1016,10 +1094,12 @@
         if(Number(p.currentPrice || 0) < startPrice) p.currentPrice = startPrice;
         p.endTime = endIso;
 
-        // 마감시간이 미래면 다시 진행중 가능
         if(new Date(p.endTime).getTime() > Date.now()){
           p.closed = false;
           p.archived = false;
+          p.defaulted = false;
+          p.defaultReason = "";
+          p.defaultedAt = "";
         }
       }else{
         state.products.unshift(normalizeProduct({
@@ -1039,16 +1119,15 @@
       saveProducts();
       adminClear();
       renderAll();
+      refreshDashboard();
     }
 
-    /***********************
-     * ✅ 데모용 진행중 카드 자동 채움(최소 3개)
-     ***********************/
+    /* ===== 데모용 진행중 카드 자동 채움(최소 3개) ===== */
     const DEMO_NAMES = ["랜덤 공구 박스", "중고 모니터(테스트)", "선풍기(테스트)", "드릴 배터리", "건설자재 잔량", "생활용품 묶음"];
     function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
     function createDemoProduct(){
-      const baseMin = 20 + Math.floor(Math.random()*140); // 20~160분
+      const baseMin = 20 + Math.floor(Math.random()*140);
       const end = new Date(Date.now() + baseMin*60*1000).toISOString();
       const cat = pick(["가전","공구/장비","전자스크랩","생활용품/레저용품","건설 잔여자재"]);
       const price = pick([12000,15000,18000,20000,25000]);
@@ -1070,22 +1149,14 @@
 
     function ensureMinOpenCards(){
       if(!UI_LIMITS.DEMO_FILL_OPEN) return;
-
-      // 아카이브 제외하고 실제 화면 기준 진행중 개수
       const open = state.products.filter(p=>!p.closed && !p.archived);
       let need = UI_LIMITS.MIN_OPEN_CARDS - open.length;
       if(need <= 0) return;
-
-      // 부족한 만큼 데모 상품 추가
-      for(let i=0;i<need;i++){
-        state.products.unshift(createDemoProduct());
-      }
+      for(let i=0;i<need;i++) state.products.unshift(createDemoProduct());
       saveProducts();
     }
 
-    /***********************
-     * Render cards
-     ***********************/
+    /* ===== Render cards ===== */
     function renderCard(p){
       const remain = calcRemain(p.endTime);
       const closed = p.closed || remain.closed;
@@ -1100,19 +1171,15 @@
       const card = document.createElement("div");
       card.className = "card" + (closed ? " closed":"");
 
-      // status badge
       let badgeClass = closed ? "badge closed" : "badge";
       let badgeText = closed ? "마감" : "진행중";
 
       if(closed && p.defaulted){
-        badgeClass = "badge bad";
-        badgeText = "미이행";
+        badgeClass = "badge bad"; badgeText = "미이행";
       }else if(closed && p.depositRefunded){
-        badgeClass = "badge good";
-        badgeText = "거래완료";
+        badgeClass = "badge good"; badgeText = "거래완료";
       }else if(closed && p.buyerPaid){
-        badgeClass = "badge good";
-        badgeText = "결제완료";
+        badgeClass = "badge good"; badgeText = "결제완료";
       }
 
       const badge = document.createElement("div");
@@ -1276,9 +1343,7 @@
       });
     }
 
-    /***********************
-     * Summary
-     ***********************/
+    /* ===== Summary ===== */
     const SUMMARY_CATS = [
       {key:"가전", label:"가전"},
       {key:"공구/장비", label:"공구/장비"},
@@ -1321,18 +1386,14 @@
             col.appendChild(box);
           });
         }
-
         grid.appendChild(col);
       });
     }
 
-    /***********************
-     * Render All (with limits + archive + ensure 3 open)
-     ***********************/
+    /* ===== Render All ===== */
     function renderAll(){
       syncClosedFlags();
 
-      // 마감 카드 후처리/아카이브
       state.products.forEach(p=>{
         if(p.closed){
           applyDefault(p);
@@ -1341,9 +1402,7 @@
         }
       });
 
-      // ✅ 진행중 최소 3개 채우기(데모용)
       ensureMinOpenCards();
-
       renderCategoryBar();
 
       const openGrid = document.getElementById("openGrid");
@@ -1351,25 +1410,18 @@
       openGrid.innerHTML = "";
       closedGrid.innerHTML = "";
 
-      // 화면에서 아카이브는 제외
       const visible = state.products.filter(p=>!p.archived);
-
       const filtered = visible.filter(passFilter);
 
-      // 진행중/마감 분리
-      let open = filtered.filter(p=>!p.closed);
-      let closed = filtered.filter(p=>p.closed);
+      let open = filtered.filter(p=>!p.closed).slice(0, UI_LIMITS.MAX_OPEN_SHOW);
 
-      // ✅ 표시 최대 개수 제한
-      open = open.slice(0, UI_LIMITS.MAX_OPEN_SHOW);
-
-      // ✅ 마감은 "마감된 순서(최신 마감 우선)" 정렬
-      closed = closed
+      let closed = filtered
+        .filter(p=>p.closed)
         .slice()
         .sort((a,b)=>{
           const ta = new Date(a.closedAt || a.endTime).getTime();
           const tb = new Date(b.closedAt || b.endTime).getTime();
-          return tb - ta; // 최신이 위
+          return tb - ta;
         })
         .slice(0, UI_LIMITS.MAX_CLOSED_SHOW);
 
@@ -1393,9 +1445,7 @@
       updateNextBidLabels();
     }
 
-    /***********************
-     * Tick
-     ***********************/
+    /* ===== Tick ===== */
     function tick(){
       let changed = false;
 
@@ -1418,19 +1468,12 @@
 
         if(wasClosed !== p.closed) changed = true;
 
-        // 진행중 카운트다운
         const cd = document.getElementById("cd_"+p.id);
-        if(cd && !p.closed){
-          cd.textContent = calcRemain(p.endTime).text;
-        }
+        if(cd && !p.closed) cd.textContent = calcRemain(p.endTime).text;
 
-        // 하단 요약 카운트다운
         const sumCd = document.getElementById("sum_cd_"+p.id);
-        if(sumCd && !p.closed){
-          sumCd.textContent = calcRemain(p.endTime).text;
-        }
+        if(sumCd && !p.closed) sumCd.textContent = calcRemain(p.endTime).text;
 
-        // 마감 카드 결제기한
         const dueEl = document.getElementById("due_"+p.id);
         if(dueEl && p.closed && p.payDueAt && !p.buyerPaid && !p.defaulted && p.winnerNick){
           const due = calcRemainFromMs(p.payDueAt);
@@ -1441,12 +1484,11 @@
       if(changed){
         saveProducts();
         renderAll();
+        refreshDashboard();
       }
     }
 
-    /***********************
-     * Reset
-     ***********************/
+    /* ===== Reset ===== */
     function resetToSample(){
       if(!confirm("샘플 데이터로 초기화할까요? (현재 저장된 상품/입찰정보가 사라집니다)")) return;
       localStorage.removeItem(LS_KEY_NEW);
@@ -1455,14 +1497,12 @@
       localStorage.removeItem(LS_USERS);
       localStorage.removeItem(LS_LEDGER);
       init(true);
+      refreshDashboard();
     }
 
-    /***********************
-     * Init
-     ***********************/
+    /* ===== Init ===== */
     function init(forceSeed=false){
       loadFilter();
-
       document.getElementById("depositAccountText").textContent =
         `${DEPOSIT_ACCOUNT.bank} ${DEPOSIT_ACCOUNT.number} (예금주: ${DEPOSIT_ACCOUNT.name}) / 보증금: ${formatMoney(RULES.depositAmount)}원`;
 
@@ -1480,9 +1520,271 @@
       document.getElementById("incSelect").addEventListener("change", updateNextBidLabels);
     }
 
+    /* ===== 관리자 대시보드(3가지) ===== */
+    let dashTab = "trade";
+
+    function dashBackdropClose(e){
+      if(e.target && e.target.id === "dashOverlay") toggleDashboard();
+    }
+
+    function toggleDashboard(){
+      const ov = document.getElementById("dashOverlay");
+      const open = ov.style.display === "flex";
+      ov.style.display = open ? "none" : "flex";
+      if(!open) refreshDashboard();
+    }
+
+    function setDashTab(tab){
+      dashTab = tab;
+      document.getElementById("tab_trade").classList.toggle("active", tab==="trade");
+      document.getElementById("tab_deposit").classList.toggle("active", tab==="deposit");
+      document.getElementById("tab_users").classList.toggle("active", tab==="users");
+
+      document.getElementById("dashTrade").style.display = tab==="trade" ? "block" : "none";
+      document.getElementById("dashDeposit").style.display = tab==="deposit" ? "block" : "none";
+      document.getElementById("dashUsers").style.display = tab==="users" ? "block" : "none";
+    }
+
+    function refreshDashboard(){
+      renderDashTrade();
+      renderDashDeposit();
+      renderDashUsers();
+      setDashTab(dashTab);
+    }
+
+    function statusLabel(p){
+      if(!p.closed) return "진행중";
+      if(p.defaulted) return "미이행";
+      if(p.depositRefunded) return "거래완료";
+      if(p.buyerPaid) return "결제완료";
+      return "마감";
+    }
+
+    function renderDashTrade(){
+      const host = document.getElementById("dashTrade");
+      const products = state.products.slice().filter(p=>!p.archived);
+
+      // KPI
+      const openCnt = products.filter(p=>!p.closed).length;
+      const closedCnt = products.filter(p=>p.closed && !p.depositRefunded && !p.defaulted).length;
+      const doneCnt = products.filter(p=>p.depositRefunded).length;
+      const defCnt = products.filter(p=>p.defaulted).length;
+      const demoCnt = products.filter(p=>p.isDemo && !p.closed).length;
+
+      let html = `
+        <div class="dashKpi">
+          <div class="kpiCard"><div class="k">진행중</div><div class="v">${openCnt}개</div></div>
+          <div class="kpiCard"><div class="k">마감(처리대기)</div><div class="v">${closedCnt}개</div></div>
+          <div class="kpiCard"><div class="k">거래완료</div><div class="v">${doneCnt}개</div></div>
+          <div class="kpiCard"><div class="k">미이행</div><div class="v">${defCnt}개</div></div>
+          <div class="kpiCard"><div class="k">데모 진행중</div><div class="v">${demoCnt}개</div></div>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <button class="btn gray small" onclick="dashTradeFilter('all')">전체</button>
+          <button class="btn gray small" onclick="dashTradeFilter('open')">진행중</button>
+          <button class="btn gray small" onclick="dashTradeFilter('closed')">마감(처리대기)</button>
+          <button class="btn gray small" onclick="dashTradeFilter('done')">거래완료</button>
+          <button class="btn gray small" onclick="dashTradeFilter('default')">미이행</button>
+        </div>
+        <div id="dashTradeList" style="margin-top:10px;"></div>
+      `;
+      host.innerHTML = html;
+
+      window._dashTradeMode = window._dashTradeMode || "all";
+      dashTradeFilter(window._dashTradeMode);
+    }
+
+    function dashTradeFilter(mode){
+      window._dashTradeMode = mode;
+      const listHost = document.getElementById("dashTradeList");
+      if(!listHost) return;
+
+      let items = state.products.slice().filter(p=>!p.archived);
+
+      if(mode==="open") items = items.filter(p=>!p.closed);
+      if(mode==="closed") items = items.filter(p=>p.closed && !p.depositRefunded && !p.defaulted);
+      if(mode==="done") items = items.filter(p=>p.depositRefunded);
+      if(mode==="default") items = items.filter(p=>p.defaulted);
+
+      items = items
+        .sort((a,b)=>{
+          const ta = new Date(a.closedAt || a.endTime).getTime();
+          const tb = new Date(b.closedAt || b.endTime).getTime();
+          return tb - ta;
+        })
+        .slice(0, 80);
+
+      if(items.length===0){
+        listHost.innerHTML = `<div class="smallText" style="padding:10px;">표시할 내역이 없습니다.</div>`;
+        return;
+      }
+
+      let html = "";
+      for(const p of items){
+        const st = statusLabel(p);
+        const money = p.closed ? (p.winnerFinalPrice || p.currentPrice || p.startPrice) : (p.currentPrice || p.startPrice);
+        const who = p.closed ? (p.winnerNick || "-") : (p.highestBidder || "-");
+        const time = p.closed ? (p.closedAt ? formatEndTime(p.closedAt) : formatEndTime(p.endTime)) : formatEndTime(p.endTime);
+
+        html += `
+          <div class="dashRow">
+            <div style="min-width:260px;">
+              <b>${escapeHtml(p.title)}</b> <span class="smallText">(${escapeHtml(p.category)})</span><br>
+              <span class="smallText">시간: ${escapeHtml(time)}</span>
+            </div>
+            <div style="min-width:200px;">
+              상태: <b>${escapeHtml(st)}</b><br>
+              닉네임: <b>${escapeHtml(who)}</b>
+            </div>
+            <div style="min-width:160px;">
+              금액: <b>${formatMoney(money)}원</b><br>
+              입찰: <b>${Number(p.bidCount||0)}회</b>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn gray small" onclick="adminEdit('${p.id}')">수정</button>
+              <button class="btn danger small" onclick="adminDelete('${p.id}')">삭제</button>
+            </div>
+          </div>
+        `;
+      }
+      listHost.innerHTML = html;
+    }
+
+    function renderDashDeposit(){
+      const host = document.getElementById("dashDeposit");
+      const ledger = loadLedger();
+
+      let held=0, refund=0, forfeit=0, seller=0, platform=0;
+      for(const l of ledger){
+        if(l.type==="DEPOSIT_HELD") held += Number(l.amount||0);
+        if(l.type==="DEPOSIT_REFUND") refund += Number(l.amount||0);
+        if(l.type==="DEPOSIT_FORFEIT"){
+          forfeit += Number(l.amount||0);
+          seller += Number(l.distribution?.seller || 0);
+          platform += Number(l.distribution?.platform || 0);
+        }
+      }
+
+      const html = `
+        <div class="dashKpi">
+          <div class="kpiCard"><div class="k">예치(기록)</div><div class="v">${formatMoney(held)}원</div></div>
+          <div class="kpiCard"><div class="k">환불</div><div class="v">${formatMoney(refund)}원</div></div>
+          <div class="kpiCard"><div class="k">몰수</div><div class="v">${formatMoney(forfeit)}원</div></div>
+          <div class="kpiCard"><div class="k">판매자 지급</div><div class="v">${formatMoney(seller)}원</div></div>
+          <div class="kpiCard"><div class="k">플랫폼 수익</div><div class="v">${formatMoney(platform)}원</div></div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <div class="smallText" style="font-weight:900;">입금 안내 계좌</div>
+          <div style="margin-top:6px; padding:10px 10px; border:1px solid rgba(0,0,0,.08); border-radius:14px; background:#fafafa; font-weight:900;">
+            ${DEPOSIT_ACCOUNT.bank} ${DEPOSIT_ACCOUNT.number} (예금주: ${DEPOSIT_ACCOUNT.name}) / 보증금: ${formatMoney(RULES.depositAmount)}원
+          </div>
+        </div>
+
+        <div style="margin-top:14px;">
+          <div class="smallText" style="font-weight:900;">최근 보증금 이벤트(상위 30개)</div>
+          <div style="margin-top:8px; border:1px solid rgba(0,0,0,.08); border-radius:14px; overflow:hidden;">
+            ${renderLedgerRows(ledger.slice(0,30))}
+          </div>
+        </div>
+      `;
+      host.innerHTML = html;
+    }
+
+    function renderLedgerRows(items){
+      if(!items || items.length===0){
+        return `<div class="smallText" style="padding:10px;">기록이 없습니다.</div>`;
+      }
+      let rows = "";
+      for(const l of items){
+        const at = l.at ? formatEndTime(l.at) : "-";
+        let label = l.type;
+        if(l.type==="DEPOSIT_HELD") label="예치";
+        if(l.type==="DEPOSIT_REFUND") label="환불";
+        if(l.type==="DEPOSIT_FORFEIT") label="몰수";
+        if(l.type==="SANCTION") label="제재";
+        if(l.type==="ARCHIVE") label="아카이브";
+        rows += `
+          <div class="dashRow">
+            <div style="min-width:150px;"><b>${escapeHtml(label)}</b><br><span class="smallText">${escapeHtml(at)}</span></div>
+            <div style="min-width:260px;"><b>${escapeHtml(l.title || l.note || "-")}</b><br><span class="smallText">${escapeHtml(l.nick || "")}</span></div>
+            <div style="min-width:160px;"><b>${formatMoney(l.amount||0)}원</b></div>
+            <div class="smallText" style="flex:1;">${escapeHtml(l.note || "")}</div>
+          </div>
+        `;
+      }
+      return rows;
+    }
+
+    function renderDashUsers(){
+      const host = document.getElementById("dashUsers");
+      const users = loadUsers();
+      const list = Object.values(users || {}).sort((a,b)=>{
+        const sa = Number(a.strikes||0), sb = Number(b.strikes||0);
+        return sb - sa;
+      });
+
+      let html = `
+        <div class="smallText" style="font-weight:900;">사용자 제재 현황</div>
+        <div style="margin-top:10px; border:1px solid rgba(0,0,0,.08); border-radius:14px; overflow:hidden;">
+      `;
+
+      if(list.length===0){
+        html += `<div class="smallText" style="padding:12px;">등록된 사용자 기록이 없습니다.</div>`;
+      }else{
+        for(const u of list.slice(0,120)){
+          const st = userStatusText(u);
+          html += `
+            <div class="dashRow">
+              <div style="min-width:220px;">
+                닉네임: <b>${escapeHtml(u.nick)}</b><br>
+                상태: <b>${escapeHtml(st)}</b>
+              </div>
+              <div style="min-width:180px;">
+                경고(누적): <b>${Number(u.strikes||0)}</b>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="btn gray small" onclick="resetUserSanction('${escapeHtml(u.nick).replaceAll("'","\\'")}')">초기화</button>
+                <button class="btn danger small" onclick="banUser('${escapeHtml(u.nick).replaceAll("'","\\'")}')">영구정지</button>
+              </div>
+            </div>
+          `;
+        }
+      }
+      html += `</div>
+        <div class="smallText" style="margin-top:10px;">※ 초기화: 경고/정지/영구정지 모두 해제</div>
+      `;
+      host.innerHTML = html;
+    }
+
+    function resetUserSanction(nick){
+      const users = loadUsers();
+      const u = users[nick];
+      if(!u){ alert("사용자 기록이 없습니다."); return; }
+      if(!confirm(`${nick} 사용자 제재를 초기화할까요?`)) return;
+      u.strikes = 0;
+      u.suspendedUntil = 0;
+      u.banned = false;
+      saveUsers(users);
+      refreshDashboard();
+      alert("초기화 완료");
+    }
+
+    function banUser(nick){
+      const users = loadUsers();
+      const u = getUser(users, nick);
+      if(!confirm(`${nick} 사용자를 영구정지 처리할까요?`)) return;
+      u.banned = true;
+      u.suspendedUntil = 0;
+      saveUsers(users);
+      ledgerAdd("SANCTION", { nick, strikes:u.strikes, status:"영구정지", note:"관리자 수동 영구정지" });
+      refreshDashboard();
+      alert("영구정지 처리 완료");
+    }
+
+    /* ===== Start ===== */
     init(false);
     setInterval(tick, 1000);
   </script>
 </body>
-</html>
 </html>
