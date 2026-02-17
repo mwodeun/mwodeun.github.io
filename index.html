@@ -48,7 +48,6 @@
       flex-wrap:wrap;
     }
 
-    /* ✅ brand를 a로 바꿔도 레이아웃 유지 */
     .brand{
       display:flex;
       align-items:center;
@@ -387,7 +386,6 @@
       font-weight:700;
     }
 
-    /* ✅ 관리자 대시보드(레이아웃 영향 없음: fixed overlay) */
     .dashBtn{
       position:fixed;
       right:18px;
@@ -505,7 +503,6 @@
       <div class="wrap">
         <div class="topbar">
 
-          <!-- ✅ 로고 클릭 시 HOME(index.html)로 이동 -->
           <a class="brand" href="index.html" title="HOME으로 이동">
             <img src="logo.png" alt="MWODEUN 모든경매" onerror="this.style.display='none'">
             <div>
@@ -549,14 +546,17 @@
               <div class="smallText">상품명</div>
               <input id="a_title" type="text" placeholder="예) 캠핑 테이블" />
             </div>
+
             <div>
               <div class="smallText">카테고리</div>
+              <!-- ✅ 카테고리명/순서 요청사항 반영 -->
               <select id="a_category">
                 <option value="가전">가전</option>
-                <option value="공구/장비">공구/장비</option>
-                <option value="전자스크랩">전자스크랩</option>
-                <option value="생활용품/레저용품">생활용품/레저용품</option>
-                <option value="건설 잔여자재">건설 잔여자재</option>
+                <option value="공구장비">공구장비</option>
+                <option value="레져용품">레져용품</option>
+                <option value="애완용품">애완용품</option>
+                <option value="건설잔여자재">건설잔여자재</option>
+                <option value="부품용">부품용</option>
               </select>
             </div>
 
@@ -587,7 +587,6 @@
 
     <div class="primaryNav">
       <div class="wrap">
-        <!-- ✅ HOME은 실제 페이지로 이동 -->
         <a class="navLink" href="index.html">HOME</a>
         <a class="navLink" href="#" onclick="return false;">회원가입</a>
         <a class="navLink" href="#" onclick="return false;">로그인</a>
@@ -627,7 +626,6 @@
     </div>
   </main>
 
-  <!-- ✅ 관리자 대시보드(고정 버튼 + 오버레이) -->
   <button class="dashBtn" onclick="toggleDashboard()">관리자 관리</button>
   <div class="dashOverlay" id="dashOverlay" onclick="dashBackdropClose(event)">
     <div class="dashPanel">
@@ -827,11 +825,11 @@
       const base = new Date();
       const plusMin = (min)=> new Date(base.getTime() + min*60*1000);
       return [
-        normalizeProduct({ id: cryptoRandomId(), title:"전동드릴 세트", category:"공구/장비", startPrice:15000, currentPrice:15000,
+        normalizeProduct({ id: cryptoRandomId(), title:"전동드릴 세트", category:"공구장비", startPrice:15000, currentPrice:15000,
           endTime: plusMin(180).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false }),
         normalizeProduct({ id: cryptoRandomId(), title:"LG 55인치 TV (고장)", category:"가전", startPrice:15000, currentPrice:15000,
           endTime: plusMin(90).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false }),
-        normalizeProduct({ id: cryptoRandomId(), title:"캠핑 테이블", category:"생활용품/레저용품", startPrice:15000, currentPrice:15000,
+        normalizeProduct({ id: cryptoRandomId(), title:"캠핑 테이블", category:"레져용품", startPrice:15000, currentPrice:15000,
           endTime: plusMin(15).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false })
       ];
     }
@@ -969,8 +967,9 @@
       }
     }
 
-    /* ===== Categories ===== */
-    const CATEGORIES = ["전체","가전","공구/장비","전자스크랩","생활용품/레저용품","건설 잔여자재"];
+    /* ===== Categories (✅ 요청 순서/명칭 반영) ===== */
+    const CATEGORIES = ["전체","가전","공구장비","레져용품","애완용품","건설잔여자재","부품용"];
+
     function renderCategoryBar(){
       const bar = document.getElementById("categoryBar");
       bar.innerHTML = "";
@@ -1130,13 +1129,13 @@
     }
 
     /* ===== 데모용 진행중 카드 자동 채움(최소 3개) ===== */
-    const DEMO_NAMES = ["랜덤 공구 박스", "중고 모니터(테스트)", "선풍기(테스트)", "드릴 배터리", "건설자재 잔량", "생활용품 묶음"];
+    const DEMO_NAMES = ["랜덤 공구 박스", "중고 모니터(테스트)", "선풍기(테스트)", "드릴 배터리", "건설자재 잔량", "레져용품 묶음", "애완용품 묶음", "부품용 묶음"];
     function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
     function createDemoProduct(){
       const baseMin = 20 + Math.floor(Math.random()*140);
       const end = new Date(Date.now() + baseMin*60*1000).toISOString();
-      const cat = pick(["가전","공구/장비","전자스크랩","생활용품/레저용품","건설 잔여자재"]);
+      const cat = pick(["가전","공구장비","레져용품","애완용품","건설잔여자재","부품용"]);
       const price = pick([12000,15000,18000,20000,25000]);
 
       return normalizeProduct({
@@ -1350,13 +1349,13 @@
       });
     }
 
-    /* ===== Summary ===== */
+    /* ===== Summary (✅ 카테고리명 반영) ===== */
     const SUMMARY_CATS = [
       {key:"가전", label:"가전"},
-      {key:"공구/장비", label:"공구/장비"},
-      {key:"전자스크랩", label:"전자스크랩"},
-      {key:"생활용품/레저용품", label:"생활용품/레저용품"},
-      {key:"건설 잔여자재", label:"건설 전여자재"}
+      {key:"공구장비", label:"공구장비"},
+      {key:"레져용품", label:"레져용품"},
+      {key:"애완용품", label:"애완용품"},
+      {key:"건설잔여자재", label:"건설잔여자재"}
     ];
 
     function renderSummary(openItems){
@@ -1527,7 +1526,7 @@
       document.getElementById("incSelect").addEventListener("change", updateNextBidLabels);
     }
 
-    /* ===== 관리자 대시보드(3가지) ===== */
+    /* ===== 관리자 대시보드 ===== */
     let dashTab = "trade";
 
     function dashBackdropClose(e){
@@ -1571,7 +1570,6 @@
       const host = document.getElementById("dashTrade");
       const products = state.products.slice().filter(p=>!p.archived);
 
-      // KPI
       const openCnt = products.filter(p=>!p.closed).length;
       const closedCnt = products.filter(p=>p.closed && !p.depositRefunded && !p.defaulted).length;
       const doneCnt = products.filter(p=>p.depositRefunded).length;
