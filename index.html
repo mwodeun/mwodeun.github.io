@@ -48,11 +48,15 @@
       flex-wrap:wrap;
     }
 
+    /* ✅ brand를 a로 바꿔도 레이아웃 유지 */
     .brand{
       display:flex;
       align-items:center;
       gap:12px;
       min-width:260px;
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
     }
     .brand img{
       height:78px;
@@ -175,10 +179,6 @@
       background:rgba(255,255,255,.08);
     }
     .navLink:hover{ background:rgba(255,255,255,.14); }
-    .navLink.active{
-      background:rgba(255,255,255,.22);
-      box-shadow:0 0 0 3px rgba(255,255,255,.10);
-    }
 
     .categoryRow{
       background:#fff;
@@ -332,7 +332,7 @@
       background:#fff;
       border:1px solid var(--border);
       border-radius:16px;
-      box-shadow:0 8px 18px rgba(0,0,0,.05);
+      box-shadow:0 8px 18px rgba(0,0,0,0.05);
       overflow:hidden;
     }
     .summaryHead{
@@ -354,7 +354,7 @@
     }
     .summaryGrid{
       display:grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(5, 1fr);
     }
     .sumCol{
       padding:12px 12px 14px;
@@ -385,37 +385,6 @@
       color:var(--muted);
       padding:6px 2px;
       font-weight:700;
-    }
-
-    /* ✅ 메뉴 클릭 시 메뉴줄 아래에 노출될 "빈 페이지" 영역 */
-    .pageBox{
-      display:none;
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:16px;
-      box-shadow:0 8px 18px rgba(0,0,0,.05);
-      overflow:hidden;
-      margin-top:16px;
-    }
-    .pageHead{
-      padding:14px 16px;
-      border-bottom:1px solid var(--border);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .pageHead .ttl{
-      font-size:18px;
-      font-weight:900;
-    }
-    .pageBody{
-      min-height:260px; /* "빈 페이지" 느낌 */
-      padding:16px;
-      color:var(--muted);
-      font-weight:800;
-      font-size:13px;
     }
 
     /* ✅ 관리자 대시보드(레이아웃 영향 없음: fixed overlay) */
@@ -535,13 +504,15 @@
     <div class="bannerArea">
       <div class="wrap">
         <div class="topbar">
-          <div class="brand">
+
+          <!-- ✅ 로고 클릭 시 HOME(index.html)로 이동 -->
+          <a class="brand" href="index.html" title="HOME으로 이동">
             <img src="logo.png" alt="MWODEUN 모든경매" onerror="this.style.display='none'">
             <div>
               <div class="title">MWODEUN 모든경매</div>
               <div class="sub">중고 물품만 등록 · 시작가+마감시간+자동연장</div>
             </div>
-          </div>
+          </a>
 
           <div class="controls">
             <div class="chip">
@@ -582,11 +553,10 @@
               <div class="smallText">카테고리</div>
               <select id="a_category">
                 <option value="가전">가전</option>
-                <option value="공구장비">공구장비</option>
-                <option value="레져용품">레져용품</option>
-                <option value="애완용품">애완용품</option>
-                <option value="건설잔여자재">건설잔여자재</option>
-                <option value="부품용">부품용</option>
+                <option value="공구/장비">공구/장비</option>
+                <option value="전자스크랩">전자스크랩</option>
+                <option value="생활용품/레저용품">생활용품/레저용품</option>
+                <option value="건설 잔여자재">건설 잔여자재</option>
               </select>
             </div>
 
@@ -617,11 +587,12 @@
 
     <div class="primaryNav">
       <div class="wrap">
-        <a class="navLink active" href="#" onclick="setTopPage('home'); return false;" id="nav_home">HOME</a>
-        <a class="navLink" href="#" onclick="setTopPage('signup'); return false;" id="nav_signup">회원가입</a>
-        <a class="navLink" href="#" onclick="setTopPage('login'); return false;" id="nav_login">로그인</a>
-        <a class="navLink" href="#" onclick="setTopPage('guide'); return false;" id="nav_guide">이용안내</a>
-        <a class="navLink" href="#" onclick="setTopPage('support'); return false;" id="nav_support">고객센터</a>
+        <!-- ✅ HOME은 실제 페이지로 이동 -->
+        <a class="navLink" href="index.html">HOME</a>
+        <a class="navLink" href="#" onclick="return false;">회원가입</a>
+        <a class="navLink" href="#" onclick="return false;">로그인</a>
+        <a class="navLink" href="#" onclick="return false;">이용안내</a>
+        <a class="navLink" href="#" onclick="return false;">고객센터</a>
       </div>
     </div>
 
@@ -632,40 +603,25 @@
 
   <main>
     <div class="wrap">
+      <h2>진행중 경매</h2>
+      <div class="sectionHint">
+        마감시간이 지나면 자동으로 “마감 카드”로 이동합니다. (LocalStorage 저장됨)
+        <br>※ 데모 모드에서는 진행중 카드가 최소 3개 유지되도록 자동 생성됩니다.
+      </div>
+      <div class="grid" id="openGrid"></div>
 
-      <!-- ✅ 메뉴 클릭 시 "메뉴줄 아래"에 노출되는 빈 페이지 -->
-      <div class="pageBox" id="pageBox">
-        <div class="pageHead">
-          <div class="ttl" id="pageTitle">페이지</div>
-        </div>
-        <div class="pageBody" id="pageBody">
-          (빈 페이지) — 추후 기능을 이 영역에 추가합니다.
-        </div>
+      <div id="closedSection" style="display:none;">
+        <h2 style="margin-top:42px;">마감 카드</h2>
+        <div class="sectionHint">마감된 상품만 이곳에 모입니다. (결제/거래완료/미이행 처리 후 자동으로 화면에서 숨김)</div>
+        <div class="grid" id="closedGrid"></div>
       </div>
 
-      <!-- ✅ HOME(경매 화면) -->
-      <div id="homeArea">
-        <h2 id="homeTitle">진행중 경매</h2>
-        <div class="sectionHint" id="homeHint">
-          마감시간이 지나면 자동으로 “마감 카드”로 이동합니다. (LocalStorage 저장됨)
-          <br>※ 데모 모드에서는 진행중 카드가 최소 3개 유지되도록 자동 생성됩니다.
+      <div class="summaryBox" id="summaryBox">
+        <div class="summaryHead">
+          <div class="ttl">진행중인 경매</div>
+          <div class="hint">카테고리별 “상품명 / 현재가 / 남은시간”</div>
         </div>
-
-        <div class="grid" id="openGrid"></div>
-
-        <div id="closedSection" style="display:none;">
-          <h2 style="margin-top:42px;">마감 카드</h2>
-          <div class="sectionHint">마감된 상품만 이곳에 모입니다. (결제/거래완료/미이행 처리 후 자동으로 화면에서 숨김)</div>
-          <div class="grid" id="closedGrid"></div>
-        </div>
-
-        <div class="summaryBox" id="summaryBox">
-          <div class="summaryHead">
-            <div class="ttl">진행중인 경매</div>
-            <div class="hint">카테고리별 “상품명 / 현재가 / 남은시간”</div>
-          </div>
-          <div class="summaryGrid" id="summaryGrid"></div>
-        </div>
+        <div class="summaryGrid" id="summaryGrid"></div>
       </div>
 
     </div>
@@ -718,10 +674,10 @@
     const DEPOSIT_ACCOUNT = { bank: "농협", number: "000-0000-0000-00", name: "MWODEUN(예치금)" };
 
     /* ===== LocalStorage Keys ===== */
-    const LS_KEY_NEW = "mwodeun_products_rules_v4"; // 버전 업
-    const LS_KEY_PREV = "mwodeun_products_rules_v3";
-    const LS_KEY_OLD  = "mwodeun_products_rules_v2";
-    const LS_FILTER = "mwodeun_filter_rules_v2";
+    const LS_KEY_NEW = "mwodeun_products_rules_v3";
+    const LS_KEY_PREV = "mwodeun_products_rules_v2";
+    const LS_KEY_OLD  = "mwodeun_products_final_v1";
+    const LS_FILTER = "mwodeun_filter_final_v1";
     const LS_USERS  = "mwodeun_users_rules_v2";
     const LS_LEDGER = "mwodeun_ledger_rules_v2";
 
@@ -768,19 +724,6 @@
       if (isNaN(d.getTime())) return "시간정보 없음";
       return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ` +
              `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-    }
-
-    /* ===== 카테고리 변경/마이그레이션 ===== */
-    const CATEGORY_MAP = {
-      "공구/장비": "공구장비",
-      "생활용품/레저용품": "레져용품",
-      "생활용품/레져용품": "레져용품",
-      "전자스크랩": "부품용",
-      "건설 잔여자재": "건설잔여자재"
-    };
-    function mapCategory(cat){
-      const c = String(cat || "").trim();
-      return CATEGORY_MAP[c] || c || "가전";
     }
 
     /* ===== Users(Sanctions) ===== */
@@ -835,7 +778,7 @@
       const n = {...p};
       n.id = n.id || cryptoRandomId();
       n.title = n.title || "-";
-      n.category = mapCategory(n.category || "가전");
+      n.category = n.category || "가전";
       n.startPrice = Number(n.startPrice || 0);
       n.currentPrice = Number(n.currentPrice || n.startPrice || 0);
       n.endTime = n.endTime || new Date(Date.now()+3600*1000).toISOString();
@@ -863,7 +806,7 @@
     }
 
     function loadProducts(){
-      const tryKeys = [LS_KEY_NEW, LS_KEY_PREV, LS_KEY_OLD, "mwodeun_products_final_v1"];
+      const tryKeys = [LS_KEY_NEW, LS_KEY_PREV, LS_KEY_OLD];
       for(const k of tryKeys){
         const raw = localStorage.getItem(k);
         if(!raw) continue;
@@ -884,76 +827,22 @@
       const base = new Date();
       const plusMin = (min)=> new Date(base.getTime() + min*60*1000);
       return [
-        normalizeProduct({ id: cryptoRandomId(), title:"전동드릴 세트", category:"공구장비", startPrice:15000, currentPrice:15000,
+        normalizeProduct({ id: cryptoRandomId(), title:"전동드릴 세트", category:"공구/장비", startPrice:15000, currentPrice:15000,
           endTime: plusMin(180).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false }),
         normalizeProduct({ id: cryptoRandomId(), title:"LG 55인치 TV (고장)", category:"가전", startPrice:15000, currentPrice:15000,
           endTime: plusMin(90).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false }),
-        normalizeProduct({ id: cryptoRandomId(), title:"캠핑 테이블", category:"레져용품", startPrice:15000, currentPrice:15000,
+        normalizeProduct({ id: cryptoRandomId(), title:"캠핑 테이블", category:"생활용품/레저용품", startPrice:15000, currentPrice:15000,
           endTime: plusMin(15).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false })
       ];
     }
 
-    const state = {
-      products: [],
-      filterCategory: "전체",
-      adminEditingId: null,
-      topPage: "home"
-    };
+    const state = { products: [], filterCategory: "전체", adminEditingId: null };
 
     function loadFilter(){
       const raw = localStorage.getItem(LS_FILTER);
       if(raw) state.filterCategory = raw;
     }
     function saveFilter(){ localStorage.setItem(LS_FILTER, state.filterCategory); }
-
-    /* ===== 상단 메뉴(한 페이지 전환) ===== */
-    function setTopPage(page){
-      state.topPage = page;
-
-      // nav active
-      const ids = ["home","signup","login","guide","support"];
-      ids.forEach(k=>{
-        const el = document.getElementById("nav_"+k);
-        if(el) el.classList.toggle("active", k===page);
-      });
-
-      const pageBox = document.getElementById("pageBox");
-      const homeArea = document.getElementById("homeArea");
-
-      if(page === "home"){
-        pageBox.style.display = "none";
-        homeArea.style.display = "block";
-        // 홈으로 올 때는 현재 카테고리 제목 표시
-        updateHomeTitle();
-        renderAll();
-        return;
-      }
-
-      // 메뉴 클릭 시: 메뉴줄 아래에 페이지 표시 + 경매 영역 숨김
-      homeArea.style.display = "none";
-      pageBox.style.display = "block";
-
-      const titles = {
-        signup: "회원가입",
-        login: "로그인",
-        guide: "이용안내",
-        support: "고객센터"
-      };
-      document.getElementById("pageTitle").textContent = titles[page] || "페이지";
-      document.getElementById("pageBody").textContent = "(빈 페이지) — 추후 기능을 이 영역에 추가합니다.";
-      window.scrollTo({top:0, behavior:"smooth"});
-    }
-    window.setTopPage = setTopPage;
-
-    function updateHomeTitle(){
-      const t = document.getElementById("homeTitle");
-      const h = document.getElementById("homeHint");
-      const cat = state.filterCategory || "전체";
-      t.textContent = (cat === "전체") ? "진행중 경매" : `${cat} · 진행중 경매`;
-      h.innerHTML =
-        `마감시간이 지나면 자동으로 “마감 카드”로 이동합니다. (LocalStorage 저장됨)` +
-        `<br>※ 데모 모드에서는 진행중 카드가 최소 3개 유지되도록 자동 생성됩니다.`;
-    }
 
     /* ===== Close finalize ===== */
     function onCloseFinalize(p){
@@ -1080,9 +969,8 @@
       }
     }
 
-    /* ===== Categories (요청 순서 그대로) ===== */
-    const CATEGORIES = ["전체","가전","공구장비","레져용품","애완용품","건설잔여자재","부품용"];
-
+    /* ===== Categories ===== */
+    const CATEGORIES = ["전체","가전","공구/장비","전자스크랩","생활용품/레저용품","건설 잔여자재"];
     function renderCategoryBar(){
       const bar = document.getElementById("categoryBar");
       bar.innerHTML = "";
@@ -1093,8 +981,6 @@
         btn.onclick = ()=>{
           state.filterCategory = cat;
           saveFilter();
-          // 카테고리 클릭 시 HOME 화면으로 자동 복귀 + 제목 변경
-          setTopPage("home");
           renderAll();
         };
         bar.appendChild(btn);
@@ -1102,7 +988,7 @@
     }
     function passFilter(p){
       if(state.filterCategory === "전체") return true;
-      return mapCategory(p.category) === state.filterCategory;
+      return p.category === state.filterCategory;
     }
 
     /* ===== Bidding ===== */
@@ -1164,8 +1050,6 @@
     function toggleAdmin(){
       const panel = document.getElementById("adminPanel");
       panel.style.display = (panel.style.display === "block") ? "none" : "block";
-      // 관리자 패널을 열었다면 HOME 복귀(보이도록)
-      setTopPage("home");
     }
     function adminClear(){
       state.adminEditingId = null;
@@ -1179,11 +1063,10 @@
       const p = state.products.find(x=>x.id===id);
       if(!p) return;
 
-      setTopPage("home");
       state.adminEditingId = id;
       document.getElementById("adminPanel").style.display = "block";
       document.getElementById("a_title").value = p.title || "";
-      document.getElementById("a_category").value = mapCategory(p.category) || "가전";
+      document.getElementById("a_category").value = p.category || "가전";
       document.getElementById("a_startPrice").value = Number(p.startPrice || 0);
       document.getElementById("a_endTime").value = toLocalInputValue(new Date(p.endTime));
       document.getElementById("adminModeText").textContent = "현재: 수정 모드 (저장하면 해당 상품이 수정됩니다)";
@@ -1213,7 +1096,7 @@
         if(!p) return;
 
         p.title = title;
-        p.category = mapCategory(category);
+        p.category = category;
         p.startPrice = startPrice;
         if(Number(p.currentPrice || 0) < startPrice) p.currentPrice = startPrice;
         p.endTime = endIso;
@@ -1228,8 +1111,7 @@
       }else{
         state.products.unshift(normalizeProduct({
           id: cryptoRandomId(),
-          title,
-          category: mapCategory(category),
+          title, category,
           startPrice,
           currentPrice: startPrice,
           endTime: endIso,
@@ -1248,13 +1130,13 @@
     }
 
     /* ===== 데모용 진행중 카드 자동 채움(최소 3개) ===== */
-    const DEMO_NAMES = ["랜덤 공구 박스", "중고 모니터(테스트)", "선풍기(테스트)", "드릴 배터리", "건설자재 잔량", "레져용품 묶음", "애완용품(테스트)", "부품용 묶음"];
+    const DEMO_NAMES = ["랜덤 공구 박스", "중고 모니터(테스트)", "선풍기(테스트)", "드릴 배터리", "건설자재 잔량", "생활용품 묶음"];
     function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
     function createDemoProduct(){
       const baseMin = 20 + Math.floor(Math.random()*140);
       const end = new Date(Date.now() + baseMin*60*1000).toISOString();
-      const cat = pick(["가전","공구장비","레져용품","애완용품","건설잔여자재","부품용"]);
+      const cat = pick(["가전","공구/장비","전자스크랩","생활용품/레저용품","건설 잔여자재"]);
       const price = pick([12000,15000,18000,20000,25000]);
 
       return normalizeProduct({
@@ -1318,7 +1200,7 @@
       const cat = document.createElement("div");
       cat.className = "smallText";
       cat.style.fontWeight = "900";
-      cat.textContent = mapCategory(p.category || "-");
+      cat.textContent = p.category || "-";
       topRow.appendChild(cat);
 
       const body = document.createElement("div");
@@ -1468,14 +1350,13 @@
       });
     }
 
-    /* ===== Summary (요청 카테고리 반영 + 오타 제거) ===== */
+    /* ===== Summary ===== */
     const SUMMARY_CATS = [
       {key:"가전", label:"가전"},
-      {key:"공구장비", label:"공구장비"},
-      {key:"레져용품", label:"레져용품"},
-      {key:"애완용품", label:"애완용품"},
-      {key:"건설잔여자재", label:"건설잔여자재"},
-      {key:"부품용", label:"부품용"}
+      {key:"공구/장비", label:"공구/장비"},
+      {key:"전자스크랩", label:"전자스크랩"},
+      {key:"생활용품/레저용품", label:"생활용품/레저용품"},
+      {key:"건설 잔여자재", label:"건설 전여자재"}
     ];
 
     function renderSummary(openItems){
@@ -1492,7 +1373,7 @@
 
         col.appendChild(t);
 
-        const list = openItems.filter(p=>mapCategory(p.category)===cat.key);
+        const list = openItems.filter(p=>p.category===cat.key);
 
         if(list.length===0){
           const empty = document.createElement("div");
@@ -1518,8 +1399,6 @@
 
     /* ===== Render All ===== */
     function renderAll(){
-      if(state.topPage !== "home") return; // 홈이 아닐 땐 경매 UI 렌더/업데이트 최소화
-
       syncClosedFlags();
 
       state.products.forEach(p=>{
@@ -1532,7 +1411,6 @@
 
       ensureMinOpenCards();
       renderCategoryBar();
-      updateHomeTitle();
 
       const openGrid = document.getElementById("openGrid");
       const closedGrid = document.getElementById("closedGrid");
@@ -1576,8 +1454,6 @@
 
     /* ===== Tick ===== */
     function tick(){
-      if(state.topPage !== "home") return; // 메뉴 페이지 표시 중엔 불필요한 갱신 최소화
-
       let changed = false;
 
       state.products.forEach(p=>{
@@ -1625,7 +1501,6 @@
       localStorage.removeItem(LS_KEY_NEW);
       localStorage.removeItem(LS_KEY_PREV);
       localStorage.removeItem(LS_KEY_OLD);
-      localStorage.removeItem("mwodeun_products_final_v1");
       localStorage.removeItem(LS_USERS);
       localStorage.removeItem(LS_LEDGER);
       init(true);
@@ -1644,9 +1519,6 @@
       }else{
         state.products = seedSample();
       }
-
-      // 저장된 상품들의 카테고리 강제 정리(마이그레이션 확정)
-      state.products = state.products.map(normalizeProduct);
 
       saveProducts();
       syncClosedFlags();
@@ -1764,7 +1636,7 @@
         html += `
           <div class="dashRow">
             <div style="min-width:260px;">
-              <b>${escapeHtml(p.title)}</b> <span class="smallText">(${escapeHtml(mapCategory(p.category))})</span><br>
+              <b>${escapeHtml(p.title)}</b> <span class="smallText">(${escapeHtml(p.category)})</span><br>
               <span class="smallText">시간: ${escapeHtml(time)}</span>
             </div>
             <div style="min-width:200px;">
