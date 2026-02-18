@@ -135,11 +135,11 @@
       border-radius:12px;
       outline:none;
       background:#fff;
-      font-family: inherit;
+      font-family:inherit;
     }
     input[type="text"]{min-width:170px}
     select{min-width:120px}
-    textarea{width:100%; min-height:92px; resize:vertical;}
+    textarea{width:100%; resize:vertical; min-height:84px; line-height:1.5}
 
     .btn{
       cursor:pointer;
@@ -208,7 +208,6 @@
       box-shadow:0 0 0 3px rgba(106,13,173,.08);
     }
 
-    /* ✅ 메뉴 클릭 시 "메뉴줄 아래 제목" 표시 영역 */
     .pageTitleBar{
       background:#fff;
       border-bottom:1px solid var(--border);
@@ -247,6 +246,27 @@
     }
     .adminGrid .full{grid-column:1 / -1}
 
+    .imgGrid{
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap:8px;
+    }
+    .imgGrid input{min-width:0; width:100%}
+    .imgHint{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:800;
+      line-height:1.45;
+      margin-top:6px;
+    }
+    .descCount{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      text-align:right;
+      margin-top:6px;
+    }
+
     main .wrap{padding:18px 16px 70px}
     h2{ margin:24px 0 12px; font-size:20px; }
     .sectionHint{
@@ -275,16 +295,15 @@
     }
     .card.closed{ background:#e9e9e9; filter:grayscale(0.15); }
 
-    /* ✅ 대표사진 */
     .thumb{
       width:100%;
       aspect-ratio: 4 / 3;
       background:#f2f2f2;
-      border-bottom:1px solid var(--border);
       display:flex;
       align-items:center;
       justify-content:center;
       overflow:hidden;
+      border-bottom:1px solid var(--border);
     }
     .thumb img{
       width:100%;
@@ -293,13 +312,13 @@
       display:block;
     }
     .thumb .noimg{
-      font-size:12px;
-      color:var(--muted);
       font-weight:900;
-      padding:16px;
+      color:#999;
+      font-size:13px;
     }
 
     .card .body{ padding:14px 14px 12px; }
+
     .row{
       display:flex;
       justify-content:space-between;
@@ -324,6 +343,7 @@
     }
     .badge.bad{background:rgba(217,48,37,.10); color:#b42318; border-color:rgba(217,48,37,.25);}
     .badge.good{background:rgba(0,128,0,.10); color:#0f6a1a; border-color:rgba(0,128,0,.22);}
+
     .name{
       font-size:18px;
       font-weight:900;
@@ -338,6 +358,7 @@
     .price{ margin-top:10px; font-size:16px; font-weight:900; }
     .price span{color:var(--purple)}
     .divider{ height:1px; background:var(--border); margin:12px 0; }
+
     .actions{
       display:flex;
       gap:8px;
@@ -345,32 +366,46 @@
       align-items:center;
       justify-content:space-between;
     }
-    .bidBox{
+
+    .expandArea{
       margin-top:10px;
       padding:10px;
       border:1px dashed rgba(106,13,173,.35);
       border-radius:12px;
       background:rgba(106,13,173,.04);
+      display:none; /* 기본은 숨김 */
+    }
+
+    .gallery{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .gimg{
+      width:58px;
+      height:44px;
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,.10);
+      overflow:hidden;
+      background:#f2f2f2;
+      cursor:pointer;
+    }
+    .gimg img{width:100%; height:100%; object-fit:cover; display:block}
+    .descBox{
+      background:#fff;
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:12px;
+      padding:10px;
+      font-size:13px;
+      color:#111;
+      line-height:1.6;
+      margin-bottom:10px;
     }
     .bidHelp{ font-size:12px; color:var(--muted); margin-top:6px; line-height:1.35; }
     .smallText{font-size:12px; color:var(--muted)}
     .countdown{font-weight:900}
     .lastBidder{font-weight:900; color:#111;}
-
-    /* ✅ 메인: 카드 최소노출 / 상세는 펼침 */
-    .cardSummaryMeta{
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.45;
-      margin-top:2px;
-    }
-    .cardDetail{
-      display:none;
-      margin-top:10px;
-    }
-    .cardDetail.open{
-      display:block;
-    }
 
     .summaryBox{
       margin-top:22px;
@@ -409,7 +444,6 @@
     .sumLine b{font-weight:900;}
     .sumEmpty{ font-size:12px; color:var(--muted); padding:6px 2px; font-weight:700; }
 
-    /* ✅ 빈페이지(회원가입/로그인/이용안내/고객센터) 영역 */
     .pageBox{
       background:#fff;
       border:1px solid var(--border);
@@ -421,40 +455,6 @@
     .pageBox h3{ margin:0 0 8px; font-size:18px; }
     .pageBox p{ margin:0; color:var(--muted); line-height:1.6; font-size:13px; }
 
-    /* ✅ 관리자: 사진 미리보기 */
-    .photoHint{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.4;
-      margin-top:6px;
-      font-weight:700;
-    }
-    .photoPreview{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:8px;
-    }
-    .photoPreview img{
-      width:72px;
-      height:72px;
-      object-fit:cover;
-      border-radius:12px;
-      border:1px solid rgba(0,0,0,.12);
-      background:#fafafa;
-    }
-    .counterLine{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      margin-top:6px;
-      font-size:12px;
-      color:var(--muted);
-      font-weight:800;
-    }
-
-    /* ✅ 관리자 대시보드 */
     .dashBtn{
       position:fixed;
       right:18px;
@@ -552,6 +552,7 @@
       .sumCol{ border-left:none; border-top:1px solid var(--border); }
       .sumCol:first-child{ border-top:none; }
       .dashKpi{ grid-template-columns: 1fr; }
+      .imgGrid{grid-template-columns: 1fr;}
     }
     @media (max-width:720px){
       .adminGrid{grid-template-columns:1fr}
@@ -579,7 +580,7 @@
           <div class="controls">
             <div class="chip">
               <label>닉네임</label>
-              <input id="nickname" type="text" placeholder="입찰 닉네임" />
+              <input id="nickname" type="text" placeholder="(로그인 전) 임시 닉네임" />
             </div>
 
             <div class="chip">
@@ -633,25 +634,25 @@
               <input id="a_endTime" type="datetime-local" />
             </div>
 
-            <!-- ✅ 사진(최소 5장) -->
             <div class="full">
-              <div class="smallText" style="font-weight:900;">상품 사진 (최소 5장)</div>
-              <input id="a_photos" type="file" accept="image/*" multiple />
-              <div class="photoHint">
-                • 사진은 PC/휴대폰에서 선택하면 자동 저장됩니다(LocalStorage).<br>
-                • 최소 5장 이상 선택해야 저장됩니다. (대표사진=첫번째)
+              <div class="smallText" style="font-weight:900; margin-bottom:6px;">상품 사진 URL (최소 5장 필수)</div>
+              <div class="imgGrid">
+                <input id="a_img1" type="text" placeholder="사진1 URL (대표)" />
+                <input id="a_img2" type="text" placeholder="사진2 URL" />
+                <input id="a_img3" type="text" placeholder="사진3 URL" />
+                <input id="a_img4" type="text" placeholder="사진4 URL" />
+                <input id="a_img5" type="text" placeholder="사진5 URL" />
               </div>
-              <div class="photoPreview" id="a_photoPreview"></div>
+              <div class="imgHint">
+                ※ 사진은 “URL”로 받습니다. (예: repo에 업로드한 사진이면 <b>img/abc.jpg</b> 처럼 경로를 넣으면 됩니다)<br>
+                ※ 메인에 노출되는 사진은 <b>사진1</b> 입니다.
+              </div>
             </div>
 
-            <!-- ✅ 상세설명(200자) -->
             <div class="full">
-              <div class="smallText" style="font-weight:900;">상세설명 (최대 200자)</div>
-              <textarea id="a_desc" maxlength="200" placeholder="예) 상태/구성품/고장여부/직거래 위치 등 (200자 내외)"></textarea>
-              <div class="counterLine">
-                <span>※ 메인에서는 숨김(입찰하기 클릭 시 상세에서 표시)</span>
-                <span id="a_descCount">0 / 200</span>
-              </div>
+              <div class="smallText" style="font-weight:900; margin-bottom:6px;">상세설명 (200자 내외)</div>
+              <textarea id="a_desc" maxlength="200" placeholder="예) 사용감 있음 / 작동 정상 / 구성품 포함 여부 / 직거래 가능지역 등 (최대 200자)"></textarea>
+              <div class="descCount"><span id="descCount">0</span> / 200</div>
             </div>
 
             <div class="full" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-start; margin-top:6px;">
@@ -697,7 +698,6 @@
 
   <main>
     <div class="wrap">
-
       <div id="staticPageArea" style="display:none;">
         <div class="pageBox">
           <h3 id="staticPageH3">페이지</h3>
@@ -708,15 +708,14 @@
       <div id="auctionArea">
         <h2>진행중 경매</h2>
         <div class="sectionHint">
-          마감시간이 지나면 자동으로 “마감 카드”로 이동합니다. (LocalStorage 저장됨)
-          <br>※ 데모 모드에서는 진행중 카드가 최소 3개 유지되도록 자동 생성됩니다.
-          <br>※ 메인 카드에는 핵심만 노출되며, “입찰하기” 클릭 시 상세 정보가 펼쳐집니다.
+          ✅ 카드에는 <b>대표사진/상품명/마감/현재가/입찰하기</b>만 보입니다.<br>
+          ✅ <b>입찰하기를 누르면</b> 상세설명 + 사진들 + 입찰보증금 안내가 펼쳐집니다.
         </div>
         <div class="grid" id="openGrid"></div>
 
         <div id="closedSection" style="display:none;">
           <h2 style="margin-top:42px;">마감 카드</h2>
-          <div class="sectionHint">마감된 상품만 이곳에 모입니다. (결제/거래완료/미이행 처리 후 자동으로 화면에서 숨김)</div>
+          <div class="sectionHint">마감된 상품만 이곳에 모입니다. (결제/거래완료/미이행 처리 후 자동 숨김)</div>
           <div class="grid" id="closedGrid"></div>
         </div>
 
@@ -778,9 +777,9 @@
     const DEPOSIT_ACCOUNT = { bank: "농협", number: "000-0000-0000-00", name: "MWODEUN(예치금)" };
 
     /* ===== LocalStorage Keys ===== */
-    const LS_KEY_NEW = "mwodeun_products_rules_v3";
-    const LS_KEY_PREV = "mwodeun_products_rules_v2";
-    const LS_KEY_OLD  = "mwodeun_products_final_v1";
+    const LS_KEY_NEW = "mwodeun_products_rules_v4";  // v4 (사진/설명 추가)
+    const LS_KEY_PREV = "mwodeun_products_rules_v3";
+    const LS_KEY_OLD  = "mwodeun_products_rules_v2";
     const LS_FILTER = "mwodeun_filter_final_v1";
     const LS_USERS  = "mwodeun_users_rules_v2";
     const LS_LEDGER = "mwodeun_ledger_rules_v2";
@@ -877,28 +876,6 @@
       saveLedger(ledger);
     }
 
-    /* ===== 사진 처리 ===== */
-    function filesToDataUrls(fileList){
-      const files = Array.from(fileList || []);
-      return Promise.all(files.map(f=>{
-        return new Promise((resolve, reject)=>{
-          const r = new FileReader();
-          r.onload = ()=> resolve(String(r.result || ""));
-          r.onerror = ()=> reject(new Error("file read error"));
-          r.readAsDataURL(f);
-        });
-      }));
-    }
-    function setAdminPreview(urls){
-      const host = document.getElementById("a_photoPreview");
-      host.innerHTML = "";
-      (urls||[]).slice(0, 12).forEach(u=>{
-        const img = document.createElement("img");
-        img.src = u;
-        host.appendChild(img);
-      });
-    }
-
     /* ===== Products Load/Migrate ===== */
     function normalizeProduct(p){
       const n = {...p};
@@ -912,6 +889,10 @@
       n.bidCount = Number(n.bidCount || 0);
       n.createdAt = n.createdAt || nowISO();
       n.closed = !!n.closed;
+
+      // ✅ 사진/설명 추가
+      n.images = Array.isArray(n.images) ? n.images.filter(Boolean) : [];
+      n.desc = (n.desc || "").toString();
 
       n.winnerNick = n.winnerNick || "";
       n.winnerFinalPrice = Number(n.winnerFinalPrice || 0);
@@ -928,11 +909,6 @@
 
       n.archived = !!n.archived;
       n.isDemo = !!n.isDemo;
-
-      // ✅ NEW: photos / desc
-      n.photos = Array.isArray(n.photos) ? n.photos.filter(Boolean) : [];
-      n.desc = (n.desc === undefined || n.desc === null) ? "" : String(n.desc);
-
       return n;
     }
 
@@ -954,18 +930,46 @@
     }
     function saveProducts(){ localStorage.setItem(LS_KEY_NEW, JSON.stringify(state.products)); }
 
+    function placeholderImg(text){
+      const t = encodeURIComponent(text || "MWODEUN");
+      return `https://via.placeholder.com/800x600.png?text=${t}`;
+    }
+
     function seedSample(){
       const base = new Date();
       const plusMin = (min)=> new Date(base.getTime() + min*60*1000);
 
-      // ✅ 샘플은 사진 없어도 됨(데모)
       return [
-        normalizeProduct({ id: cryptoRandomId(), title:"전동드릴 세트", category:"공구장비", startPrice:15000, currentPrice:15000,
-          endTime: plusMin(180).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false, isDemo:true, photos:[], desc:"" }),
-        normalizeProduct({ id: cryptoRandomId(), title:"LG 55인치 TV (고장)", category:"가전", startPrice:15000, currentPrice:15000,
-          endTime: plusMin(90).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false, isDemo:true, photos:[], desc:"" }),
-        normalizeProduct({ id: cryptoRandomId(), title:"캠핑 테이블", category:"레져용품", startPrice:15000, currentPrice:15000,
-          endTime: plusMin(15).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false, isDemo:true, photos:[], desc:"" })
+        normalizeProduct({
+          id: cryptoRandomId(),
+          title:"전동드릴 세트",
+          category:"공구장비",
+          startPrice:15000, currentPrice:15000,
+          endTime: plusMin(180).toISOString(),
+          images:[placeholderImg("DRILL-1"),placeholderImg("DRILL-2"),placeholderImg("DRILL-3"),placeholderImg("DRILL-4"),placeholderImg("DRILL-5")],
+          desc:"전동드릴 세트입니다. 사용감 있으나 작동 정상. 구성품은 사진 참고. 직거래 가능.",
+          highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false
+        }),
+        normalizeProduct({
+          id: cryptoRandomId(),
+          title:"LG 55인치 TV (고장)",
+          category:"가전",
+          startPrice:15000, currentPrice:15000,
+          endTime: plusMin(90).toISOString(),
+          images:[placeholderImg("TV-1"),placeholderImg("TV-2"),placeholderImg("TV-3"),placeholderImg("TV-4"),placeholderImg("TV-5")],
+          desc:"전원은 들어오나 화면 불량. 수리/부품용 추천. 상태는 사진 및 설명 참고.",
+          highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false
+        }),
+        normalizeProduct({
+          id: cryptoRandomId(),
+          title:"캠핑 테이블",
+          category:"레져용품",
+          startPrice:15000, currentPrice:15000,
+          endTime: plusMin(15).toISOString(),
+          images:[placeholderImg("TABLE-1"),placeholderImg("TABLE-2"),placeholderImg("TABLE-3"),placeholderImg("TABLE-4"),placeholderImg("TABLE-5")],
+          desc:"캠핑 테이블입니다. 접이식. 상판 사용감 약간. 기능 이상 없음.",
+          highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false
+        })
       ];
     }
 
@@ -973,7 +977,7 @@
       products: [],
       filterCategory: "전체",
       adminEditingId: null,
-      adminPhotoUrls: [] // ✅ 현재 관리자 입력중 사진들(DataURL)
+      expanded: {} // ✅ 카드 펼침 상태
     };
 
     function loadFilter(){
@@ -1126,17 +1130,21 @@
       return p.category === state.filterCategory;
     }
 
-    /* ===== 펼침/접기 ===== */
-    function toggleCardDetail(productId){
-      const detail = document.getElementById("detail_"+productId);
-      if(!detail) return;
-      const open = detail.classList.toggle("open");
-      const btn = document.getElementById("btnOpen_"+productId);
-      if(btn) btn.textContent = open ? "닫기" : "입찰하기";
+    /* ===== 카드 펼치기/접기 ===== */
+    function toggleExpand(productId){
+      state.expanded[productId] = !state.expanded[productId];
+      renderAll();
     }
 
     /* ===== Bidding ===== */
     function doBid(productId){
+      // ✅ 펼치기 먼저
+      if(!state.expanded[productId]){
+        state.expanded[productId] = true;
+        renderAll();
+        return;
+      }
+
       const nick = (document.getElementById("nickname").value || "").trim();
       if(!nick){
         alert("닉네임을 먼저 입력해주세요.");
@@ -1195,42 +1203,45 @@
       const panel = document.getElementById("adminPanel");
       panel.style.display = (panel.style.display === "block") ? "none" : "block";
     }
-
     function adminClear(){
       state.adminEditingId = null;
-      state.adminPhotoUrls = [];
       document.getElementById("a_title").value = "";
       document.getElementById("a_category").value = "가전";
       document.getElementById("a_startPrice").value = "";
       document.getElementById("a_endTime").value = "";
+      document.getElementById("a_img1").value = "";
+      document.getElementById("a_img2").value = "";
+      document.getElementById("a_img3").value = "";
+      document.getElementById("a_img4").value = "";
+      document.getElementById("a_img5").value = "";
       document.getElementById("a_desc").value = "";
-      document.getElementById("a_descCount").textContent = "0 / 200";
-      document.getElementById("a_photos").value = "";
-      setAdminPreview([]);
+      document.getElementById("descCount").textContent = "0";
       document.getElementById("adminModeText").textContent = "현재: 새 상품 등록 모드";
     }
-
     function adminEdit(id){
       const p = state.products.find(x=>x.id===id);
       if(!p) return;
 
       state.adminEditingId = id;
-      state.adminPhotoUrls = Array.isArray(p.photos) ? p.photos.slice() : [];
-
       document.getElementById("adminPanel").style.display = "block";
       document.getElementById("a_title").value = p.title || "";
       document.getElementById("a_category").value = p.category || "가전";
       document.getElementById("a_startPrice").value = Number(p.startPrice || 0);
       document.getElementById("a_endTime").value = toLocalInputValue(new Date(p.endTime));
-      document.getElementById("a_desc").value = p.desc || "";
-      document.getElementById("a_descCount").textContent = `${(p.desc||"").length} / 200`;
-      document.getElementById("a_photos").value = "";
-      setAdminPreview(state.adminPhotoUrls);
+
+      const imgs = Array.isArray(p.images) ? p.images : [];
+      document.getElementById("a_img1").value = imgs[0] || "";
+      document.getElementById("a_img2").value = imgs[1] || "";
+      document.getElementById("a_img3").value = imgs[2] || "";
+      document.getElementById("a_img4").value = imgs[3] || "";
+      document.getElementById("a_img5").value = imgs[4] || "";
+
+      document.getElementById("a_desc").value = (p.desc || "").slice(0,200);
+      document.getElementById("descCount").textContent = String((document.getElementById("a_desc").value||"").length);
 
       document.getElementById("adminModeText").textContent = "현재: 수정 모드 (저장하면 해당 상품이 수정됩니다)";
       window.scrollTo({top:0, behavior:"smooth"});
     }
-
     function adminDelete(id){
       if(!confirm("정말 삭제하시겠습니까?")) return;
       state.products = state.products.filter(x=>x.id!==id);
@@ -1239,36 +1250,38 @@
       refreshDashboard();
     }
 
-    async function adminSave(){
+    function getAdminImages(){
+      const arr = [
+        (document.getElementById("a_img1").value||"").trim(),
+        (document.getElementById("a_img2").value||"").trim(),
+        (document.getElementById("a_img3").value||"").trim(),
+        (document.getElementById("a_img4").value||"").trim(),
+        (document.getElementById("a_img5").value||"").trim()
+      ].filter(Boolean);
+      return arr;
+    }
+
+    function adminSave(){
       const title = (document.getElementById("a_title").value || "").trim();
       const category = document.getElementById("a_category").value;
       const startPrice = Number(document.getElementById("a_startPrice").value || 0);
       const endLocal = document.getElementById("a_endTime").value;
-      const desc = (document.getElementById("a_desc").value || "").trim();
-      const files = document.getElementById("a_photos").files;
+      const desc = (document.getElementById("a_desc").value || "").trim().slice(0,200);
+      const images = getAdminImages();
 
       if(!title){ alert("상품명을 입력하세요."); return; }
       if(!startPrice || startPrice < 0){ alert("시작가를 올바르게 입력하세요."); return; }
       if(!endLocal){ alert("마감시간을 선택하세요."); return; }
-      if(desc.length > 200){ alert("상세설명은 최대 200자입니다."); return; }
 
-      // ✅ 새로 선택된 파일이 있으면 adminPhotoUrls에 추가/갱신
-      if(files && files.length){
-        try{
-          const urls = await filesToDataUrls(files);
-          // 사용자가 고른 순서 그대로 "대표사진=첫번째" 유지
-          state.adminPhotoUrls = urls;
-          setAdminPreview(state.adminPhotoUrls);
-        }catch(e){
-          alert("사진을 읽는 중 오류가 발생했습니다. 다시 시도해주세요.");
-          return;
-        }
+      // ✅ 사진 최소 5장 이상 (요청사항)
+      if(images.length < 5){
+        alert("사진을 최소 5장 이상 입력하세요. (사진1~5 URL을 모두 채우는 방식)");
+        return;
       }
 
-      // ✅ 사진 최소 5장 필수(데모 제외)
-      // 실제 등록/수정 저장 시 무조건 5장 이상 요구
-      if(!state.adminPhotoUrls || state.adminPhotoUrls.length < 5){
-        alert("상품 사진은 최소 5장 이상 등록해야 저장됩니다.");
+      // ✅ 설명 200자 내외(최대 200자)
+      if(desc.length < 10){
+        alert("상세설명을 조금 더 입력해주세요. (최대 200자)");
         return;
       }
 
@@ -1283,9 +1296,8 @@
         p.startPrice = startPrice;
         if(Number(p.currentPrice || 0) < startPrice) p.currentPrice = startPrice;
         p.endTime = endIso;
+        p.images = images;
         p.desc = desc;
-        p.photos = state.adminPhotoUrls.slice();
-        p.isDemo = false;
 
         if(new Date(p.endTime).getTime() > Date.now()){
           p.closed = false;
@@ -1301,13 +1313,13 @@
           startPrice,
           currentPrice: startPrice,
           endTime: endIso,
+          images,
+          desc,
           highestBidder:"",
           bidCount:0,
           createdAt: nowISO(),
           closed:false,
-          isDemo:false,
-          photos: state.adminPhotoUrls.slice(),
-          desc
+          isDemo:false
         }));
       }
 
@@ -1334,13 +1346,13 @@
         startPrice: price,
         currentPrice: price,
         endTime: end,
+        images:[placeholderImg("IMG-1"),placeholderImg("IMG-2"),placeholderImg("IMG-3"),placeholderImg("IMG-4"),placeholderImg("IMG-5")],
+        desc:"테스트 상품입니다. 실제 운영 시 관리자에서 사진/설명을 입력하세요.",
         highestBidder:"",
         bidCount:0,
         createdAt: nowISO(),
         closed:false,
-        isDemo:true,
-        photos: [],
-        desc: ""
+        isDemo:true
       });
     }
 
@@ -1368,20 +1380,19 @@
       const card = document.createElement("div");
       card.className = "card" + (closed ? " closed":"");
 
-      // ✅ 대표사진(첫번째)
+      // 대표사진 = 첫번째 사진
+      const firstImg = (Array.isArray(p.images) && p.images[0]) ? p.images[0] : "";
+
       const thumb = document.createElement("div");
       thumb.className = "thumb";
-      const firstPhoto = (Array.isArray(p.photos) && p.photos.length) ? p.photos[0] : "";
-      if(firstPhoto){
+      if(firstImg){
         const img = document.createElement("img");
-        img.src = firstPhoto;
-        img.alt = "상품 대표사진";
+        img.src = firstImg;
+        img.alt = p.title || "상품";
+        img.onerror = ()=>{ thumb.innerHTML = `<div class="noimg">이미지 로드 실패</div>`; };
         thumb.appendChild(img);
       }else{
-        const no = document.createElement("div");
-        no.className = "noimg";
-        no.textContent = "대표사진 없음";
-        thumb.appendChild(no);
+        thumb.innerHTML = `<div class="noimg">대표사진 없음</div>`;
       }
       card.appendChild(thumb);
 
@@ -1396,12 +1407,15 @@
         badgeClass = "badge good"; badgeText = "결제완료";
       }
 
-      const badge = document.createElement("div");
-      badge.className = badgeClass;
-      badge.textContent = badgeText;
+      const body = document.createElement("div");
+      body.className = "body";
 
       const topRow = document.createElement("div");
       topRow.className = "row";
+
+      const badge = document.createElement("div");
+      badge.className = badgeClass;
+      badge.textContent = badgeText;
       topRow.appendChild(badge);
 
       const cat = document.createElement("div");
@@ -1410,20 +1424,22 @@
       cat.textContent = p.category || "-";
       topRow.appendChild(cat);
 
-      const body = document.createElement("div");
-      body.className = "body";
-
       const name = document.createElement("div");
       name.className = "name";
       name.textContent = p.title || "-";
 
-      // ✅ 메인 카드 기본 노출(요청대로 최소)
-      const summaryMeta = document.createElement("div");
-      summaryMeta.className = "cardSummaryMeta";
+      // ✅ 카드 기본 노출(간단): 마감/현재가만
+      const meta = document.createElement("div");
+      meta.className = "meta";
       if(!closed){
-        summaryMeta.innerHTML = `마감: <span class="countdown" id="cd_${p.id}">${remain.text}</span>`;
+        meta.innerHTML =
+          `마감: <span class="countdown" id="cd_${p.id}">${remain.text}</span><br>` +
+          `마감시간: ${formatEndTime(p.endTime)}`;
       }else{
-        summaryMeta.innerHTML = `마감시간: ${formatEndTime(p.endTime)}`;
+        const winner = p.winnerNick ? `<span class="lastBidder">${escapeHtml(p.winnerNick)}</span>` : "-";
+        meta.innerHTML =
+          `마감시간: ${formatEndTime(p.endTime)}<br>` +
+          `낙찰자: ${winner} / 낙찰가: <b>${formatMoney(p.winnerFinalPrice || p.currentPrice || p.startPrice)}</b>원`;
       }
 
       const price = document.createElement("div");
@@ -1458,115 +1474,118 @@
       adminArea.appendChild(editBtn);
       adminArea.appendChild(delBtn);
 
-      if(!closed){
-        // ✅ “입찰하기” = 상세 펼치기
-        const openBtn = document.createElement("button");
-        openBtn.className = "btn primary";
-        openBtn.id = "btnOpen_" + p.id;
-        openBtn.textContent = "입찰하기";
-        openBtn.onclick = ()=>toggleCardDetail(p.id);
-        leftBox.appendChild(openBtn);
-      }else{
-        const buyerPaidBtn = document.createElement("button");
-        buyerPaidBtn.className = "btn primary";
-        buyerPaidBtn.textContent = p.buyerPaid ? "결제완료됨" : "결제완료(구매자)";
-        buyerPaidBtn.disabled = p.buyerPaid || p.defaulted || !p.winnerNick;
-        buyerPaidBtn.onclick = ()=>markBuyerPaid(p.id);
-
-        const sellerBtn = document.createElement("button");
-        sellerBtn.className = "btn soft";
-        sellerBtn.textContent = p.sellerConfirmed ? "판매자확인됨" : "거래완료 확인(판매자)";
-        sellerBtn.disabled = p.sellerConfirmed || p.defaulted || !p.winnerNick;
-        sellerBtn.onclick = ()=>markSellerConfirm(p.id);
-
-        leftBox.appendChild(buyerPaidBtn);
-        leftBox.appendChild(sellerBtn);
-      }
+      // ✅ 입찰하기 버튼(기본 노출)
+      const bidBtn = document.createElement("button");
+      bidBtn.className = "btn primary";
+      bidBtn.textContent = state.expanded[p.id] ? "접기" : "입찰하기";
+      bidBtn.onclick = ()=>{
+        if(state.expanded[p.id]){ state.expanded[p.id] = false; renderAll(); return; }
+        toggleExpand(p.id);
+      };
+      leftBox.appendChild(bidBtn);
 
       actions.appendChild(leftBox);
       actions.appendChild(adminArea);
 
-      // ✅ 상세(기존 메타/보증금 안내/입찰 실행) : 기본 숨김
-      const detail = document.createElement("div");
-      detail.className = "cardDetail";
-      detail.id = "detail_" + p.id;
+      // ✅ 펼쳐지는 상세 영역(사진들 + 설명 + 보증금 + 실제 입찰버튼)
+      const expand = document.createElement("div");
+      expand.className = "expandArea";
+      expand.id = "exp_"+p.id;
 
-      const meta = document.createElement("div");
-      meta.className = "meta";
+      if(state.expanded[p.id]){
+        expand.style.display = "block";
 
-      const bidBox = document.createElement("div");
-      bidBox.className = "bidBox";
+        // 갤러리(썸네일들)
+        const gallery = document.createElement("div");
+        gallery.className = "gallery";
 
-      if(!closed){
-        const bidderText = p.highestBidder ? `<span class="lastBidder">${escapeHtml(p.highestBidder)}</span>` : "-";
-        meta.innerHTML =
-          `마감시간: ${formatEndTime(p.endTime)}<br>` +
-          `입찰자: ${bidderText} / 입찰횟수: <b id="bc_${p.id}">${Number(p.bidCount||0)}</b>회` +
-          (p.desc ? `<br><br><b>상세:</b> ${escapeHtml(p.desc)}` : "");
+        const imgs = Array.isArray(p.images) ? p.images : [];
+        imgs.slice(0,10).forEach((url)=>{
+          const box = document.createElement("div");
+          box.className = "gimg";
+          const im = document.createElement("img");
+          im.src = url;
+          im.alt = "사진";
+          im.onerror = ()=>{ box.style.display="none"; };
+          box.appendChild(im);
+          box.onclick = ()=>{
+            // 대표사진 교체(보기용)
+            if(url){
+              const ti = thumb.querySelector("img");
+              if(ti) ti.src = url;
+            }
+          };
+          gallery.appendChild(box);
+        });
 
-        const inc = Number(document.getElementById("incSelect").value || 1000);
-        const next = Number(p.currentPrice || p.startPrice || 0) + inc;
+        const descBox = document.createElement("div");
+        descBox.className = "descBox";
+        descBox.innerHTML = `<b>상세설명</b><br>${escapeHtml(p.desc || "설명이 없습니다.")}`;
 
-        // ✅ 상세에서만 보증금/안내/실제입찰 버튼 노출
-        bidBox.innerHTML = `
-          <div class="row" style="gap:10px; flex-wrap:wrap; justify-content:flex-start;">
-            <label style="display:flex; align-items:center; gap:8px; font-weight:900; cursor:pointer;">
-              <input type="checkbox" id="dep_${p.id}">
-              입찰보증금(${formatMoney(RULES.depositAmount)}원) 확인
-            </label>
-            <div class="smallText" style="font-weight:900;">
-              다음 입찰가: <span id="nb_${p.id}">${formatMoney(next)}</span>원
+        expand.appendChild(gallery);
+        expand.appendChild(descBox);
+
+        // 진행중이면: 보증금 체크 + 실제 입찰 실행버튼
+        if(!closed){
+          const inc = Number(document.getElementById("incSelect").value || 1000);
+          const next = Number(p.currentPrice || p.startPrice || 0) + inc;
+
+          expand.innerHTML += `
+            <div class="row" style="gap:10px; flex-wrap:wrap; justify-content:flex-start;">
+              <label style="display:flex; align-items:center; gap:8px; font-weight:900; cursor:pointer;">
+                <input type="checkbox" id="dep_${p.id}">
+                입찰보증금(${formatMoney(RULES.depositAmount)}원) 확인
+              </label>
+              <div class="smallText" style="font-weight:900;">
+                다음 입찰가: <span id="nb_${p.id}">${formatMoney(next)}</span>원
+              </div>
             </div>
-          </div>
-          <div class="bidHelp" style="margin-top:8px;">
-            • 입금계좌: <b>${DEPOSIT_ACCOUNT.bank} ${DEPOSIT_ACCOUNT.number}</b> (${DEPOSIT_ACCOUNT.name})<br>
-            • 닉네임 + 보증금 체크 후 “아래 입찰 실행”을 누르면 자동 증가합니다.<br>
-            • 마감 60초 이내 입찰 시 자동연장(60초) 적용.
-          </div>
-          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
-            <button class="btn primary" onclick="doBid('${p.id}')">입찰 실행</button>
-            <button class="btn gray" onclick="toggleCardDetail('${p.id}')">닫기</button>
-          </div>
-        `;
-      }else{
-        const winner = p.winnerNick ? `<span class="lastBidder">${escapeHtml(p.winnerNick)}</span>` : "-";
-        const due = p.payDueAt ? calcRemainFromMs(p.payDueAt) : {over:false, text:"-"};
-        const dueText = p.winnerNick ? (due.over ? "기한 만료" : due.text) : "-";
+            <div class="bidHelp">
+              • 입금계좌: <b>${DEPOSIT_ACCOUNT.bank} ${DEPOSIT_ACCOUNT.number}</b> (${DEPOSIT_ACCOUNT.name})<br>
+              • 닉네임 입력 + 보증금 체크 후 아래 “입찰 실행” 버튼을 누르세요.<br>
+              • 마감 60초 이내 입찰 시 자동연장(60초) 적용.
+            </div>
+          `;
 
-        meta.innerHTML =
-          `마감시간: ${formatEndTime(p.endTime)}<br>` +
-          `낙찰자: ${winner} / 낙찰가: <b>${formatMoney(p.winnerFinalPrice || p.currentPrice || p.startPrice)}</b>원<br>` +
-          `결제기한(48H): <b id="due_${p.id}">${dueText}</b>` +
-          (p.desc ? `<br><br><b>상세:</b> ${escapeHtml(p.desc)}` : "");
+          const execBtn = document.createElement("button");
+          execBtn.className = "btn primary";
+          execBtn.style.marginTop = "10px";
+          execBtn.textContent = "입찰 실행";
+          execBtn.onclick = ()=>doBid(p.id);
+          expand.appendChild(execBtn);
+        }else{
+          // 마감이면: 결제/거래완료 버튼 노출
+          const buyerPaidBtn = document.createElement("button");
+          buyerPaidBtn.className = "btn primary";
+          buyerPaidBtn.textContent = p.buyerPaid ? "결제완료됨" : "결제완료(구매자)";
+          buyerPaidBtn.disabled = p.buyerPaid || p.defaulted || !p.winnerNick;
+          buyerPaidBtn.onclick = ()=>markBuyerPaid(p.id);
 
-        if(p.defaulted){
-          meta.innerHTML += `<br><span style="color:#b42318; font-weight:900;">사유: ${escapeHtml(p.defaultReason || "미이행")}</span>`;
+          const sellerBtn = document.createElement("button");
+          sellerBtn.className = "btn soft";
+          sellerBtn.textContent = p.sellerConfirmed ? "판매자확인됨" : "거래완료 확인(판매자)";
+          sellerBtn.disabled = p.sellerConfirmed || p.defaulted || !p.winnerNick;
+          sellerBtn.onclick = ()=>markSellerConfirm(p.id);
+
+          const row = document.createElement("div");
+          row.style.display="flex";
+          row.style.gap="8px";
+          row.style.flexWrap="wrap";
+          row.style.marginTop="10px";
+          row.appendChild(buyerPaidBtn);
+          row.appendChild(sellerBtn);
+
+          expand.appendChild(row);
         }
-
-        const depositState =
-          p.depositRefunded ? "환불 완료" :
-          p.depositForfeited ? "몰수(판매자/플랫폼 분배)" :
-          p.depositHeld ? "예치 중" : "-";
-
-        bidBox.innerHTML = `
-          <div class="bidHelp">
-            • 보증금 상태: <b>${depositState}</b> (금액: ${formatMoney(RULES.depositAmount)}원)<br>
-            • 낙찰 후 48시간 내 결제완료 없으면 자동 “미이행” 처리됩니다.<br>
-            • 거래완료(구매자 결제완료 + 판매자 확인) 시 보증금 환불 처리(기록).
-          </div>
-        `;
       }
-
-      detail.appendChild(meta);
-      detail.appendChild(bidBox);
 
       body.appendChild(topRow);
       body.appendChild(name);
-      body.appendChild(summaryMeta);
+      body.appendChild(meta);
       body.appendChild(price);
       body.appendChild(divider);
       body.appendChild(actions);
-      body.appendChild(detail);
+      body.appendChild(expand);
 
       card.appendChild(body);
       return card;
@@ -1712,12 +1731,6 @@
 
         const sumCd = document.getElementById("sum_cd_"+p.id);
         if(sumCd && !p.closed) sumCd.textContent = calcRemain(p.endTime).text;
-
-        const dueEl = document.getElementById("due_"+p.id);
-        if(dueEl && p.closed && p.payDueAt && !p.buyerPaid && !p.defaulted && p.winnerNick){
-          const due = calcRemainFromMs(p.payDueAt);
-          dueEl.textContent = due.over ? "기한 만료" : due.text;
-        }
       });
 
       if(changed){
@@ -1758,36 +1771,13 @@
 
       document.getElementById("incSelect").addEventListener("change", updateNextBidLabels);
 
-      // ✅ 관리자: 사진 선택 시 미리보기 + 상태 저장
-      const photoInput = document.getElementById("a_photos");
-      photoInput.addEventListener("change", async ()=>{
-        const files = photoInput.files;
-        if(!files || !files.length){
-          state.adminPhotoUrls = [];
-          setAdminPreview([]);
-          return;
-        }
-        try{
-          const urls = await filesToDataUrls(files);
-          state.adminPhotoUrls = urls;
-          setAdminPreview(state.adminPhotoUrls);
-        }catch(e){
-          alert("사진을 읽는 중 오류가 발생했습니다. 다시 선택해주세요.");
-          photoInput.value = "";
-          state.adminPhotoUrls = [];
-          setAdminPreview([]);
-        }
-      });
-
-      // ✅ 관리자: 상세설명 글자수 표시
       const desc = document.getElementById("a_desc");
-      const cnt = document.getElementById("a_descCount");
       desc.addEventListener("input", ()=>{
-        cnt.textContent = `${desc.value.length} / 200`;
+        document.getElementById("descCount").textContent = String((desc.value||"").length);
       });
     }
 
-    /* ===== 라우터: 메뉴 클릭 시 상단 아래에 제목 표시 + 영역 전환 ===== */
+    /* ===== 라우터: hash 기반 (파일이 달라도 index로 모여서 처리) ===== */
     const auctionArea = ()=>document.getElementById("auctionArea");
     const staticArea = ()=>document.getElementById("staticPageArea");
     const titleEl = ()=>document.getElementById("pageTitleText");
@@ -1855,12 +1845,9 @@
       });
     }
 
-    /* ===== 관리자 대시보드 ===== */
+    /* ===== 관리자 대시보드 (기존 유지) ===== */
     let dashTab = "trade";
-
-    function dashBackdropClose(e){
-      if(e.target && e.target.id === "dashOverlay") toggleDashboard();
-    }
+    function dashBackdropClose(e){ if(e.target && e.target.id === "dashOverlay") toggleDashboard(); }
     function toggleDashboard(){
       const ov = document.getElementById("dashOverlay");
       const open = ov.style.display === "flex";
@@ -1872,7 +1859,6 @@
       document.getElementById("tab_trade").classList.toggle("active", tab==="trade");
       document.getElementById("tab_deposit").classList.toggle("active", tab==="deposit");
       document.getElementById("tab_users").classList.toggle("active", tab==="users");
-
       document.getElementById("dashTrade").style.display = tab==="trade" ? "block" : "none";
       document.getElementById("dashDeposit").style.display = tab==="deposit" ? "block" : "none";
       document.getElementById("dashUsers").style.display = tab==="users" ? "block" : "none";
@@ -1883,7 +1869,6 @@
       renderDashUsers();
       setDashTab(dashTab);
     }
-
     function statusLabel(p){
       if(!p.closed) return "진행중";
       if(p.defaulted) return "미이행";
