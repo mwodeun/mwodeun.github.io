@@ -493,7 +493,8 @@
       <div class="wrap">
         <div class="topbar">
 
-          <a class="brand" href="index.html" title="HOME으로 이동">
+          <!-- ✅ 로고 클릭: 새로고침 없이 HOME -->
+          <a class="brand" href="#home" title="HOME으로 이동" id="brandHomeLink">
             <img src="logo.png" alt="MWODEUN 모든경매" onerror="this.style.display='none'">
             <div>
               <div class="title">MWODEUN 모든경매</div>
@@ -576,11 +577,12 @@
 
     <div class="primaryNav">
       <div class="wrap">
-        <a class="navLink" href="index.html">HOME</a>
-        <a class="navLink" href="signup.html">회원가입</a>
-        <a class="navLink" href="login.html">로그인</a>
-        <a class="navLink" href="guide.html">이용안내</a>
-        <a class="navLink" href="support.html">고객센터</a>
+        <!-- ✅ HOME도 새로고침 없이 -->
+        <a class="navLink" href="#home" id="topHomeLink">HOME</a>
+        <a class="navLink" href="#page=signup">회원가입</a>
+        <a class="navLink" href="#page=login">로그인</a>
+        <a class="navLink" href="#page=guide">이용안내</a>
+        <a class="navLink" href="#page=support">고객센터</a>
       </div>
     </div>
 
@@ -990,7 +992,7 @@
         btn.className = "catBtn" + (state.filterCategory===cat ? " active":"");
         btn.textContent = cat;
         btn.onclick = ()=>{
-          // ✅ 카테고리 클릭 -> 페이지 제목 표시 + 경매영역 유지
+          // ✅ 즉시 해시로 라우팅(새로고침 없음)
           location.hash = "#cat=" + encodeURIComponent(cat);
         };
         bar.appendChild(btn);
@@ -1565,7 +1567,7 @@
 
     function parseHash(){
       const h = (location.hash || "").replace(/^#/, "");
-      if(!h) return {page:"home"};
+      if(!h || h==="home") return {page:"home"};
       if(h.startsWith("page=")) return {page: decodeURIComponent(h.slice(5))};
       if(h.startsWith("cat="))  return {page:"cat", cat: decodeURIComponent(h.slice(4))};
       return {page:"home"};
@@ -1583,22 +1585,10 @@
         return;
       }
 
-      if(r.page === "signup"){
-        showStatic("회원가입", "준비중입니다. (빈페이지)");
-        return;
-      }
-      if(r.page === "login"){
-        showStatic("로그인", "준비중입니다. (빈페이지)");
-        return;
-      }
-      if(r.page === "guide"){
-        showStatic("이용안내", "준비중입니다. (빈페이지)");
-        return;
-      }
-      if(r.page === "support"){
-        showStatic("고객센터", "준비중입니다. (빈페이지)");
-        return;
-      }
+      if(r.page === "signup"){ showStatic("회원가입", "준비중입니다. (빈페이지)"); return; }
+      if(r.page === "login"){ showStatic("로그인", "준비중입니다. (빈페이지)"); return; }
+      if(r.page === "guide"){ showStatic("이용안내", "준비중입니다. (빈페이지)"); return; }
+      if(r.page === "support"){ showStatic("고객센터", "준비중입니다. (빈페이지)"); return; }
 
       // HOME
       state.filterCategory = "전체";
@@ -1607,279 +1597,10 @@
       showAuction("HOME", "진행중 경매를 확인하세요.");
     }
 
-    // 상단 메뉴 링크가 해시로 열리게(페이지 이동 없이 상단 유지)
-    function bindTopNavToHash(){
-      const links = document.querySelectorAll(".primaryNav .navLink");
-      links.forEach(a=>{
-        const txt = (a.textContent||"").trim();
-        if(txt==="회원가입"){ a.addEventListener("click", (e)=>{ e.preventDefault(); location.hash="#page=signup"; }); }
-        if(txt==="로그인"){ a.addEventListener("click", (e)=>{ e.preventDefault(); location.hash="#page=login"; }); }
-        if(txt==="이용안내"){ a.addEventListener("click", (e)=>{ e.preventDefault(); location.hash="#page=guide"; }); }
-        if(txt==="고객센터"){ a.addEventListener("click", (e)=>{ e.preventDefault(); location.hash="#page=support"; }); }
-      });
-    }
-
-    /* ===== 관리자 대시보드 ===== */
-    let dashTab = "trade";
-
-    function dashBackdropClose(e){
-      if(e.target && e.target.id === "dashOverlay") toggleDashboard();
-    }
-    function toggleDashboard(){
-      const ov = document.getElementById("dashOverlay");
-      const open = ov.style.display === "flex";
-      ov.style.display = open ? "none" : "flex";
-      if(!open) refreshDashboard();
-    }
-    function setDashTab(tab){
-      dashTab = tab;
-      document.getElementById("tab_trade").classList.toggle("active", tab==="trade");
-      document.getElementById("tab_deposit").classList.toggle("active", tab==="deposit");
-      document.getElementById("tab_users").classList.toggle("active", tab==="users");
-
-      document.getElementById("dashTrade").style.display = tab==="trade" ? "block" : "none";
-      document.getElementById("dashDeposit").style.display = tab==="deposit" ? "block" : "none";
-      document.getElementById("dashUsers").style.display = tab==="users" ? "block" : "none";
-    }
-    function refreshDashboard(){
-      renderDashTrade();
-      renderDashDeposit();
-      renderDashUsers();
-      setDashTab(dashTab);
-    }
-
-    function statusLabel(p){
-      if(!p.closed) return "진행중";
-      if(p.defaulted) return "미이행";
-      if(p.depositRefunded) return "거래완료";
-      if(p.buyerPaid) return "결제완료";
-      return "마감";
-    }
-
-    function renderDashTrade(){
-      const host = document.getElementById("dashTrade");
-      const products = state.products.slice().filter(p=>!p.archived);
-
-      const openCnt = products.filter(p=>!p.closed).length;
-      const closedCnt = products.filter(p=>p.closed && !p.depositRefunded && !p.defaulted).length;
-      const doneCnt = products.filter(p=>p.depositRefunded).length;
-      const defCnt = products.filter(p=>p.defaulted).length;
-      const demoCnt = products.filter(p=>p.isDemo && !p.closed).length;
-
-      let html = `
-        <div class="dashKpi">
-          <div class="kpiCard"><div class="k">진행중</div><div class="v">${openCnt}개</div></div>
-          <div class="kpiCard"><div class="k">마감(처리대기)</div><div class="v">${closedCnt}개</div></div>
-          <div class="kpiCard"><div class="k">거래완료</div><div class="v">${doneCnt}개</div></div>
-          <div class="kpiCard"><div class="k">미이행</div><div class="v">${defCnt}개</div></div>
-          <div class="kpiCard"><div class="k">데모 진행중</div><div class="v">${demoCnt}개</div></div>
-        </div>
-        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-          <button class="btn gray small" onclick="dashTradeFilter('all')">전체</button>
-          <button class="btn gray small" onclick="dashTradeFilter('open')">진행중</button>
-          <button class="btn gray small" onclick="dashTradeFilter('closed')">마감(처리대기)</button>
-          <button class="btn gray small" onclick="dashTradeFilter('done')">거래완료</button>
-          <button class="btn gray small" onclick="dashTradeFilter('default')">미이행</button>
-        </div>
-        <div id="dashTradeList" style="margin-top:10px;"></div>
-      `;
-      host.innerHTML = html;
-
-      window._dashTradeMode = window._dashTradeMode || "all";
-      dashTradeFilter(window._dashTradeMode);
-    }
-
-    function dashTradeFilter(mode){
-      window._dashTradeMode = mode;
-      const listHost = document.getElementById("dashTradeList");
-      if(!listHost) return;
-
-      let items = state.products.slice().filter(p=>!p.archived);
-
-      if(mode==="open") items = items.filter(p=>!p.closed);
-      if(mode==="closed") items = items.filter(p=>p.closed && !p.depositRefunded && !p.defaulted);
-      if(mode==="done") items = items.filter(p=>p.depositRefunded);
-      if(mode==="default") items = items.filter(p=>p.defaulted);
-
-      items = items
-        .sort((a,b)=>{
-          const ta = new Date(a.closedAt || a.endTime).getTime();
-          const tb = new Date(b.closedAt || b.endTime).getTime();
-          return tb - ta;
-        })
-        .slice(0, 80);
-
-      if(items.length===0){
-        listHost.innerHTML = `<div class="smallText" style="padding:10px;">표시할 내역이 없습니다.</div>`;
-        return;
-      }
-
-      let html = "";
-      for(const p of items){
-        const st = statusLabel(p);
-        const money = p.closed ? (p.winnerFinalPrice || p.currentPrice || p.startPrice) : (p.currentPrice || p.startPrice);
-        const who = p.closed ? (p.winnerNick || "-") : (p.highestBidder || "-");
-        const time = p.closed ? (p.closedAt ? formatEndTime(p.closedAt) : formatEndTime(p.endTime)) : formatEndTime(p.endTime);
-
-        html += `
-          <div class="dashRow">
-            <div style="min-width:260px;">
-              <b>${escapeHtml(p.title)}</b> <span class="smallText">(${escapeHtml(p.category)})</span><br>
-              <span class="smallText">시간: ${escapeHtml(time)}</span>
-            </div>
-            <div style="min-width:200px;">
-              상태: <b>${escapeHtml(st)}</b><br>
-              닉네임: <b>${escapeHtml(who)}</b>
-            </div>
-            <div style="min-width:160px;">
-              금액: <b>${formatMoney(money)}원</b><br>
-              입찰: <b>${Number(p.bidCount||0)}회</b>
-            </div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <button class="btn gray small" onclick="adminEdit('${p.id}')">수정</button>
-              <button class="btn danger small" onclick="adminDelete('${p.id}')">삭제</button>
-            </div>
-          </div>
-        `;
-      }
-      listHost.innerHTML = html;
-    }
-
-    function renderDashDeposit(){
-      const host = document.getElementById("dashDeposit");
-      const ledger = loadLedger();
-
-      let held=0, refund=0, forfeit=0, seller=0, platform=0;
-      for(const l of ledger){
-        if(l.type==="DEPOSIT_HELD") held += Number(l.amount||0);
-        if(l.type==="DEPOSIT_REFUND") refund += Number(l.amount||0);
-        if(l.type==="DEPOSIT_FORFEIT"){
-          forfeit += Number(l.amount||0);
-          seller += Number(l.distribution?.seller || 0);
-          platform += Number(l.distribution?.platform || 0);
-        }
-      }
-
-      const html = `
-        <div class="dashKpi">
-          <div class="kpiCard"><div class="k">예치(기록)</div><div class="v">${formatMoney(held)}원</div></div>
-          <div class="kpiCard"><div class="k">환불</div><div class="v">${formatMoney(refund)}원</div></div>
-          <div class="kpiCard"><div class="k">몰수</div><div class="v">${formatMoney(forfeit)}원</div></div>
-          <div class="kpiCard"><div class="k">판매자 지급</div><div class="v">${formatMoney(seller)}원</div></div>
-          <div class="kpiCard"><div class="k">플랫폼 수익</div><div class="v">${formatMoney(platform)}원</div></div>
-        </div>
-        <div style="margin-top:12px;">
-          <div class="smallText" style="font-weight:900;">입금 안내 계좌</div>
-          <div style="margin-top:6px; padding:10px 10px; border:1px solid rgba(0,0,0,.08); border-radius:14px; background:#fafafa; font-weight:900;">
-            ${DEPOSIT_ACCOUNT.bank} ${DEPOSIT_ACCOUNT.number} (예금주: ${DEPOSIT_ACCOUNT.name}) / 보증금: ${formatMoney(RULES.depositAmount)}원
-          </div>
-        </div>
-        <div style="margin-top:14px;">
-          <div class="smallText" style="font-weight:900;">최근 보증금 이벤트(상위 30개)</div>
-          <div style="margin-top:8px; border:1px solid rgba(0,0,0,.08); border-radius:14px; overflow:hidden;">
-            ${renderLedgerRows(ledger.slice(0,30))}
-          </div>
-        </div>
-      `;
-      host.innerHTML = html;
-    }
-
-    function renderLedgerRows(items){
-      if(!items || items.length===0){
-        return `<div class="smallText" style="padding:10px;">기록이 없습니다.</div>`;
-      }
-      let rows = "";
-      for(const l of items){
-        const at = l.at ? formatEndTime(l.at) : "-";
-        let label = l.type;
-        if(l.type==="DEPOSIT_HELD") label="예치";
-        if(l.type==="DEPOSIT_REFUND") label="환불";
-        if(l.type==="DEPOSIT_FORFEIT") label="몰수";
-        if(l.type==="SANCTION") label="제재";
-        if(l.type==="ARCHIVE") label="아카이브";
-        rows += `
-          <div class="dashRow">
-            <div style="min-width:150px;"><b>${escapeHtml(label)}</b><br><span class="smallText">${escapeHtml(at)}</span></div>
-            <div style="min-width:260px;"><b>${escapeHtml(l.title || l.note || "-")}</b><br><span class="smallText">${escapeHtml(l.nick || "")}</span></div>
-            <div style="min-width:160px;"><b>${formatMoney(l.amount||0)}원</b></div>
-            <div class="smallText" style="flex:1;">${escapeHtml(l.note || "")}</div>
-          </div>
-        `;
-      }
-      return rows;
-    }
-
-    function renderDashUsers(){
-      const host = document.getElementById("dashUsers");
-      const users = loadUsers();
-      const list = Object.values(users || {}).sort((a,b)=>{
-        const sa = Number(a.strikes||0), sb = Number(b.strikes||0);
-        return sb - sa;
-      });
-
-      let html = `
-        <div class="smallText" style="font-weight:900;">사용자 제재 현황</div>
-        <div style="margin-top:10px; border:1px solid rgba(0,0,0,.08); border-radius:14px; overflow:hidden;">
-      `;
-
-      if(list.length===0){
-        html += `<div class="smallText" style="padding:12px;">등록된 사용자 기록이 없습니다.</div>`;
-      }else{
-        for(const u of list.slice(0,120)){
-          const st = userStatusText(u);
-          html += `
-            <div class="dashRow">
-              <div style="min-width:220px;">
-                닉네임: <b>${escapeHtml(u.nick)}</b><br>
-                상태: <b>${escapeHtml(st)}</b>
-              </div>
-              <div style="min-width:180px;">
-                경고(누적): <b>${Number(u.strikes||0)}</b>
-              </div>
-              <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                <button class="btn gray small" onclick="resetUserSanction('${escapeHtml(u.nick).replaceAll("'","\\'")}')">초기화</button>
-                <button class="btn danger small" onclick="banUser('${escapeHtml(u.nick).replaceAll("'","\\'")}')">영구정지</button>
-              </div>
-            </div>
-          `;
-        }
-      }
-      html += `</div>
-        <div class="smallText" style="margin-top:10px;">※ 초기화: 경고/정지/영구정지 모두 해제</div>
-      `;
-      host.innerHTML = html;
-    }
-
-    function resetUserSanction(nick){
-      const users = loadUsers();
-      const u = users[nick];
-      if(!u){ alert("사용자 기록이 없습니다."); return; }
-      if(!confirm(`${nick} 사용자 제재를 초기화할까요?`)) return;
-      u.strikes = 0;
-      u.suspendedUntil = 0;
-      u.banned = false;
-      saveUsers(users);
-      refreshDashboard();
-      alert("초기화 완료");
-    }
-
-    function banUser(nick){
-      const users = loadUsers();
-      const u = getUser(users, nick);
-      if(!confirm(`${nick} 사용자를 영구정지 처리할까요?`)) return;
-      u.banned = true;
-      u.suspendedUntil = 0;
-      saveUsers(users);
-      ledgerAdd("SANCTION", { nick, strikes:u.strikes, status:"영구정지", note:"관리자 수동 영구정지" });
-      refreshDashboard();
-      alert("영구정지 처리 완료");
-    }
-
     /* ===== Start ===== */
     init(false);
-    bindTopNavToHash();
     window.addEventListener("hashchange", route);
-    route();               // ✅ 처음 로드 시 현재 메뉴 반영
+    route();
     setInterval(tick, 1000);
   </script>
 </body>
