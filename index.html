@@ -129,15 +129,17 @@
       white-space:nowrap;
       font-weight:800;
     }
-    input[type="text"], input[type="number"], input[type="datetime-local"], select{
+    input[type="text"], input[type="number"], input[type="datetime-local"], select, textarea{
       padding:8px 10px;
       border:1px solid rgba(0,0,0,.12);
       border-radius:12px;
       outline:none;
       background:#fff;
+      font-family: inherit;
     }
     input[type="text"]{min-width:170px}
     select{min-width:120px}
+    textarea{width:100%; min-height:92px; resize:vertical;}
 
     .btn{
       cursor:pointer;
@@ -272,6 +274,31 @@
       flex-direction:column;
     }
     .card.closed{ background:#e9e9e9; filter:grayscale(0.15); }
+
+    /* ✅ 대표사진 */
+    .thumb{
+      width:100%;
+      aspect-ratio: 4 / 3;
+      background:#f2f2f2;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .thumb .noimg{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      padding:16px;
+    }
+
     .card .body{ padding:14px 14px 12px; }
     .row{
       display:flex;
@@ -330,12 +357,27 @@
     .countdown{font-weight:900}
     .lastBidder{font-weight:900; color:#111;}
 
+    /* ✅ 메인: 카드 최소노출 / 상세는 펼침 */
+    .cardSummaryMeta{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.45;
+      margin-top:2px;
+    }
+    .cardDetail{
+      display:none;
+      margin-top:10px;
+    }
+    .cardDetail.open{
+      display:block;
+    }
+
     .summaryBox{
       margin-top:22px;
       background:#fff;
       border:1px solid var(--border);
       border-radius:16px;
-      box-shadow:0 8px 18px rgba(0,0,0,0.05);
+      box-shadow:0 8px 18px rgba(0,0,0,.05);
       overflow:hidden;
     }
     .summaryHead{
@@ -378,6 +420,39 @@
     }
     .pageBox h3{ margin:0 0 8px; font-size:18px; }
     .pageBox p{ margin:0; color:var(--muted); line-height:1.6; font-size:13px; }
+
+    /* ✅ 관리자: 사진 미리보기 */
+    .photoHint{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.4;
+      margin-top:6px;
+      font-weight:700;
+    }
+    .photoPreview{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+    .photoPreview img{
+      width:72px;
+      height:72px;
+      object-fit:cover;
+      border-radius:12px;
+      border:1px solid rgba(0,0,0,.12);
+      background:#fafafa;
+    }
+    .counterLine{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      margin-top:6px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:800;
+    }
 
     /* ✅ 관리자 대시보드 */
     .dashBtn{
@@ -493,8 +568,7 @@
       <div class="wrap">
         <div class="topbar">
 
-          <!-- ✅ 로고 클릭: 새로고침 없이 HOME -->
-          <a class="brand" href="#home" title="HOME으로 이동" id="brandHomeLink">
+          <a class="brand" href="index.html" title="HOME으로 이동">
             <img src="logo.png" alt="MWODEUN 모든경매" onerror="this.style.display='none'">
             <div>
               <div class="title">MWODEUN 모든경매</div>
@@ -559,6 +633,27 @@
               <input id="a_endTime" type="datetime-local" />
             </div>
 
+            <!-- ✅ 사진(최소 5장) -->
+            <div class="full">
+              <div class="smallText" style="font-weight:900;">상품 사진 (최소 5장)</div>
+              <input id="a_photos" type="file" accept="image/*" multiple />
+              <div class="photoHint">
+                • 사진은 PC/휴대폰에서 선택하면 자동 저장됩니다(LocalStorage).<br>
+                • 최소 5장 이상 선택해야 저장됩니다. (대표사진=첫번째)
+              </div>
+              <div class="photoPreview" id="a_photoPreview"></div>
+            </div>
+
+            <!-- ✅ 상세설명(200자) -->
+            <div class="full">
+              <div class="smallText" style="font-weight:900;">상세설명 (최대 200자)</div>
+              <textarea id="a_desc" maxlength="200" placeholder="예) 상태/구성품/고장여부/직거래 위치 등 (200자 내외)"></textarea>
+              <div class="counterLine">
+                <span>※ 메인에서는 숨김(입찰하기 클릭 시 상세에서 표시)</span>
+                <span id="a_descCount">0 / 200</span>
+              </div>
+            </div>
+
             <div class="full" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-start; margin-top:6px;">
               <button class="btn primary" onclick="adminSave()">등록/수정 저장</button>
               <button class="btn gray" onclick="adminClear()">입력칸 비우기</button>
@@ -577,12 +672,11 @@
 
     <div class="primaryNav">
       <div class="wrap">
-        <!-- ✅ HOME도 새로고침 없이 -->
-        <a class="navLink" href="#home" id="topHomeLink">HOME</a>
-        <a class="navLink" href="#page=signup">회원가입</a>
-        <a class="navLink" href="#page=login">로그인</a>
-        <a class="navLink" href="#page=guide">이용안내</a>
-        <a class="navLink" href="#page=support">고객센터</a>
+        <a class="navLink" href="index.html">HOME</a>
+        <a class="navLink" href="signup.html">회원가입</a>
+        <a class="navLink" href="login.html">로그인</a>
+        <a class="navLink" href="guide.html">이용안내</a>
+        <a class="navLink" href="support.html">고객센터</a>
       </div>
     </div>
 
@@ -590,7 +684,6 @@
       <div class="wrap" id="categoryBar"></div>
     </div>
 
-    <!-- ✅ 메뉴줄 아래 제목 표시 -->
     <div class="pageTitleBar">
       <div class="wrap">
         <div>
@@ -605,7 +698,6 @@
   <main>
     <div class="wrap">
 
-      <!-- ✅ 회원가입/로그인/이용안내/고객센터 빈페이지 영역 -->
       <div id="staticPageArea" style="display:none;">
         <div class="pageBox">
           <h3 id="staticPageH3">페이지</h3>
@@ -613,12 +705,12 @@
         </div>
       </div>
 
-      <!-- ✅ 경매 메인(카테고리 포함) -->
       <div id="auctionArea">
         <h2>진행중 경매</h2>
         <div class="sectionHint">
           마감시간이 지나면 자동으로 “마감 카드”로 이동합니다. (LocalStorage 저장됨)
           <br>※ 데모 모드에서는 진행중 카드가 최소 3개 유지되도록 자동 생성됩니다.
+          <br>※ 메인 카드에는 핵심만 노출되며, “입찰하기” 클릭 시 상세 정보가 펼쳐집니다.
         </div>
         <div class="grid" id="openGrid"></div>
 
@@ -785,6 +877,28 @@
       saveLedger(ledger);
     }
 
+    /* ===== 사진 처리 ===== */
+    function filesToDataUrls(fileList){
+      const files = Array.from(fileList || []);
+      return Promise.all(files.map(f=>{
+        return new Promise((resolve, reject)=>{
+          const r = new FileReader();
+          r.onload = ()=> resolve(String(r.result || ""));
+          r.onerror = ()=> reject(new Error("file read error"));
+          r.readAsDataURL(f);
+        });
+      }));
+    }
+    function setAdminPreview(urls){
+      const host = document.getElementById("a_photoPreview");
+      host.innerHTML = "";
+      (urls||[]).slice(0, 12).forEach(u=>{
+        const img = document.createElement("img");
+        img.src = u;
+        host.appendChild(img);
+      });
+    }
+
     /* ===== Products Load/Migrate ===== */
     function normalizeProduct(p){
       const n = {...p};
@@ -814,6 +928,11 @@
 
       n.archived = !!n.archived;
       n.isDemo = !!n.isDemo;
+
+      // ✅ NEW: photos / desc
+      n.photos = Array.isArray(n.photos) ? n.photos.filter(Boolean) : [];
+      n.desc = (n.desc === undefined || n.desc === null) ? "" : String(n.desc);
+
       return n;
     }
 
@@ -838,17 +957,24 @@
     function seedSample(){
       const base = new Date();
       const plusMin = (min)=> new Date(base.getTime() + min*60*1000);
+
+      // ✅ 샘플은 사진 없어도 됨(데모)
       return [
         normalizeProduct({ id: cryptoRandomId(), title:"전동드릴 세트", category:"공구장비", startPrice:15000, currentPrice:15000,
-          endTime: plusMin(180).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false }),
+          endTime: plusMin(180).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false, isDemo:true, photos:[], desc:"" }),
         normalizeProduct({ id: cryptoRandomId(), title:"LG 55인치 TV (고장)", category:"가전", startPrice:15000, currentPrice:15000,
-          endTime: plusMin(90).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false }),
+          endTime: plusMin(90).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false, isDemo:true, photos:[], desc:"" }),
         normalizeProduct({ id: cryptoRandomId(), title:"캠핑 테이블", category:"레져용품", startPrice:15000, currentPrice:15000,
-          endTime: plusMin(15).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false })
+          endTime: plusMin(15).toISOString(), highestBidder:"", bidCount:0, createdAt: nowISO(), closed:false, isDemo:true, photos:[], desc:"" })
       ];
     }
 
-    const state = { products: [], filterCategory: "전체", adminEditingId: null };
+    const state = {
+      products: [],
+      filterCategory: "전체",
+      adminEditingId: null,
+      adminPhotoUrls: [] // ✅ 현재 관리자 입력중 사진들(DataURL)
+    };
 
     function loadFilter(){
       const raw = localStorage.getItem(LS_FILTER);
@@ -991,16 +1117,22 @@
         const btn = document.createElement("button");
         btn.className = "catBtn" + (state.filterCategory===cat ? " active":"");
         btn.textContent = cat;
-        btn.onclick = ()=>{
-          // ✅ 즉시 해시로 라우팅(새로고침 없음)
-          location.hash = "#cat=" + encodeURIComponent(cat);
-        };
+        btn.onclick = ()=>{ location.hash = "#cat=" + encodeURIComponent(cat); };
         bar.appendChild(btn);
       });
     }
     function passFilter(p){
       if(state.filterCategory === "전체") return true;
       return p.category === state.filterCategory;
+    }
+
+    /* ===== 펼침/접기 ===== */
+    function toggleCardDetail(productId){
+      const detail = document.getElementById("detail_"+productId);
+      if(!detail) return;
+      const open = detail.classList.toggle("open");
+      const btn = document.getElementById("btnOpen_"+productId);
+      if(btn) btn.textContent = open ? "닫기" : "입찰하기";
     }
 
     /* ===== Bidding ===== */
@@ -1063,27 +1195,42 @@
       const panel = document.getElementById("adminPanel");
       panel.style.display = (panel.style.display === "block") ? "none" : "block";
     }
+
     function adminClear(){
       state.adminEditingId = null;
+      state.adminPhotoUrls = [];
       document.getElementById("a_title").value = "";
       document.getElementById("a_category").value = "가전";
       document.getElementById("a_startPrice").value = "";
       document.getElementById("a_endTime").value = "";
+      document.getElementById("a_desc").value = "";
+      document.getElementById("a_descCount").textContent = "0 / 200";
+      document.getElementById("a_photos").value = "";
+      setAdminPreview([]);
       document.getElementById("adminModeText").textContent = "현재: 새 상품 등록 모드";
     }
+
     function adminEdit(id){
       const p = state.products.find(x=>x.id===id);
       if(!p) return;
 
       state.adminEditingId = id;
+      state.adminPhotoUrls = Array.isArray(p.photos) ? p.photos.slice() : [];
+
       document.getElementById("adminPanel").style.display = "block";
       document.getElementById("a_title").value = p.title || "";
       document.getElementById("a_category").value = p.category || "가전";
       document.getElementById("a_startPrice").value = Number(p.startPrice || 0);
       document.getElementById("a_endTime").value = toLocalInputValue(new Date(p.endTime));
+      document.getElementById("a_desc").value = p.desc || "";
+      document.getElementById("a_descCount").textContent = `${(p.desc||"").length} / 200`;
+      document.getElementById("a_photos").value = "";
+      setAdminPreview(state.adminPhotoUrls);
+
       document.getElementById("adminModeText").textContent = "현재: 수정 모드 (저장하면 해당 상품이 수정됩니다)";
       window.scrollTo({top:0, behavior:"smooth"});
     }
+
     function adminDelete(id){
       if(!confirm("정말 삭제하시겠습니까?")) return;
       state.products = state.products.filter(x=>x.id!==id);
@@ -1091,15 +1238,39 @@
       renderAll();
       refreshDashboard();
     }
-    function adminSave(){
+
+    async function adminSave(){
       const title = (document.getElementById("a_title").value || "").trim();
       const category = document.getElementById("a_category").value;
       const startPrice = Number(document.getElementById("a_startPrice").value || 0);
       const endLocal = document.getElementById("a_endTime").value;
+      const desc = (document.getElementById("a_desc").value || "").trim();
+      const files = document.getElementById("a_photos").files;
 
       if(!title){ alert("상품명을 입력하세요."); return; }
       if(!startPrice || startPrice < 0){ alert("시작가를 올바르게 입력하세요."); return; }
       if(!endLocal){ alert("마감시간을 선택하세요."); return; }
+      if(desc.length > 200){ alert("상세설명은 최대 200자입니다."); return; }
+
+      // ✅ 새로 선택된 파일이 있으면 adminPhotoUrls에 추가/갱신
+      if(files && files.length){
+        try{
+          const urls = await filesToDataUrls(files);
+          // 사용자가 고른 순서 그대로 "대표사진=첫번째" 유지
+          state.adminPhotoUrls = urls;
+          setAdminPreview(state.adminPhotoUrls);
+        }catch(e){
+          alert("사진을 읽는 중 오류가 발생했습니다. 다시 시도해주세요.");
+          return;
+        }
+      }
+
+      // ✅ 사진 최소 5장 필수(데모 제외)
+      // 실제 등록/수정 저장 시 무조건 5장 이상 요구
+      if(!state.adminPhotoUrls || state.adminPhotoUrls.length < 5){
+        alert("상품 사진은 최소 5장 이상 등록해야 저장됩니다.");
+        return;
+      }
 
       const endIso = new Date(endLocal).toISOString();
 
@@ -1112,6 +1283,9 @@
         p.startPrice = startPrice;
         if(Number(p.currentPrice || 0) < startPrice) p.currentPrice = startPrice;
         p.endTime = endIso;
+        p.desc = desc;
+        p.photos = state.adminPhotoUrls.slice();
+        p.isDemo = false;
 
         if(new Date(p.endTime).getTime() > Date.now()){
           p.closed = false;
@@ -1131,7 +1305,9 @@
           bidCount:0,
           createdAt: nowISO(),
           closed:false,
-          isDemo:false
+          isDemo:false,
+          photos: state.adminPhotoUrls.slice(),
+          desc
         }));
       }
 
@@ -1162,7 +1338,9 @@
         bidCount:0,
         createdAt: nowISO(),
         closed:false,
-        isDemo:true
+        isDemo:true,
+        photos: [],
+        desc: ""
       });
     }
 
@@ -1189,6 +1367,23 @@
 
       const card = document.createElement("div");
       card.className = "card" + (closed ? " closed":"");
+
+      // ✅ 대표사진(첫번째)
+      const thumb = document.createElement("div");
+      thumb.className = "thumb";
+      const firstPhoto = (Array.isArray(p.photos) && p.photos.length) ? p.photos[0] : "";
+      if(firstPhoto){
+        const img = document.createElement("img");
+        img.src = firstPhoto;
+        img.alt = "상품 대표사진";
+        thumb.appendChild(img);
+      }else{
+        const no = document.createElement("div");
+        no.className = "noimg";
+        no.textContent = "대표사진 없음";
+        thumb.appendChild(no);
+      }
+      card.appendChild(thumb);
 
       let badgeClass = closed ? "badge closed" : "badge";
       let badgeText = closed ? "마감" : "진행중";
@@ -1222,26 +1417,13 @@
       name.className = "name";
       name.textContent = p.title || "-";
 
-      const meta = document.createElement("div");
-      meta.className = "meta";
-
+      // ✅ 메인 카드 기본 노출(요청대로 최소)
+      const summaryMeta = document.createElement("div");
+      summaryMeta.className = "cardSummaryMeta";
       if(!closed){
-        const bidderText = p.highestBidder ? `<span class="lastBidder">${escapeHtml(p.highestBidder)}</span>` : "-";
-        meta.innerHTML =
-          `마감: <span class="countdown" id="cd_${p.id}">${remain.text}</span><br>` +
-          `마감시간: ${formatEndTime(p.endTime)}<br>` +
-          `입찰자: ${bidderText} / 입찰횟수: <b id="bc_${p.id}">${Number(p.bidCount||0)}</b>회`;
+        summaryMeta.innerHTML = `마감: <span class="countdown" id="cd_${p.id}">${remain.text}</span>`;
       }else{
-        const winner = p.winnerNick ? `<span class="lastBidder">${escapeHtml(p.winnerNick)}</span>` : "-";
-        const due = p.payDueAt ? calcRemainFromMs(p.payDueAt) : {over:false, text:"-"};
-        const dueText = p.winnerNick ? (due.over ? "기한 만료" : due.text) : "-";
-        meta.innerHTML =
-          `마감시간: ${formatEndTime(p.endTime)}<br>` +
-          `낙찰자: ${winner} / 낙찰가: <b>${formatMoney(p.winnerFinalPrice || p.currentPrice || p.startPrice)}</b>원<br>` +
-          `결제기한(48H): <b id="due_${p.id}">${dueText}</b>`;
-        if(p.defaulted){
-          meta.innerHTML += `<br><span style="color:#b42318; font-weight:900;">사유: ${escapeHtml(p.defaultReason || "미이행")}</span>`;
-        }
+        summaryMeta.innerHTML = `마감시간: ${formatEndTime(p.endTime)}`;
       }
 
       const price = document.createElement("div");
@@ -1277,11 +1459,13 @@
       adminArea.appendChild(delBtn);
 
       if(!closed){
-        const bidBtn = document.createElement("button");
-        bidBtn.className = "btn primary";
-        bidBtn.textContent = "입찰하기";
-        bidBtn.onclick = ()=>doBid(p.id);
-        leftBox.appendChild(bidBtn);
+        // ✅ “입찰하기” = 상세 펼치기
+        const openBtn = document.createElement("button");
+        openBtn.className = "btn primary";
+        openBtn.id = "btnOpen_" + p.id;
+        openBtn.textContent = "입찰하기";
+        openBtn.onclick = ()=>toggleCardDetail(p.id);
+        leftBox.appendChild(openBtn);
       }else{
         const buyerPaidBtn = document.createElement("button");
         buyerPaidBtn.className = "btn primary";
@@ -1302,13 +1486,28 @@
       actions.appendChild(leftBox);
       actions.appendChild(adminArea);
 
+      // ✅ 상세(기존 메타/보증금 안내/입찰 실행) : 기본 숨김
+      const detail = document.createElement("div");
+      detail.className = "cardDetail";
+      detail.id = "detail_" + p.id;
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+
       const bidBox = document.createElement("div");
       bidBox.className = "bidBox";
 
       if(!closed){
+        const bidderText = p.highestBidder ? `<span class="lastBidder">${escapeHtml(p.highestBidder)}</span>` : "-";
+        meta.innerHTML =
+          `마감시간: ${formatEndTime(p.endTime)}<br>` +
+          `입찰자: ${bidderText} / 입찰횟수: <b id="bc_${p.id}">${Number(p.bidCount||0)}</b>회` +
+          (p.desc ? `<br><br><b>상세:</b> ${escapeHtml(p.desc)}` : "");
+
         const inc = Number(document.getElementById("incSelect").value || 1000);
         const next = Number(p.currentPrice || p.startPrice || 0) + inc;
 
+        // ✅ 상세에서만 보증금/안내/실제입찰 버튼 노출
         bidBox.innerHTML = `
           <div class="row" style="gap:10px; flex-wrap:wrap; justify-content:flex-start;">
             <label style="display:flex; align-items:center; gap:8px; font-weight:900; cursor:pointer;">
@@ -1319,13 +1518,31 @@
               다음 입찰가: <span id="nb_${p.id}">${formatMoney(next)}</span>원
             </div>
           </div>
-          <div class="bidHelp">
+          <div class="bidHelp" style="margin-top:8px;">
             • 입금계좌: <b>${DEPOSIT_ACCOUNT.bank} ${DEPOSIT_ACCOUNT.number}</b> (${DEPOSIT_ACCOUNT.name})<br>
-            • 닉네임 + 보증금 체크 후 “입찰하기” 누르면 자동 증가합니다.<br>
+            • 닉네임 + 보증금 체크 후 “아래 입찰 실행”을 누르면 자동 증가합니다.<br>
             • 마감 60초 이내 입찰 시 자동연장(60초) 적용.
+          </div>
+          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn primary" onclick="doBid('${p.id}')">입찰 실행</button>
+            <button class="btn gray" onclick="toggleCardDetail('${p.id}')">닫기</button>
           </div>
         `;
       }else{
+        const winner = p.winnerNick ? `<span class="lastBidder">${escapeHtml(p.winnerNick)}</span>` : "-";
+        const due = p.payDueAt ? calcRemainFromMs(p.payDueAt) : {over:false, text:"-"};
+        const dueText = p.winnerNick ? (due.over ? "기한 만료" : due.text) : "-";
+
+        meta.innerHTML =
+          `마감시간: ${formatEndTime(p.endTime)}<br>` +
+          `낙찰자: ${winner} / 낙찰가: <b>${formatMoney(p.winnerFinalPrice || p.currentPrice || p.startPrice)}</b>원<br>` +
+          `결제기한(48H): <b id="due_${p.id}">${dueText}</b>` +
+          (p.desc ? `<br><br><b>상세:</b> ${escapeHtml(p.desc)}` : "");
+
+        if(p.defaulted){
+          meta.innerHTML += `<br><span style="color:#b42318; font-weight:900;">사유: ${escapeHtml(p.defaultReason || "미이행")}</span>`;
+        }
+
         const depositState =
           p.depositRefunded ? "환불 완료" :
           p.depositForfeited ? "몰수(판매자/플랫폼 분배)" :
@@ -1340,13 +1557,16 @@
         `;
       }
 
+      detail.appendChild(meta);
+      detail.appendChild(bidBox);
+
       body.appendChild(topRow);
       body.appendChild(name);
-      body.appendChild(meta);
+      body.appendChild(summaryMeta);
       body.appendChild(price);
       body.appendChild(divider);
       body.appendChild(actions);
-      body.appendChild(bidBox);
+      body.appendChild(detail);
 
       card.appendChild(body);
       return card;
@@ -1537,6 +1757,34 @@
       renderAll();
 
       document.getElementById("incSelect").addEventListener("change", updateNextBidLabels);
+
+      // ✅ 관리자: 사진 선택 시 미리보기 + 상태 저장
+      const photoInput = document.getElementById("a_photos");
+      photoInput.addEventListener("change", async ()=>{
+        const files = photoInput.files;
+        if(!files || !files.length){
+          state.adminPhotoUrls = [];
+          setAdminPreview([]);
+          return;
+        }
+        try{
+          const urls = await filesToDataUrls(files);
+          state.adminPhotoUrls = urls;
+          setAdminPreview(state.adminPhotoUrls);
+        }catch(e){
+          alert("사진을 읽는 중 오류가 발생했습니다. 다시 선택해주세요.");
+          photoInput.value = "";
+          state.adminPhotoUrls = [];
+          setAdminPreview([]);
+        }
+      });
+
+      // ✅ 관리자: 상세설명 글자수 표시
+      const desc = document.getElementById("a_desc");
+      const cnt = document.getElementById("a_descCount");
+      desc.addEventListener("input", ()=>{
+        cnt.textContent = `${desc.value.length} / 200`;
+      });
     }
 
     /* ===== 라우터: 메뉴 클릭 시 상단 아래에 제목 표시 + 영역 전환 ===== */
@@ -1567,7 +1815,7 @@
 
     function parseHash(){
       const h = (location.hash || "").replace(/^#/, "");
-      if(!h || h==="home") return {page:"home"};
+      if(!h) return {page:"home"};
       if(h.startsWith("page=")) return {page: decodeURIComponent(h.slice(5))};
       if(h.startsWith("cat="))  return {page:"cat", cat: decodeURIComponent(h.slice(4))};
       return {page:"home"};
@@ -1590,15 +1838,282 @@
       if(r.page === "guide"){ showStatic("이용안내", "준비중입니다. (빈페이지)"); return; }
       if(r.page === "support"){ showStatic("고객센터", "준비중입니다. (빈페이지)"); return; }
 
-      // HOME
       state.filterCategory = "전체";
       saveFilter();
       renderAll();
       showAuction("HOME", "진행중 경매를 확인하세요.");
     }
 
+    function bindTopNavToHash(){
+      const links = document.querySelectorAll(".primaryNav .navLink");
+      links.forEach(a=>{
+        const txt = (a.textContent||"").trim();
+        if(txt==="회원가입"){ a.addEventListener("click", (e)=>{ e.preventDefault(); location.hash="#page=signup"; }); }
+        if(txt==="로그인"){ a.addEventListener("click", (e)=>{ e.preventDefault(); location.hash="#page=login"; }); }
+        if(txt==="이용안내"){ a.addEventListener("click", (e)=>{ e.preventDefault(); location.hash="#page=guide"; }); }
+        if(txt==="고객센터"){ a.addEventListener("click", (e)=>{ e.preventDefault(); location.hash="#page=support"; }); }
+      });
+    }
+
+    /* ===== 관리자 대시보드 ===== */
+    let dashTab = "trade";
+
+    function dashBackdropClose(e){
+      if(e.target && e.target.id === "dashOverlay") toggleDashboard();
+    }
+    function toggleDashboard(){
+      const ov = document.getElementById("dashOverlay");
+      const open = ov.style.display === "flex";
+      ov.style.display = open ? "none" : "flex";
+      if(!open) refreshDashboard();
+    }
+    function setDashTab(tab){
+      dashTab = tab;
+      document.getElementById("tab_trade").classList.toggle("active", tab==="trade");
+      document.getElementById("tab_deposit").classList.toggle("active", tab==="deposit");
+      document.getElementById("tab_users").classList.toggle("active", tab==="users");
+
+      document.getElementById("dashTrade").style.display = tab==="trade" ? "block" : "none";
+      document.getElementById("dashDeposit").style.display = tab==="deposit" ? "block" : "none";
+      document.getElementById("dashUsers").style.display = tab==="users" ? "block" : "none";
+    }
+    function refreshDashboard(){
+      renderDashTrade();
+      renderDashDeposit();
+      renderDashUsers();
+      setDashTab(dashTab);
+    }
+
+    function statusLabel(p){
+      if(!p.closed) return "진행중";
+      if(p.defaulted) return "미이행";
+      if(p.depositRefunded) return "거래완료";
+      if(p.buyerPaid) return "결제완료";
+      return "마감";
+    }
+
+    function renderDashTrade(){
+      const host = document.getElementById("dashTrade");
+      const products = state.products.slice().filter(p=>!p.archived);
+
+      const openCnt = products.filter(p=>!p.closed).length;
+      const closedCnt = products.filter(p=>p.closed && !p.depositRefunded && !p.defaulted).length;
+      const doneCnt = products.filter(p=>p.depositRefunded).length;
+      const defCnt = products.filter(p=>p.defaulted).length;
+      const demoCnt = products.filter(p=>p.isDemo && !p.closed).length;
+
+      let html = `
+        <div class="dashKpi">
+          <div class="kpiCard"><div class="k">진행중</div><div class="v">${openCnt}개</div></div>
+          <div class="kpiCard"><div class="k">마감(처리대기)</div><div class="v">${closedCnt}개</div></div>
+          <div class="kpiCard"><div class="k">거래완료</div><div class="v">${doneCnt}개</div></div>
+          <div class="kpiCard"><div class="k">미이행</div><div class="v">${defCnt}개</div></div>
+          <div class="kpiCard"><div class="k">데모 진행중</div><div class="v">${demoCnt}개</div></div>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <button class="btn gray small" onclick="dashTradeFilter('all')">전체</button>
+          <button class="btn gray small" onclick="dashTradeFilter('open')">진행중</button>
+          <button class="btn gray small" onclick="dashTradeFilter('closed')">마감(처리대기)</button>
+          <button class="btn gray small" onclick="dashTradeFilter('done')">거래완료</button>
+          <button class="btn gray small" onclick="dashTradeFilter('default')">미이행</button>
+        </div>
+        <div id="dashTradeList" style="margin-top:10px;"></div>
+      `;
+      host.innerHTML = html;
+
+      window._dashTradeMode = window._dashTradeMode || "all";
+      dashTradeFilter(window._dashTradeMode);
+    }
+
+    function dashTradeFilter(mode){
+      window._dashTradeMode = mode;
+      const listHost = document.getElementById("dashTradeList");
+      if(!listHost) return;
+
+      let items = state.products.slice().filter(p=>!p.archived);
+
+      if(mode==="open") items = items.filter(p=>!p.closed);
+      if(mode==="closed") items = items.filter(p=>p.closed && !p.depositRefunded && !p.defaulted);
+      if(mode==="done") items = items.filter(p=>p.depositRefunded);
+      if(mode==="default") items = items.filter(p=>p.defaulted);
+
+      items = items
+        .sort((a,b)=>{
+          const ta = new Date(a.closedAt || a.endTime).getTime();
+          const tb = new Date(b.closedAt || b.endTime).getTime();
+          return tb - ta;
+        })
+        .slice(0, 80);
+
+      if(items.length===0){
+        listHost.innerHTML = `<div class="smallText" style="padding:10px;">표시할 내역이 없습니다.</div>`;
+        return;
+      }
+
+      let html = "";
+      for(const p of items){
+        const st = statusLabel(p);
+        const money = p.closed ? (p.winnerFinalPrice || p.currentPrice || p.startPrice) : (p.currentPrice || p.startPrice);
+        const who = p.closed ? (p.winnerNick || "-") : (p.highestBidder || "-");
+        const time = p.closed ? (p.closedAt ? formatEndTime(p.closedAt) : formatEndTime(p.endTime)) : formatEndTime(p.endTime);
+
+        html += `
+          <div class="dashRow">
+            <div style="min-width:260px;">
+              <b>${escapeHtml(p.title)}</b> <span class="smallText">(${escapeHtml(p.category)})</span><br>
+              <span class="smallText">시간: ${escapeHtml(time)}</span>
+            </div>
+            <div style="min-width:200px;">
+              상태: <b>${escapeHtml(st)}</b><br>
+              닉네임: <b>${escapeHtml(who)}</b>
+            </div>
+            <div style="min-width:160px;">
+              금액: <b>${formatMoney(money)}원</b><br>
+              입찰: <b>${Number(p.bidCount||0)}회</b>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn gray small" onclick="adminEdit('${p.id}')">수정</button>
+              <button class="btn danger small" onclick="adminDelete('${p.id}')">삭제</button>
+            </div>
+          </div>
+        `;
+      }
+      listHost.innerHTML = html;
+    }
+
+    function renderDashDeposit(){
+      const host = document.getElementById("dashDeposit");
+      const ledger = loadLedger();
+
+      let held=0, refund=0, forfeit=0, seller=0, platform=0;
+      for(const l of ledger){
+        if(l.type==="DEPOSIT_HELD") held += Number(l.amount||0);
+        if(l.type==="DEPOSIT_REFUND") refund += Number(l.amount||0);
+        if(l.type==="DEPOSIT_FORFEIT"){
+          forfeit += Number(l.amount||0);
+          seller += Number(l.distribution?.seller || 0);
+          platform += Number(l.distribution?.platform || 0);
+        }
+      }
+
+      const html = `
+        <div class="dashKpi">
+          <div class="kpiCard"><div class="k">예치(기록)</div><div class="v">${formatMoney(held)}원</div></div>
+          <div class="kpiCard"><div class="k">환불</div><div class="v">${formatMoney(refund)}원</div></div>
+          <div class="kpiCard"><div class="k">몰수</div><div class="v">${formatMoney(forfeit)}원</div></div>
+          <div class="kpiCard"><div class="k">판매자 지급</div><div class="v">${formatMoney(seller)}원</div></div>
+          <div class="kpiCard"><div class="k">플랫폼 수익</div><div class="v">${formatMoney(platform)}원</div></div>
+        </div>
+        <div style="margin-top:12px;">
+          <div class="smallText" style="font-weight:900;">입금 안내 계좌</div>
+          <div style="margin-top:6px; padding:10px 10px; border:1px solid rgba(0,0,0,.08); border-radius:14px; background:#fafafa; font-weight:900;">
+            ${DEPOSIT_ACCOUNT.bank} ${DEPOSIT_ACCOUNT.number} (예금주: ${DEPOSIT_ACCOUNT.name}) / 보증금: ${formatMoney(RULES.depositAmount)}원
+          </div>
+        </div>
+        <div style="margin-top:14px;">
+          <div class="smallText" style="font-weight:900;">최근 보증금 이벤트(상위 30개)</div>
+          <div style="margin-top:8px; border:1px solid rgba(0,0,0,.08); border-radius:14px; overflow:hidden;">
+            ${renderLedgerRows(ledger.slice(0,30))}
+          </div>
+        </div>
+      `;
+      host.innerHTML = html;
+    }
+
+    function renderLedgerRows(items){
+      if(!items || items.length===0){
+        return `<div class="smallText" style="padding:10px;">기록이 없습니다.</div>`;
+      }
+      let rows = "";
+      for(const l of items){
+        const at = l.at ? formatEndTime(l.at) : "-";
+        let label = l.type;
+        if(l.type==="DEPOSIT_HELD") label="예치";
+        if(l.type==="DEPOSIT_REFUND") label="환불";
+        if(l.type==="DEPOSIT_FORFEIT") label="몰수";
+        if(l.type==="SANCTION") label="제재";
+        if(l.type==="ARCHIVE") label="아카이브";
+        rows += `
+          <div class="dashRow">
+            <div style="min-width:150px;"><b>${escapeHtml(label)}</b><br><span class="smallText">${escapeHtml(at)}</span></div>
+            <div style="min-width:260px;"><b>${escapeHtml(l.title || l.note || "-")}</b><br><span class="smallText">${escapeHtml(l.nick || "")}</span></div>
+            <div style="min-width:160px;"><b>${formatMoney(l.amount||0)}원</b></div>
+            <div class="smallText" style="flex:1;">${escapeHtml(l.note || "")}</div>
+          </div>
+        `;
+      }
+      return rows;
+    }
+
+    function renderDashUsers(){
+      const host = document.getElementById("dashUsers");
+      const users = loadUsers();
+      const list = Object.values(users || {}).sort((a,b)=>{
+        const sa = Number(a.strikes||0), sb = Number(b.strikes||0);
+        return sb - sa;
+      });
+
+      let html = `
+        <div class="smallText" style="font-weight:900;">사용자 제재 현황</div>
+        <div style="margin-top:10px; border:1px solid rgba(0,0,0,.08); border-radius:14px; overflow:hidden;">
+      `;
+
+      if(list.length===0){
+        html += `<div class="smallText" style="padding:12px;">등록된 사용자 기록이 없습니다.</div>`;
+      }else{
+        for(const u of list.slice(0,120)){
+          const st = userStatusText(u);
+          html += `
+            <div class="dashRow">
+              <div style="min-width:220px;">
+                닉네임: <b>${escapeHtml(u.nick)}</b><br>
+                상태: <b>${escapeHtml(st)}</b>
+              </div>
+              <div style="min-width:180px;">
+                경고(누적): <b>${Number(u.strikes||0)}</b>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="btn gray small" onclick="resetUserSanction('${escapeHtml(u.nick).replaceAll("'","\\'")}')">초기화</button>
+                <button class="btn danger small" onclick="banUser('${escapeHtml(u.nick).replaceAll("'","\\'")}')">영구정지</button>
+              </div>
+            </div>
+          `;
+        }
+      }
+      html += `</div>
+        <div class="smallText" style="margin-top:10px;">※ 초기화: 경고/정지/영구정지 모두 해제</div>
+      `;
+      host.innerHTML = html;
+    }
+
+    function resetUserSanction(nick){
+      const users = loadUsers();
+      const u = users[nick];
+      if(!u){ alert("사용자 기록이 없습니다."); return; }
+      if(!confirm(`${nick} 사용자 제재를 초기화할까요?`)) return;
+      u.strikes = 0;
+      u.suspendedUntil = 0;
+      u.banned = false;
+      saveUsers(users);
+      refreshDashboard();
+      alert("초기화 완료");
+    }
+
+    function banUser(nick){
+      const users = loadUsers();
+      const u = getUser(users, nick);
+      if(!confirm(`${nick} 사용자를 영구정지 처리할까요?`)) return;
+      u.banned = true;
+      u.suspendedUntil = 0;
+      saveUsers(users);
+      ledgerAdd("SANCTION", { nick, strikes:u.strikes, status:"영구정지", note:"관리자 수동 영구정지" });
+      refreshDashboard();
+      alert("영구정지 처리 완료");
+    }
+
     /* ===== Start ===== */
     init(false);
+    bindTopNavToHash();
     window.addEventListener("hashchange", route);
     route();
     setInterval(tick, 1000);
